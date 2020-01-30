@@ -14,12 +14,12 @@
 
 <body>
 	<header class="masthead">
-    <div class="container">
+    <div class="container-flex" style="background-color: #d3dadb">
       <div class="row" style="padding: 50px 0 70px 0">
         <div class="mx-auto">
-          <div class="site-heading">
+          <div class="site-heading text-center">
             <h1>Lunch STHLM</h1>
-            <span class="subheading">Den enda lunch guiden i Stockholm</span>
+            <span class="subheading text-center">Den enda lunch guiden i Stockholm</span>
           </div>
         </div>
       </div>
@@ -29,46 +29,51 @@
   <div class="container">
     <div id="reviews" class="row">
     </div>
-     <hr>
   </div>
   <script>
   	const reviews = document.getElementById("reviews");
-  	function buildReview(item) {
+
+  	function createCard(header, value, parent) {
+	  	if (value) {
+		  	extras_score = document.createElement("div");
+		  	extras_score.setAttribute("class", "col-sm-12 col-md-6 font-weight-light");
+		  	extras_score.append(`${header}: ${value}`);
+		  	parent.appendChild(extras_score);
+		}
+	}
+
+  	function buildReview(item, idx) {
 		review = document.createElement("div");
-	  	review.setAttribute("class", "col-sm-12 col-md-6 py-4");
+
+		if (idx % 5 < 3) {
+			review.setAttribute("class", "col-sm-12 col-md-6 col-lg-4 py-4");	
+		} else {
+	  		review.setAttribute("class", "col-sm-12 col-md-6 py-4");
+	  	}
 	  	restaurant = document.createElement("h2");
 	  	restaurant.append(item.restaurant);
-	  	meal = document.createElement("h3");
+	  	meal = document.createElement("h4");
+	  	meal.setAttribute("class", "font-weight-light");
 	  	meal.append(item.meal);
 	  	description = document.createElement("div");
 	  	description.append(item.description);
 	  	reviewer = document.createElement("div");
-		reviewer.append(`reviewed by ${item.name}`);
-		reviewer.setAttribute("class", "font-italic p-3")
+		reviewer.append(`reviewed by ${item.reviewer}`);
+		reviewer.setAttribute("class", "font-italic p-3");
 	  	price = document.createElement("div");
 	  	price.setAttribute("class", "font-weight-bold")
 	  	price.append(`Pris: ${item.price}kr`);
 	  	
 	  	score_grid = document.createElement("container");
 	  	score_row = document.createElement("div");
-	  	score_row.setAttribute("class", "row py-2")
-	  	taste_score = document.createElement("div");
-	  	taste_score.setAttribute("class", "col-sm-12 col-md-6");
-	  	taste_score.append("Smak: " + item.taste_score);
-	  	extras_score = document.createElement("div");
-	  	extras_score.setAttribute("class", "col-sm-12 col-md-6");
-	  	extras_score.append("Extras: " + item.extras_score);
-	  	environment_score = document.createElement("div");
-	  	environment_score.setAttribute("class", "col-sm-12 col-md-6");
-	  	environment_score.append("Omgivning: " + item.Omgivning);
-	  	inovation_score = document.createElement("div");
-	  	inovation_score.setAttribute("class", "col-sm-12 col-md-6");
-	  	inovation_score.append("Nytänkande: " + item.Nytänkande);
-	  	score_row.appendChild(taste_score)
-	  	score_row.appendChild(extras_score)
-	  	score_row.appendChild(environment_score)
-	  	score_row.appendChild(inovation_score)
-	  	score_grid.appendChild(score_row)
+	  	score_row.setAttribute("class", "row pt-4");
+
+	  	createCard("Smak", item.taste_score, score_row);
+	  	createCard("Extras", item.extras_score, score_row);
+	  	createCard("Omgivning", item.environment_score, score_row);
+	  	createCard("Nytänkande", item.innovation_score, score_row);
+
+	  	score_grid.appendChild(score_row);
 
 	  	review.appendChild(restaurant);
 	  	review.appendChild(meal);
@@ -84,8 +89,8 @@
   		return response.json();
   	})
   	.then((items) => {
-	    items.forEach(item => {
-			buildReview(item);
+	    items.forEach((item, idx, array) => {
+			buildReview(item, idx);
 	    });
 	  });
   </script>
