@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NotFoundPage from './NotFoundPage.js';
 import AllReviewsPage from './AllReviewsPage.js';
+import RestaurantReviewsPage from './RestaurantReviewsPage.js';
 import Head from './Head.js';
 import {
   HashRouter,
@@ -16,6 +17,7 @@ export default class App extends Component {
           <Route component={Head} />
           <Switch>
             <Route exact path="/" component={AllReviewsPage}/>
+            <Route exact path="/restaurants" component={RestaurantReviewsPage}/>
             <Route path="*" component={NotFoundPage} />
           </Switch>
         </>

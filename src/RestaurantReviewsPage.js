@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import ReviewCard from './ReviewCard.js';
+import RestaurantCard from './RestaurantCard.js';
+import _ from 'lodash';
 
 
 export default class AllReviewsPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {"reviewCards": []}
+    this.state = {"restaurantCards": ""}
   }
 
   componentDidMount() {
@@ -14,9 +15,12 @@ export default class AllReviewsPage extends Component {
       response.json()
       .then((reviews) => {
         if (reviews) {
-          let reviewCards = [];
-          reviews.forEach((review, idx) => reviewCards.push(<ReviewCard key={review.timestamp} review={review} idx={idx}/>));
-          this.setState({"reviewCards": reviewCards})
+          const groupedReviews = _.groupBy(reviews, r => r.restaurant);
+          let restaurantCards = [];
+          Object.keys(groupedReviews).forEach(restaurant => restaurantCards.push(
+            <RestaurantCard key={restaurant} restaurant={restaurant} reviews={groupedReviews[restaurant]} />
+          ));
+          this.setState({"restaurantCards": restaurantCards});
         }
       }
       );
@@ -24,7 +28,7 @@ export default class AllReviewsPage extends Component {
   }
 
   render() {
-    const { reviewCards } = this.state;
+    const { restaurantCards } = this.state;
     return (
       <>
         <div className="container-fluid" style={{"backgroundColor": "#d3dadb"}}>
@@ -40,8 +44,8 @@ export default class AllReviewsPage extends Component {
 
         <div className="container">
           <div id="reviews" className="row">
-           { reviewCards }
-          </div>
+            { restaurantCards }
+          </div>  
         </div>
       </>
     );
