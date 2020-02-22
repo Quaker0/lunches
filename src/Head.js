@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
-import stockholm from './stockholm.jpg'
+import stockholm from './content/stockholm.jpg'
+import logo from './content/sthlm-lunch-logo.png'
 
 export default class Head extends PureComponent {
 	render() {
@@ -17,14 +18,7 @@ export default class Head extends PureComponent {
 						<NavLink exact to="/" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
 						<NavLink exact to="/restaurants" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
 				    </div>
-					<div className="row" style={{"padding": "50px 0 70px 0"}}>
-					 	<div className="mx-auto">
-					    	<div className="site-heading text-center">
-					      		<h1>STHLM LUNCH</h1>
-					      		<span className="subheading text-center">Den enda lunch-guiden i Stockholm</span>
-					    	</div>
-					  	</div>
-					</div>
+				    <img src={logo} alt="STHLM LUNCH" className="rounded mx-auto d-block"/>
 				</div>
 			</>
 		);

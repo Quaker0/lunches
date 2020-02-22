@@ -9,6 +9,11 @@ body {
     background-attachment: scroll !important;
   }
 }
+@media(max-width:767px) {
+  .navbar {
+    justify-content: center !important;
+  }
+}
 
 a {
   color: black !important;
