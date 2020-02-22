@@ -25,27 +25,32 @@ function aggregateReviews(reviews) {
 
 export function getAggregatedReviews(reviews) {
   const scoreSums = aggregateReviews(reviews);
-  const tasteAvg = Math.round(scoreSums.taste_score/reviews.length);
+  const tastePrecise = scoreSums.taste_score/reviews.length;
+  console.log(tastePrecise);
+  const tasteScore = Math.round(tastePrecise);
   const extrasAvg = scoreSums.extras_score ? Math.round(scoreSums.extras_score/reviews.length) : 0;
   const envAvg = Math.round(scoreSums.environment_score/reviews.length);
   const innovationAvg = Math.round(scoreSums.innovation_score/reviews.length);
   const priceAvg = Math.round(scoreSums.price/reviews.length);
 
   const weightedExtrasAvg = extrasAvg / 5;
-  const mostValue = ((tasteAvg + (envAvg / 2) + weightedExtrasAvg || 0) / (priceAvg / 12)) > 1;
-  const bestTaste = tasteAvg + weightedExtrasAvg >= 10;
+  const valueScore = ((tasteScore + (envAvg / 2) + weightedExtrasAvg || 0) / (priceAvg / 12));
+  const bestTaste = tasteScore + weightedExtrasAvg >= 10;
   const mostInnovation = innovationAvg >= 8;
-  const bestDate = envAvg >= 7 && tasteAvg >= 6 && priceAvg > 120 && !reviews[0].origin.includes("Nordamerika");
+  const bestDate = envAvg >= 7 && tasteScore >= 6 && priceAvg > 120 && !reviews[0].origin.includes("Nordamerika");
 
   return {
+    "numReviews": reviews.length,
     "scoreSums": scoreSums,
-    "tasteAvg": tasteAvg,
+    "tastePrecise": tastePrecise,
+    "tasteScore": tasteScore,
+    "valueScore": valueScore,
     "extrasAvg": extrasAvg,
     "envAvg": envAvg,
     "innovationAvg": innovationAvg,
     "priceAvg": priceAvg,
     "weightedExtrasAvg": weightedExtrasAvg,
-    "mostValue": mostValue,
+    "mostValue": valueScore > 1,
     "bestTaste": bestTaste,
     "mostInnovation": mostInnovation,
     "bestDate": bestDate,
@@ -54,14 +59,27 @@ export function getAggregatedReviews(reviews) {
   }
 }
 
-export function filterReviews(reviews, aggregatedReviews, filterOn) {
+export function filterReviews(groupedReviews, aggregatedReviews, filterOn) {
   var filteredReviews = {};
-  Object.keys(reviews).forEach(restaurant => {
+  Object.keys(groupedReviews).forEach(restaurant => {
     if (aggregatedReviews[restaurant][filterOn]) {
-      filteredReviews[restaurant] = reviews[restaurant];
+      filteredReviews[restaurant] = groupedReviews[restaurant];
     }
   })
   return filteredReviews;
+}
+
+export function sortReviews(reviews, aggregatedReviews, sortOn) {
+  console.log(aggregatedReviews);
+  return _(reviews).chain()
+  .sortBy(review => review.restaurant)
+  .sortBy(review => aggregatedReviews[review.restaurant.toLowerCase()][sortOn])
+  .reverse()
+  .value()
+}
+
+export function groupReviews(reviews) {
+  return _.groupBy(reviews, r => r.restaurant.toLowerCase());
 }
 
 export function filterSearchedReviews(reviews, searchPhrase) {

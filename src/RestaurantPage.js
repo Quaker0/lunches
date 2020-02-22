@@ -11,7 +11,7 @@ class MealReviewCard extends Component {
     const aggregatedReviews = getAggregatedReviews(reviews);
     let reviewsItems = [];
     _.filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={review.timestamp}><p><i className="fas fa-quote-left"/><i className="p-2">{review.review}</i><i className="fas fa-quote-right"/></p></div>));
-    var tasteIcons = getRateCircles(aggregatedReviews.tasteAvg)
+    var tasteIcons = getRateCircles(aggregatedReviews.tasteScore)
     
     return (
       <div className="col-sm-6 py-3 px-5">
@@ -31,14 +31,14 @@ export default class RestaurantPage extends Component {
     super(props);
     const restaurant = this.props.match.params.restaurant;
     this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0}
-    window.mixpanel.track("Page view", {"page": "Restaurant page", "restaurant": restaurant});
+    window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-    fetch('https://www.sthlmlunch.se/reviews.json')
+    window.addEventListener("resize", this.updateWindowDimensions);
+    fetch("https://www.sthlmlunch.se/reviews.json")
     .then((response) => {
       response.json()
       .then((allReviews) => {
@@ -98,14 +98,8 @@ export default class RestaurantPage extends Component {
 
     return (    
     <>  
-      <div className="container-fluid">
-        <div className="row p-4">
-          <div className="mx-auto">
-            <div className="page-header text-center">
-              <h2>{this.state.reviews[0].restaurant}</h2>
-            </div>
-          </div>
-        </div>
+      <div className="page-header text-center">
+        <h2>{this.state.reviews[0].restaurant}</h2>
       </div>
 
       <div className="container">

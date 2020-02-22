@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import RestaurantCard from './RestaurantCard.js';
 import SearchBar from './SearchBar.js';
-import { getAggregatedReviews, filterReviews, filterSearchedReviews } from './utils.js'
-import _ from 'lodash';
+import { getAggregatedReviews, filterSearchedReviews, sortReviews, groupReviews } from './utils.js'
 
 export default class RestaurantReviewsPage extends Component {
   constructor(props) {
@@ -10,37 +9,22 @@ export default class RestaurantReviewsPage extends Component {
     const params = new URLSearchParams(this.props.location.search); 
     window.mixpanel.track("Page view", {"page": "Restaurants page"});
     const originFilter = params.get("origin");
-    if (originFilter) {
-      window.mixpanel.track("Filter used", {"filterType": "origin"});
-    }
+    Object.keys(params).forEach(filterItem => window.mixpanel.track("Filter used", {"filterType": "origin"}));
 
     this.state = {
-      reviews: null, aggregatedReviews: {}, bestTaste: false, bestDate: false, 
-      mostValue: false, mostInnovative: false, searchPhrase: null, 
-      originFilter: originFilter
+      reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: originFilter
     };
-    this.toggleTasteCheckbox = this.toggleTasteCheckbox.bind(this);
-    this.toggleDateCheckbox = this.toggleDateCheckbox.bind(this);
-    this.toggleValueCheckbox = this.toggleValueCheckbox.bind(this);
-    this.toggleInnovationCheckbox = this.toggleInnovationCheckbox.bind(this);
     this.removeOriginFilter = this.removeOriginFilter.bind(this);
+    this.sortBy = this.sortBy.bind(this);
     this.search = this.search.bind(this);
   }
 
-  toggleTasteCheckbox() {
-    this.setState({"bestTaste": !this.state.bestTaste});
-  }
-  toggleDateCheckbox() {
-    this.setState({"bestDate": !this.state.bestDate});
-  }
-  toggleValueCheckbox() {
-    this.setState({"mostValue": !this.state.mostValue});
-  }
-  toggleInnovationCheckbox() {
-    this.setState({"mostInnovative": !this.state.mostInnovative});
-  }
   removeOriginFilter() {
-    this.setState({"originFilter": null});
+    this.setState({originFilter: null});
+  }
+  sortBy(event) {
+    const sortedReviews = sortReviews(Object.values(this.state.groupedReviews).flat(), this.state.aggregatedReviews, event.target.id);
+    this.setState({groupedReviews: groupReviews(sortedReviews)});
   }
   search(event) {
     if (event.target.value !== this.state.searchPhrase) {
@@ -54,13 +38,13 @@ export default class RestaurantReviewsPage extends Component {
       response.json()
       .then((reviews) => {
         if (reviews) {
-          const groupedReviews = _.groupBy(reviews, r => r.restaurant.toLowerCase());
+          const groupedReviews = groupReviews(reviews);
           const aggregatedReviews = {};
           Object.keys(groupedReviews).forEach( restaurant => {
               aggregatedReviews[restaurant] = getAggregatedReviews(groupedReviews[restaurant])
             }
           )
-          this.setState({"reviews": groupedReviews, "aggregatedReviews": aggregatedReviews});
+          this.setState({groupedReviews: groupedReviews, aggregatedReviews: aggregatedReviews});
         }
       }
       );
@@ -68,20 +52,8 @@ export default class RestaurantReviewsPage extends Component {
   }
 
   render() {
-    const { reviews, aggregatedReviews, bestTaste, bestDate, mostValue, mostInnovative, searchPhrase, originFilter } = this.state;  
-    var filteredReviews = Object.assign({}, reviews);
-    if (bestTaste) {
-      filteredReviews = filterReviews(filteredReviews, aggregatedReviews, "bestTaste");
-    }
-    if (bestDate) {
-      filteredReviews = filterReviews(filteredReviews, aggregatedReviews, "bestDate");
-    }
-    if (mostValue) {
-      filteredReviews = filterReviews(filteredReviews, aggregatedReviews, "mostValue");
-    }
-    if (mostInnovative) {
-      filteredReviews = filterReviews(filteredReviews, aggregatedReviews, "mostInnovative");
-    }
+    const { groupedReviews, aggregatedReviews, searchPhrase, originFilter } = this.state;  
+    var filteredReviews = Object.assign({}, groupedReviews);
     if (searchPhrase) {
       filteredReviews = filterSearchedReviews(filteredReviews, searchPhrase);
     }
@@ -100,7 +72,7 @@ export default class RestaurantReviewsPage extends Component {
     return (
       <>
         <h2 className="page-header text-center">Restauranger</h2>
-        <SearchBar toggleTaste={this.toggleTasteCheckbox} toggleDateCheckbox={this.toggleDateCheckbox} toggleValueCheckbox={this.toggleValueCheckbox} toggleInnovationCheckbox={this.toggleInnovationCheckbox} search={this.search}/>
+        <SearchBar search={this.search} sortBy={this.sortBy}/>
         <div className="container">
           {originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}
           <div id="reviews" className="row">
