@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
 import ReviewCard from './ReviewCard.js';
-
+import _ from "lodash";
 
 export default class AllReviewsPage extends Component {
   constructor(props) {
+    window.mixpanel.track("Page view", {"page": "Reviews page"});
     super(props);
-    this.state = {"reviewCards": []}
+    this.state = {"reviews": []};
+    this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
+  }
+
+  toggleReviewerFilter(reviewer) {
+    if (this.state.reviewerFilter === reviewer) {
+      this.setState({"reviewerFilter": null})
+    } else {
+      this.setState({"reviewerFilter": reviewer})
+    }
   }
 
   componentDidMount() {
-    fetch('http://lunch-static.s3-website.eu-north-1.amazonaws.com/reviews.json')
+    fetch('https://www.sthlmlunch.se/reviews.json')
     .then((response) => {
       response.json()
       .then((reviews) => {
         if (reviews) {
-          let reviewCards = [];
-          reviews.forEach((review, idx) => reviewCards.push(<ReviewCard key={review.timestamp} review={review} idx={idx}/>));
-          this.setState({"reviewCards": reviewCards})
+          this.setState({"reviews": reviews});
         }
       }
       );
@@ -24,26 +32,22 @@ export default class AllReviewsPage extends Component {
   }
 
   render() {
-    const { reviewCards } = this.state;
+    const { reviews, reviewerFilter } = this.state;
+    let filteredReviews = [];
+    if (reviewerFilter) {
+      filteredReviews = _.filter(reviews, review => review.reviewer.toLowerCase() === reviewerFilter);
+    } else {
+      filteredReviews = Object.assign([], reviews);
+    }
+    
+    let reviewCards = [];
+    filteredReviews.forEach((review) => reviewCards.push(<ReviewCard key={review.timestamp} review={review}/>));
     return (
-      <>
-        <div className="container-fluid" style={{"backgroundColor": "#d3dadb"}}>
-          <div className="row" style={{"padding": "50px 0 70px 0"}}>
-            <div className="mx-auto">
-              <div className="site-heading text-center">
-                <h1>Lunch STHLM</h1>
-                <span className="subheading text-center">Den enda lunch-guiden i Stockholm</span>
-              </div>
-            </div>
-          </div>
+      <div className="container">
+        <div id="reviews" className="row">
+         { reviewCards }
         </div>
-
-        <div className="container">
-          <div id="reviews" className="row">
-           { reviewCards }
-          </div>
-        </div>
-      </>
+      </div>
     );
   }
 }
