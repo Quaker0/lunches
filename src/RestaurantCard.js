@@ -1,36 +1,29 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
-
-function aggregateReviews(reviews) {
-  const scores = ["taste_score", "environment_score", "extras_score", "innovation_score"];
-  var agg = {};
-  scores.forEach(score => {
-    agg[score] = _.sumBy(reviews, r => parseInt(r[score]));
-  });
-  return agg;
-}
-
-function toAvg(sum, samples) {
-  return (Math.round(10 * sum / samples) / 10).toFixed(1);
-}
+import { Link } from 'react-router-dom';
 
 export default class RestaurantCard extends Component {
   	render() {
-      console.log(this.props);
-  		const { restaurant, reviews} = this.props;
-      const scoreSums = aggregateReviews(reviews);
-      const tasteAvg = toAvg(scoreSums.taste_score, reviews.length);
-      const extrasAvg = toAvg(scoreSums.extras_score, reviews.length);
-      const envAvg = toAvg(scoreSums.environment_score, reviews.length);
-      const innovationAvg = toAvg(scoreSums.innovation_score, reviews.length);
+  		const { restaurant, reviews, aggregatedReviews} = this.props;
+      if (!reviews.length) {
+        return ""
+      }
+      const {tasteAvg, envAvg, extrasAvg, innovationAvg, mostInnovation, bestTaste, mostValue, bestDate} = aggregatedReviews;
+      const restaurantName = reviews[0].restaurant
+      const redirect = `/restaurant/${restaurant}`;
 
     	return (
     		<div className="col-sm-12 col-md-6 col-xl-4 py-4">
-    			<h2>{restaurant}</h2>
-          <div>Smak: {tasteAvg>0 ? tasteAvg : "-"}</div>
-          <div>Omgivning: {envAvg>0 ? envAvg : "-"}</div>
-          <div>Tillbehör: {extrasAvg>0 ? extrasAvg : "–"}</div>
-          <div>Nytänkande: {innovationAvg>0 ? innovationAvg : "-"}</div>
+          <div className="inline-block">
+      			<Link to={redirect} className="h2 text-dark">{restaurantName}</Link>
+            {mostInnovation && <i className="fas fa-pencil-ruler fa-sm p-1 pt-3" style={{float: "right", color:"sandybrown"}}/>}
+            {mostValue && <i className="fas fa-award fa-sm p-1 pt-3" style={{float: "right", color:"mediumseagreen"}}/>}
+            {bestTaste && <i className="fas fa-trophy fa-sm p-1 pt-3" style={{float: "right", color:"gold"}}/>}
+            {bestDate && <i className="fas fa-heart fa-sm p-1 pt-3" style={{float: "right", color:"red"}}/>}
+          </div>
+          <div>Smak: {tasteAvg>0 ? Math.round(tasteAvg) + "/10" : "–"}</div>
+          <div>Omgivning: {envAvg>0 ? Math.round(envAvg) + "/10" : "–"}</div>
+          {extrasAvg>0 && <div>Tillbehör: {Math.round(extrasAvg) + "/10"}</div>}
+          <div>Nytänkande: {innovationAvg>0 ? Math.round(innovationAvg) + "/10": "–"}</div>
     		</div>
     	);
   	}
