@@ -19,14 +19,23 @@ a:hover {
   text-decoration: underline;
 }
 
-div.navbar > a {
+.navbar > a {
   color: black !important;
 }
 
-div.navbar > a:hover {
+.navbar > a:hover {
   color: black !important;
+  background-color: #00000060;
+  color: white !important;
   text-decoration: none;
-  background-color: white;
+}
+
+.navbar .active {
+  background-color: #00000060;
+}
+
+.navbar .active a {
+  opacity: 100% !important;
 }
 
 .page-header {

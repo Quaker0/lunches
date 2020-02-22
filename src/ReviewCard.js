@@ -18,7 +18,9 @@ export default class ReviewCard extends Component {
   			<Link to={restaurantRedirect}><h4 style={{width:"60%"}}>{review.restaurant}</h4></Link>
 		     <h4 className="font-weight-light">{review.meal}</h4> 
          {pepperIcons}
-        <Link to={`/restaurants?origin=${review.origin}`}><i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm position-absolute pb-2"} style={{top:30, right:20}}> {review.origin}</i></Link>
+        <Link to={{pathname: "/restaurants", search: "?origin=" + review.origin}}>
+          <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm position-absolute pb-2"} style={{top:30, right:20}}> {review.origin}</i>
+        </Link>
   			<div>{review.description}</div>
   			<div className="font-weight-bold">Pris: {review.price}kr</div>
 

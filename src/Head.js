@@ -14,8 +14,8 @@ export default class Head extends PureComponent {
 
 	    		<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholm})`, width:"100%", height:"500px", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}}>
 		    		<div className="row navbar justify-content-start mx-2">
-						<NavLink to="/" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
-						<NavLink to="/restaurants" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
+						<NavLink exact to="/" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
+						<NavLink exact to="/restaurants" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
 				    </div>
 					<div className="row" style={{"padding": "50px 0 70px 0"}}>
 					 	<div className="mx-auto">

@@ -9,11 +9,15 @@ export default class RestaurantReviewsPage extends Component {
     super(props);
     const params = new URLSearchParams(this.props.location.search); 
     window.mixpanel.track("Page view", {"page": "Restaurants page"});
-    if (params.get("origin")) {
-      window.mixpanel.track("Origin filter used");
+    const originFilter = params.get("origin");
+    if (originFilter) {
+      window.mixpanel.track("Filter used", {"filterType": "origin"});
     }
+
     this.state = {
-      "reviews": "", "aggregatedReviews": {}, "bestTaste": false, "bestDate": false, "mostValue": false, "mostInnovative": false, "searchPhrase": null, "originFilter": params.get("origin")
+      reviews: null, aggregatedReviews: {}, bestTaste: false, bestDate: false, 
+      mostValue: false, mostInnovative: false, searchPhrase: null, 
+      originFilter: originFilter
     };
     this.toggleTasteCheckbox = this.toggleTasteCheckbox.bind(this);
     this.toggleDateCheckbox = this.toggleDateCheckbox.bind(this);
@@ -88,13 +92,14 @@ export default class RestaurantReviewsPage extends Component {
         }
       });
     }
+
     let restaurantCards = [];
     Object.keys(filteredReviews).forEach(restaurant => restaurantCards.push(
       <RestaurantCard key={restaurant} restaurant={restaurant} reviews={filteredReviews[restaurant]} aggregatedReviews={aggregatedReviews[restaurant]} />
     ));
     return (
       <>
-        <h2 className="page-header text-center">Lunch restauranger</h2>
+        <h2 className="page-header text-center">Restauranger</h2>
         <SearchBar toggleTaste={this.toggleTasteCheckbox} toggleDateCheckbox={this.toggleDateCheckbox} toggleValueCheckbox={this.toggleValueCheckbox} toggleInnovationCheckbox={this.toggleInnovationCheckbox} search={this.search}/>
         <div className="container">
           {originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}

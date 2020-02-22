@@ -44,7 +44,7 @@ export default class AllReviewsPage extends Component {
     filteredReviews.forEach((review) => reviewCards.push(<ReviewCard key={review.timestamp} review={review}/>));
     return (
       <>
-        <h2 className="page-header text-center">Lunch Recensioner</h2>
+        <h2 className="page-header text-center">Recensioner</h2>
         <div className="container">
           <div id="reviews" className="row">
            { reviewCards }
