@@ -29,6 +29,11 @@ div.navbar > a:hover {
   background-color: white;
 }
 
+.page-header {
+  padding: 20px;
+  background-color: #e1e5eb;
+}
+
 .circle-icon {
     background: lightskyblue;
     border-radius: 50%;

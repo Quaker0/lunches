@@ -94,7 +94,7 @@ export default class RestaurantReviewsPage extends Component {
     ));
     return (
       <>
-        <h2 className="page-header text-center">Lunch Restauranger</h2>
+        <h2 className="page-header text-center">Lunch restauranger</h2>
         <SearchBar toggleTaste={this.toggleTasteCheckbox} toggleDateCheckbox={this.toggleDateCheckbox} toggleValueCheckbox={this.toggleValueCheckbox} toggleInnovationCheckbox={this.toggleInnovationCheckbox} search={this.search}/>
         <div className="container">
           {originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}
