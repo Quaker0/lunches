@@ -1,11 +1,10 @@
 const path = require("path");
-const fs = require("fs");
 const { createSitemapsAndIndex } = require("sitemap");
 const _ = require("lodash");
 const fetch = require("node-fetch");
 
 const dest = path.resolve("./public", "sitemap");
-const hostname = "https://www.sthlmlunch.se";
+const hostname = "https://www.sthlmlunch.se/sitemap";
 const routes = ["/", "/restaurants"];
 
 fetch("https://www.sthlmlunch.se/reviews.json")
@@ -16,12 +15,10 @@ fetch("https://www.sthlmlunch.se/reviews.json")
     	routes.push("/restaurants/" + restaurant);
     });
     createSitemapsAndIndex({
-	  hostname: hostname,
-	  sitemapName: "sm",
-	  sitemapSize: 50,
-	  targetFolder: dest,
-	  urls: routes
-	});
-  }
-  );
-})
+  	  hostname: hostname,
+  	  targetFolder: dest,
+  	  urls: routes,
+      gzip: false
+	   });
+  });
+});
