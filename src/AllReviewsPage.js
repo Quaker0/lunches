@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import ReviewCard from './ReviewCard.js';
+import React, { Component } from "react";
+import ReviewCard from "./ReviewCard.js";
 import _ from "lodash";
 
 export default class AllReviewsPage extends Component {
@@ -19,7 +19,7 @@ export default class AllReviewsPage extends Component {
   }
 
   componentDidMount() {
-    fetch('https://www.sthlmlunch.se/reviews.json')
+    fetch("https://www.sthlmlunch.se/reviews.json")
     .then((response) => {
       response.json()
       .then((reviews) => {

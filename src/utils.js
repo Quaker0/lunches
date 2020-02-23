@@ -26,7 +26,6 @@ function aggregateReviews(reviews) {
 export function getAggregatedReviews(reviews) {
   const scoreSums = aggregateReviews(reviews);
   const tastePrecise = scoreSums.taste_score/reviews.length;
-  console.log(tastePrecise);
   const tasteScore = Math.round(tastePrecise);
   const extrasAvg = scoreSums.extras_score ? Math.round(scoreSums.extras_score/reviews.length) : 0;
   const envAvg = Math.round(scoreSums.environment_score/reviews.length);
@@ -70,7 +69,6 @@ export function filterReviews(groupedReviews, aggregatedReviews, filterOn) {
 }
 
 export function sortReviews(reviews, aggregatedReviews, sortOn) {
-  console.log(aggregatedReviews);
   return _(reviews).chain()
   .sortBy(review => review.restaurant)
   .sortBy(review => aggregatedReviews[review.restaurant.toLowerCase()][sortOn])
