@@ -24,7 +24,7 @@ export default class AllReviewsPage extends Component {
       response.json()
       .then((reviews) => {
         if (reviews) {
-          this.setState({"reviews": reviews});
+          this.setState({"reviews": reviews.slice(0, 50)});
         }
       }
       );

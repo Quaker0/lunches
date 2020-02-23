@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
-import stockholm from './content/stockholm.jpg'
+import stockholmjp2 from './content/stockholm.jp2'
+import stockholmwebp from './content/stockholm.webp'
 import logo from './content/sthlm-lunch-logo.png'
 
 export default class Head extends PureComponent {
@@ -13,7 +14,7 @@ export default class Head extends PureComponent {
 	    		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossOrigin="anonymous"/>
 	    		<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"/>
 
-	    		<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholm})`, width:"100%", height:"500px", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}}>
+	    		<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"500px", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
 		    		<div className="row navbar justify-content-start mx-2">
 						<NavLink exact to="/" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
 						<NavLink exact to="/restaurants" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
