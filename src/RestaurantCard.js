@@ -12,7 +12,7 @@ export default class RestaurantCard extends Component {
       const redirect = `/restaurant/${restaurant}`;
 
     	return (
-    		<div className="col-sm-12 col-md-6 col-xl-4 py-4">
+    		<div className="col-sm-12 col-md-6 col-xl-4 cardItem">
           <div className="inline-block">
       			<Link to={redirect} className="h3 text-dark">{restaurantName}</Link>
             {mostInnovation && <i className="fas fa-pencil-ruler fa-sm p-1 pt-3" style={{float: "right", color:"sandybrown"}}/>}

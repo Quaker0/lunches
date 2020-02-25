@@ -15,6 +15,10 @@ body {
   }
 }
 
+.cardItem {
+  padding: 1vmax 3vw !important;
+}
+
 a {
   color: black !important;
 }

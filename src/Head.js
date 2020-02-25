@@ -14,12 +14,14 @@ export default class Head extends PureComponent {
 	    		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossOrigin="anonymous"/>
 	    		<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"/>
 
-	    		<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"500px", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
+	    		<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"60vh", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
 		    		<div className="row navbar justify-content-start mx-2">
 						<NavLink exact to="/" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
 						<NavLink exact to="/restaurants" className="p-2 px-3 m-2 my-4 border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
 				    </div>
-				    <img src={logo} alt="STHLM LUNCH" className="rounded mx-auto d-block"/>
+				    <div className="row h-50 justify-content-center align-items-center">
+				    	<img src={logo} alt="STHLM LUNCH"/>
+				    </div>
 				</div>
 			</>
 		);

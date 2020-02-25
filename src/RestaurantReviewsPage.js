@@ -73,7 +73,7 @@ export default class RestaurantReviewsPage extends Component {
       <>
         <h2 className="page-header text-center">Restauranger</h2>
         <SearchBar search={this.search} sortBy={this.sortBy}/>
-        <div className="container">
+        <div className="container-fluid">
           {originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}
           <div id="reviews" className="row">
             { restaurantCards }

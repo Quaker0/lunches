@@ -14,13 +14,13 @@ export default class ReviewCard extends Component {
     const restaurantRedirect = `/restaurant/${review.restaurant}`;
 
   	return (
-  		<div className="col-sm-12 col-md-6 py-4">
-  			<Link to={restaurantRedirect}><h4 style={{width:"60%"}}>{review.restaurant}</h4></Link>
-		     <h4 className="font-weight-light">{review.meal}</h4> 
-         {pepperIcons}
+  		<div className="col-sm-12 col-md-6 cardItem">
         <Link to={{pathname: "/restaurants", search: "?origin=" + review.origin}}>
-          <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm position-absolute pb-2"} style={{top:30, right:20}}> {review.origin}</i>
+          <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {review.origin}</i>
         </Link>
+  			<Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{review.restaurant}</h2></Link>
+		     <h3 className="font-weight-light">{review.meal}</h3> 
+         {pepperIcons}
   			<div>{review.description}</div>
   			<div className="font-weight-bold">Pris: {review.price}kr</div>
 
