@@ -12,7 +12,7 @@ fetch("https://www.sthlmlunch.se/reviews.json")
   response.json()
   .then((reviews) => {
     Object.keys(_.groupBy(reviews, "restaurant")).forEach(restaurant => {
-    	routes.push("/restaurants/" + restaurant);
+    	routes.push("/#/restaurant/" + restaurant);
     });
     createSitemapsAndIndex({
   	  hostname: hostname,
