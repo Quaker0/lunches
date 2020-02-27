@@ -132,7 +132,7 @@ export default class RestaurantPage extends Component {
         </div>
       </div>
 
-      <div className="container-fluid cardItem">
+      <div className="container-fluid card-item">
         <h3>Recenserade måltider</h3>
         <hr />
         <div id="reviews" className="row justify-content-start">

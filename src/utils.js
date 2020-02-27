@@ -5,6 +5,10 @@ import { List } from 'immutable';
 export const originMap = {"Asien": "asia", "Nordeuropa": "europe", "Sydeuropa": "europe", "Mellanöstern": "asia", "Nordamerika": "americas", "Sydamerika": "americas", "Afrika": "africa"};
 export const pepperValues = ["Ingen hetta", "Lite hetta", "Lagom hetta", "Stark", "För stark", "Alldeles för stark"];
 
+export function firstLetterUpperCase(str) {
+  return str ? str[0].toUpperCase() + str.slice(1) : "";
+}
+
 export function getPepperIcons(heat) {
   const numPeppers = pepperValues.indexOf(heat);
   let peppers = [];

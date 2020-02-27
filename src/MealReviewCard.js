@@ -15,7 +15,7 @@ export default class MealReviewCard extends Component {
     var tasteIcons = getRateCircles(aggregatedReviews.tasteScore)
     
     return (
-      <div className="col-sm-6 col-xl-4 cardItem">
+      <div className="col-sm-6 col-xl-4 card-item">
         <h5 className="font-weight-bold">{reviews[0].meal.toUpperCase()}</h5>
         { tasteIcons }
         { pepperIcons }

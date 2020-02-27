@@ -50,7 +50,11 @@ body {
   }
 }
 
-.cardItem {
+*:focus {
+    outline: none !important;
+}
+
+.card-item {
   padding: 1vmax 3vw !important;
 }
 
