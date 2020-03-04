@@ -5,6 +5,7 @@ import AddReviewPage from './AddReviewPage.js';
 import RestaurantReviewsPage from './RestaurantReviewsPage.js';
 import RestaurantPage from './RestaurantPage.js';
 import Head from './Head.js';
+import LoginForm from './LoginForm.js';
 import {
   HashRouter,
   Route,
@@ -22,6 +23,7 @@ export default class App extends Component {
             <Route exact path="/restaurants" component={RestaurantReviewsPage}/>
             <Route exact path="/restaurant/:restaurant" component={RestaurantPage}/>
             <Route exact path="/add-review" component={AddReviewPage}/>
+            <Route exact path="/login" component={LoginForm}/>
             <Route path="*" component={NotFoundPage} />
           </Switch>
         </>

@@ -1,14 +1,22 @@
 import React, { Component } from "react";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Button, TextField, Grid, Chip } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import SaveIcon from '@material-ui/icons/Save';
-import { svSE } from '@material-ui/core/locale';
-import { firstLetterUpperCase } from './utils.js'
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { Button, TextField, Grid, Chip } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import SaveIcon from "@material-ui/icons/Save";
+import { svSE } from "@material-ui/core/locale";
+import { firstLetterUpperCase } from "./utils.js"
+import { getRestaurantMeta, getRestaurantReviews } from "./api.js"
+import { List } from 'immutable';
+
+const tags = [
+  {"id": "takeaway", "title": "Take Away"},
+  {"id": "bookable", "title": "Bokningsbar"}
+];
+
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#e1e5eb' },
+    primary: { main: "#e1e5eb" },
   },
 }, svSE);
 
@@ -28,10 +36,6 @@ const SaveButton = function(props) {
 }
 
 const TagSelect = function(props) {
-  const tags = [
-    {"id": "takeaway", "title": "Take Away"},
-    {"id": "bookable", "title": "Bokningsbar"}
-  ];
   return (
     <Autocomplete
       multiple
@@ -123,24 +127,42 @@ const MealSelect = function(props) {
 export default class AddReviewPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {restaurants:[], newRestaurant:false, newMeal:false, newMealDesc:"", meal:"", restaurant:"", address:"", website:""};
+    this.state = {restaurantMeta:[], meals:[], newRestaurant:false, newMeal:false, newMealDesc:"", meal:"", restaurant:"", address:"", website:""};
     this.toggleNewRestaurant = (show) => this.setState({newRestaurant: show});
     this.toggleNewMeal = (show) => this.setState({newMeal: show});
     this.updateMeal = (event, value) => this.setState({meal: firstLetterUpperCase(value), mealError:false});
-    this.updateRestaurant = (event, value) => this.setState({restaurant: firstLetterUpperCase(value), restaurantError:false});
     this.updateNewMealDesc = (event) => this.setState({newMealDesc: firstLetterUpperCase(event.target.value), newMealDescError:false});
     this.updateWebsite = (event) => this.setState({website: firstLetterUpperCase(event.target.value), websiteError:false});
     this.updateAddress = (event) => this.setState({address: firstLetterUpperCase(event.target.value), addressError:false});
     this.clear = this.clear.bind(this);
     this.validateFields = this.validateFields.bind(this);
+    this.updateRestaurant = this.updateRestaurant.bind(this);
+  }
+
+  updateRestaurant(event, value) {
+    const { restaurantMeta } = this.state;
+    let restaurantName = firstLetterUpperCase(value);
+    this.setState({restaurant: restaurantName, restaurantError: false})
+
+    restaurantMeta.forEach(restaurant => {
+      if (restaurantName === restaurant.name) {
+        getRestaurantReviews(restaurant.reviewPointer)
+        .then(reviews => {;
+          this.setState({"meals": [...new Set(reviews.map(review => review.meal) || [])]});
+        });
+      }
+    });
   }
 
   validateFields() {
-    const { meal, restaurant, newMealDesc, website, address } = this.state;
-    const missingValues = [meal, restaurant, newMealDesc, website, address].filter(v => !v).length;
+    const { meal, restaurant, restaurantMeta, newMealDesc, website, address } = this.state;
+    const isNewRestaurant = !restaurantMeta.some(meta => meta.name === restaurant);
+    const missingDefaultValues = [meal, restaurant].filter(v => !v).length;
+    const missingNewRestaurantValues = isNewRestaurant && [newMealDesc, website, address].filter(v => !v).length;
 
-    if (!missingValues) {
-      return true
+
+    if (!missingDefaultValues && !missingNewRestaurantValues) {
+      return true;
     }
     if (!meal) {
       this.setState({"mealError": true});
@@ -148,16 +170,18 @@ export default class AddReviewPage extends Component {
     if (!restaurant) {
       this.setState({"restaurantError": true});
     }
-    if (!newMealDesc) {
-      this.setState({"newMealDescError": true});
-    } 
-    if (!website) {
-      this.setState({"websiteError": true});
+    if (isNewRestaurant) {
+      if (!newMealDesc) {
+        this.setState({"newMealDescError": true});
+      }
+      if (!website) {
+        this.setState({"websiteError": true});
+      }
+      if (!address) {
+        this.setState({"addressError": true});
+      }
     }
-    if (!address) {
-      this.setState({"addressError": true});
-    }
-    return false
+    return false;
   }
 
   clear() {
@@ -165,17 +189,20 @@ export default class AddReviewPage extends Component {
   }
 
   componentDidMount() {
-    this.setState({restaurants: ["Meat On A Stick", "Ingrids Kitchen"]});
+    getRestaurantMeta()
+    .then(
+      meta => this.setState({restaurantMeta: Object.values(meta)})
+    );
   }
 
 
   render() {
     const { 
-      restaurants, restaurant, newRestaurant, newMeal, newMealDesc, meal, mealError,
+      restaurantMeta, restaurant, newRestaurant, meals, newMeal, newMealDesc, meal, mealError,
       restaurantError, newMealDescError, website, websiteError, address, addressError 
     } = this.state;
+    const restaurants = List(restaurantMeta).map(meta => meta.name).toArray();
     
-    const meals = ["Kebab", "osv"];
     
     return (
       <ThemeProvider theme={theme}>
