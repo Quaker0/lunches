@@ -7,7 +7,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { login } from "./login.js";
+import { login, isLoggedIn } from "./login.js";
+import Dialog from '@material-ui/core/Dialog';
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -33,67 +34,83 @@ export default function LoginForm() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [loginResult, setLoginResult] = useState();
+	const [open, setOpen] = useState(true);
 
 	const handleLoginResult = (result) => {
 		if (result) {
 			if (result.type === "updatePassword") {
-				console.log("updatePassword")
+				console.log("updatePassword");
 				return (
-					<Form 
-						setUsername={setUsername} 
-						setPassword={setPassword} 
-						onSubmit={(event) => submitSignup(event, result.callback)} 
-						username={username}
-						password={password}
-						usernameDisabled={true}
-						actionMessage="Nytt lösenord"
-					/>
+					<Dialog open >
+			        	<Form 
+							setUsername={setUsername} 
+							setPassword={setPassword} 
+							onSubmit={(event) => submitSignup(event, result.callback)} 
+							username={username}
+							password={password}
+							usernameDisabled={true}
+							actionMessage="Nytt lösenord"
+						/>
+				    </Dialog>
 				);
 			}
 			else if (result.type === "failure") {
-				alert(result.message)
+				alert(result.message);
 			}
 			else if (result.type === "success") {
-				console.log("Success")
+				console.log("Success");
+				setOpen(false);
 			}
 			else {
-				console.error(result)
+				console.error(result);
 			}
+			return (
+				<Dialog open={open && !isLoggedIn()}>
+			        <Form
+						username={username}
+						password={password}
+						setUsername={setUsername} 
+						setPassword={setPassword} 
+						onSubmit={submitLogin} 
+					/>
+			    </Dialog>
+			);
 		}
 	}
 
 	const submitLogin = (event) => {
 		event.preventDefault();
 		const result = login(username, password, setLoginResult);
-		console.log(result);
 		setPassword("")
 		setLoginResult(result);
 	}
 
 	const submitSignup = (event, callback) => {
 		event.preventDefault();
-		const result = callback(password);
-		console.log(result);
+		callback(password);
 	}
 
-	if (loginResult) {
+	if (open && loginResult) {
 		return handleLoginResult(loginResult);
 	}
 
 	return (
-		<Form
-			username={username}
-			password={password}
-			setUsername={setUsername} 
-			setPassword={setPassword} 
-			onSubmit={submitLogin} 
-		/>
+		<Dialog open={open && !isLoggedIn()}>
+			<Form
+				username={username}
+				password={password}
+				setUsername={setUsername} 
+				setPassword={setPassword} 
+				onSubmit={submitLogin} 
+			/>
+		</Dialog>
 	);
 }
 
 function Form(props) {
 	const classes = useStyles();
 	const {setUsername, setPassword, onSubmit, username, password, usernameDisabled, actionMessage } = props;
+	console.log("isLoggedIn", isLoggedIn());
 
 	return (
 		<Container component="main" maxWidth="xs">

@@ -7,6 +7,7 @@ import { svSE } from "@material-ui/core/locale";
 import { firstLetterUpperCase } from "./utils.js"
 import { getRestaurantMeta, getRestaurantReviews } from "./api.js"
 import { List } from 'immutable';
+import LoginForm from './LoginForm.js';
 
 const tags = [
   {"id": "takeaway", "title": "Take Away"},
@@ -132,7 +133,7 @@ export default class AddReviewPage extends Component {
     this.toggleNewMeal = (show) => this.setState({newMeal: show});
     this.updateMeal = (event, value) => this.setState({meal: firstLetterUpperCase(value), mealError:false});
     this.updateNewMealDesc = (event) => this.setState({newMealDesc: firstLetterUpperCase(event.target.value), newMealDescError:false});
-    this.updateWebsite = (event) => this.setState({website: firstLetterUpperCase(event.target.value), websiteError:false});
+    this.updateWebsite = (event) => this.setState({website: event.target.value, websiteError:false});
     this.updateAddress = (event) => this.setState({address: firstLetterUpperCase(event.target.value), addressError:false});
     this.clear = this.clear.bind(this);
     this.validateFields = this.validateFields.bind(this);
@@ -141,11 +142,10 @@ export default class AddReviewPage extends Component {
 
   updateRestaurant(event, value) {
     const { restaurantMeta } = this.state;
-    let restaurantName = firstLetterUpperCase(value);
-    this.setState({restaurant: restaurantName, restaurantError: false})
+    this.setState({restaurant: value, restaurantError: false})
 
     restaurantMeta.forEach(restaurant => {
-      if (restaurantName === restaurant.name) {
+      if (value === restaurant.name) {
         getRestaurantReviews(restaurant.reviewPointer)
         .then(reviews => {;
           this.setState({"meals": [...new Set(reviews.map(review => review.meal) || [])]});
@@ -205,30 +205,33 @@ export default class AddReviewPage extends Component {
     
     
     return (
-      <ThemeProvider theme={theme}>
-        <h1 className="page-header text-center">Recensera</h1>
-        <Grid container spacing={3} className="card-item pb-5">
-          <Grid container item direction="row" justify="center">
-            <RestaurantSelect restaurant={restaurant} error={restaurantError} restaurants={restaurants} updateRestaurant={this.updateRestaurant} addNew={this.toggleNewRestaurant}/>
+      <>
+        <LoginForm/>
+        <ThemeProvider theme={theme}>
+          <h1 className="page-header text-center">Recensera</h1>
+          <Grid container spacing={3} className="card-item pb-5">
+            <Grid container item direction="row" justify="center">
+              <RestaurantSelect restaurant={restaurant} error={restaurantError} restaurants={restaurants} updateRestaurant={this.updateRestaurant} addNew={this.toggleNewRestaurant}/>
+            </Grid>
+            <Grid container item direction="row" justify="center">
+              <div className={!newRestaurant ? "collapse in" : ""}>
+                <NewRestaurant website={website} websiteError={websiteError} updateWebsite={this.updateWebsite} address={address} addressError={addressError} updateAddress={this.updateAddress}/>
+              </div>
+            </Grid>
+            <Grid container item direction="row" justify="center">
+              <MealSelect meal={meal} error={mealError} updateMeal={this.updateMeal} meals={meals} addNew={this.toggleNewMeal}/>
+            </Grid>
+            <Grid container item direction="row" justify="center">
+              <div className={!newMeal ? "collapse in" : ""}>
+                <NewMeal desc={newMealDesc} descError={newMealDescError} updateDesc={this.updateNewMealDesc}/>
+              </div>
+            </Grid>
           </Grid>
           <Grid container item direction="row" justify="center">
-            <div className={!newRestaurant ? "collapse in" : ""}>
-              <NewRestaurant website={website} websiteError={websiteError} updateWebsite={this.updateWebsite} address={address} addressError={addressError} updateAddress={this.updateAddress}/>
-            </div>
+            <SaveButton state={this.state} clear={this.clear} validate={this.validateFields}/>
           </Grid>
-          <Grid container item direction="row" justify="center">
-            <MealSelect meal={meal} error={mealError} updateMeal={this.updateMeal} meals={meals} addNew={this.toggleNewMeal}/>
-          </Grid>
-          <Grid container item direction="row" justify="center">
-            <div className={!newMeal ? "collapse in" : ""}>
-              <NewMeal desc={newMealDesc} descError={newMealDescError} updateDesc={this.updateNewMealDesc}/>
-            </div>
-          </Grid>
-        </Grid>
-        <Grid container item direction="row" justify="center">
-          <SaveButton state={this.state} clear={this.clear} validate={this.validateFields}/>
-        </Grid>
-      </ThemeProvider>
+        </ThemeProvider>
+      </>
     );
   }
 }

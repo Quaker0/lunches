@@ -5,7 +5,7 @@ const poolData = {
 	UserPoolId: "eu-central-1_845hqElSt",
 	ClientId: "10ckl84jpvm8sjidd1knmcql1r",
 };
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
 function newCognitoIdentityCredentials(result) {
 	return new AWS.CognitoIdentityCredentials({
@@ -33,45 +33,27 @@ export function login(username, password, callback) {
 	var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 	cognitoUser.authenticateUser(authenticationDetails, {
 		onSuccess: function(result) {
-			var accessToken = result.getAccessToken().getJwtToken();
-			console.log(accessToken);
 			AWS.config.region = "eu-central-1";
 			AWS.config.credentials = newCognitoIdentityCredentials(result);
-
-			AWS.config.credentials.refresh(error => {
-				if (error) {
-					console.error(error);
-					callback({
-						type: "failure", 
-						message: error.message || JSON.stringify(error)
-					});
-				} else {
-					console.log("Successfully logged!");
-					callback({type: "success"});
-				}
-			});
+			callback({type: "success"});
 		},
-
 		newPasswordRequired: function(userAttributes, requiredAttributes) {
 			console.log("newPasswordRequired");
 			delete userAttributes.email_verified;
-			console.log(userAttributes);
             callback({
-            	type: "updatePassword", 
-            	callback: (newPassword, pswCallback) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
+            	type: "updatePassword",
+            	callback: (newPassword) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
 					onSuccess: (result) => {
-						console.log("NEW PASSWORD COMPLETED: ");
-						console.log(result);
-						pswCallback(result);
+						console.log("NEW PASSWORD COMPLETED");
+						AWS.config.credentials = newCognitoIdentityCredentials(result);
+						return result;
 					},
 					onFailure: (err) => {
-						console.log(err);
-						pswCallback(err);
+						console.error(err);
 					}
             	})
             });
         },
-
 		onFailure: function(err) {
 			callback({
 				type: "failure", 
@@ -81,22 +63,30 @@ export function login(username, password, callback) {
 	});
 }
 
-export function getUser() {
+export function isLoggedIn() {
 	var cognitoUser = userPool.getCurrentUser();
- 
 	if (cognitoUser != null) {
-	    cognitoUser.getSession(function(err, session) {
-	        if (err) {
-	            console.log(err.message || JSON.stringify(err));
-	            return {
-					type: "failure", 
-					message: err.message || JSON.stringify(err)
-				}
-	        }
-	        console.log("session validity: " + session.isValid());
-	        AWS.config.credentials = newCognitoIdentityCredentials(session);
-	 		return {type: "success"};
+	    return cognitoUser.getSession(function(err, session) {
+	        if (err) { return false }
+	        return session.isValid();
 	    });
 	}
-	return {type: "userNotFound"};
+	return false;
+}
+
+export function getIdToken() {
+	var cognitoUser = userPool.getCurrentUser();
+	if (cognitoUser != null) {
+	    return cognitoUser.getSession(function(err, session) {
+	    	if (!err && session.isValid()){
+	    		return session.getIdToken().getJwtToken();
+	    	}  
+	    });
+	}
+	return false;
+}
+
+export function getUsername() {
+	const cognitoUser = userPool.getCurrentUser();
+	if (cognitoUser) { return cognitoUser.getUsername(); }
 }
