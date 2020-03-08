@@ -26,10 +26,10 @@ export default class ReviewCard extends Component {
 
   			<div className="container">
   				<div className="row pt-4">
-  					<div className="col-sm-12 col-md-6 font-weight-light">Smak: {review.taste_score ? review.taste_score + "/10" : "–"}</div>
-  					<div className="col-sm-12 col-md-6 font-weight-light">Tillbehör: {review.extras_score ? review.extras_score + "/10" : "–"}</div>
-  					<div className="col-sm-12 col-md-6 font-weight-light">Omgivning: {review.environment_score ? review.environment_score + "/10" : "–"}</div>
-  					<div className="col-sm-12 col-md-6 font-weight-light">Nytänkande: {review.innovation_score ? review.innovation_score + "/10" : "–"}</div>
+  					<div className="col-sm-12 col-md-6 font-weight-light">Smak: {review.tasteScore ? review.tasteScore + "/10" : "–"}</div>
+  					<div className="col-sm-12 col-md-6 font-weight-light">Tillbehör: {review.extrasScore ? review.extrasScore + "/10" : "–"}</div>
+  					<div className="col-sm-12 col-md-6 font-weight-light">Omgivning: {review.environmentScore ? review.environmentScore + "/10" : "–"}</div>
+  					<div className="col-sm-12 col-md-6 font-weight-light">Nytänkande: {review.innovationScore ? review.innovationScore + "/10" : "–"}</div>
   				</div>
   			</div>
         <div className="font-italic py-3">recenserad av {review.reviewer}</div>

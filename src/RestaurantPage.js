@@ -61,9 +61,8 @@ export default class RestaurantPage extends Component {
 
     const aggregatedReviews = getAggregatedReviews(reviews);
     const seats = cleanGet(reviews, "seats");
-    const mealSize = cleanGet(reviews, "meal_size");
-    const waitTime = cleanGet(reviews, "wait_time");
-    const totalTime = cleanGet(reviews, "total_time");
+    const portionSize = cleanGet(reviews, "portionSize");
+    const waitTime = cleanGet(reviews, "waitTime");
     const prices = cleanGet(reviews, "price");
 
     const topPrice = Math.max(...prices);
@@ -97,10 +96,10 @@ export default class RestaurantPage extends Component {
                   </tr>
                   : <></>
                 }
-                { mealSize.length ?
+                { portionSize.length ?
                   <tr>
                     <th scope="row">Portionsstorlek</th>
-                    <td>{mode(mealSize)}</td>
+                    <td>{mode(portionSize)}</td>
                   </tr>
                   : <></>
                 }
@@ -108,13 +107,6 @@ export default class RestaurantPage extends Component {
                   <tr>
                     <th scope="row">Väntetid innan servering</th>
                     <td>{mode(waitTime)}</td>
-                  </tr>
-                  : <></>
-                }
-                { totalTime.length ?
-                  <tr>
-                    <th scope="row">Tid på restaurangen</th>
-                    <td>{mode(totalTime)}</td>
                   </tr>
                   : <></>
                 }

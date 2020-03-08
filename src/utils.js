@@ -19,7 +19,7 @@ export function getPepperIcons(heat) {
 }
 
 function aggregateReviews(reviews) {
-  const scores = ["taste_score", "environment_score", "extras_score", "innovation_score", "price"];
+  const scores = ["tasteScore", "environmentScore", "extrasScore", "innovationScore", "price"];
   var agg = {};
   scores.forEach(score => {
     agg[score] = _.sumBy(reviews, r => parseInt(r[score]));
@@ -29,11 +29,11 @@ function aggregateReviews(reviews) {
 
 export function getAggregatedReviews(reviews) {
   const scoreSums = aggregateReviews(reviews);
-  const tastePrecise = scoreSums.taste_score/reviews.length;
+  const tastePrecise = scoreSums.tasteScore/reviews.length;
   const tasteScore = Math.round(tastePrecise);
-  const extrasAvg = scoreSums.extras_score ? Math.round(scoreSums.extras_score/reviews.length) : 0;
-  const envAvg = Math.round(scoreSums.environment_score/reviews.length);
-  const innovationAvg = Math.round(scoreSums.innovation_score/reviews.length);
+  const extrasAvg = scoreSums.extrasScore ? Math.round(scoreSums.extrasScore/reviews.length) : 0;
+  const envAvg = Math.round(scoreSums.environmentScore/reviews.length);
+  const innovationAvg = Math.round(scoreSums.innovationScore/reviews.length);
   const priceAvg = Math.round(scoreSums.price/reviews.length);
 
   const weightedExtrasAvg = extrasAvg / 5;
