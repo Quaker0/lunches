@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReviewCard from "./ReviewCard.js";
+import { reviewToKey } from "./utils.js";
 import _ from "lodash";
 
 export default class AllReviewsPage extends Component {
@@ -19,20 +20,28 @@ export default class AllReviewsPage extends Component {
   }
 
   componentDidMount() {
-    fetch("https://www.sthlmlunch.se/reviews.json")
+    fetch("https://www.sthlmlunch.se/recentReviews.json")
     .then((response) => {
       response.json()
       .then((reviews) => {
         if (reviews) {
-          this.setState({"reviews": reviews.slice(0, 50)});
+          this.setState({"reviews": reviews});
         }
-      }
-      );
-    })
+      });
+    });
+    fetch("https://www.sthlmlunch.se/restaurants/meta.json")
+    .then((response) => {
+      response.json()
+      .then((meta) => {
+        if (meta) {
+          this.setState({"restaurantsMeta": meta});
+        }
+      });
+    });
   }
 
   render() {
-    const { reviews, reviewerFilter } = this.state;
+    const { reviews, restaurantsMeta, reviewerFilter } = this.state;
     let filteredReviews = [];
     if (reviewerFilter) {
       filteredReviews = _.filter(reviews, review => review.reviewer.toLowerCase() === reviewerFilter);
@@ -41,7 +50,9 @@ export default class AllReviewsPage extends Component {
     }
     
     let reviewCards = [];
-    filteredReviews.forEach((review) => reviewCards.push(<ReviewCard key={review.timestamp} review={review}/>));
+    filteredReviews.forEach((review) => reviewCards.push(
+      <ReviewCard key={reviewToKey(review)} review={review} restaurantsMeta={restaurantsMeta} 
+    />));
     return (
       <>
         <h1 className="page-header text-center">Recensioner</h1>

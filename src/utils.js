@@ -112,6 +112,14 @@ export function getRateCircles(score) {
   return (<div className="row m-0">{icons}</div>);
 }
 
+export function toPointer(restaurant) {
+  return restaurant.toLowerCase().replace("[^a-zA-Zåäö]", "");
+}
+
+export function reviewToKey(review) {
+  return review.reviewer + review.timestamp + review.meal;
+}
+
 export function mode(arr) {
     return arr.sort((a,b) =>
           arr.filter(v => v===a).length

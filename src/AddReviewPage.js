@@ -8,10 +8,10 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import SaveIcon from "@material-ui/icons/Save";
 import { svSE } from "@material-ui/core/locale";
 import { firstLetterUpperCase } from "./utils.js"
-import { getRestaurantMeta, getRestaurantReviews } from "./api.js"
+import { getRestaurantMeta, getRestaurantReviews, addReview } from "./api.js"
 import { List } from 'immutable';
 import LoginForm from './LoginForm.js';
-import { loginUsername } from './login.js';
+import { getUsername } from './login.js';
 import _ from 'lodash';
 
 const tagOptions = [
@@ -32,9 +32,9 @@ const defaultState = {
 };
 
 const saveWhiteList = [
-  "tasteScore", "environmentScore", "meal", "description", "price", "origin",
+  "tasteScore", "environmentScore", "meal", "description", "price",
   "totalPrice", "portionSize", "heat", "waitTime", "totalTime", "extrasScore", 
-  "innovationScore", "restaurantComment", "mealReview", "payInAdvance", "timestamp"
+  "innovationScore", "restaurantComment", "mealReview", "timestamp"
 ]
 
 const theme = createMuiTheme({
@@ -49,27 +49,38 @@ function buildReviewRequest(state) {
   if (!review.description) {
     review.description = state.meals[review.meal];
   }
-  review.reviewer = firstLetterUpperCase(loginUsername);
+  review.reviewer = firstLetterUpperCase(state.username);
   const request = { review: review };
+  var tags = [];
+  state.tags.forEach(tag => tags.push(tag.title))
   if (state.newRestaurant) {
     request.restaurant = {
       name: state.restaurant,
-      tags: Object.values(state.tags).sort().join(", "),
+      tags: tags.sort().join(", "),
       origin: state.origin.sort().join(", "),
       address: state.address,
-      website: state.website
+      website: state.website,
+      payInAdvance: state.payInAdvance
     };
   } else {
-    request.reviewPointer = state.restaurantMeta[0].reviewPointer;
+    state.restaurantMeta.forEach(restaurant => {
+      if (restaurant.name === state.restaurant) {
+        request.reviewPointer = restaurant.reviewPointer
+      }
+    });
   }
   console.log(request);
+  return request;
 }
 
 
 function save(state, clear, validate) {
   if (validate()) {
-    buildReviewRequest(state);
-    // addReview(buildReviewRequest(state))
+    addReview(buildReviewRequest(state)).then(response => {
+      if (response.status !== 201) {
+        alert(`Failed to add review! Error code: ${response.status}.`);
+      }
+    });
     clear();
   }
 }
@@ -274,7 +285,7 @@ export default class AddReviewPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      restaurantMeta:[], meals:[], ...defaultState
+      restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
     };
     this.toggleNewRestaurant = (show) => this.setState({newRestaurant: show});
     this.toggleNewMeal = (show) => this.setState({newMeal: show});
@@ -300,6 +311,11 @@ export default class AddReviewPage extends Component {
     this.clear = this.clear.bind(this);
     this.validateFields = this.validateFields.bind(this);
     this.updateRestaurant = this.updateRestaurant.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+  }
+
+  onFocus() {
+    this.setState({username: getUsername()});
   }
 
   updateRestaurant(event, value) {
@@ -368,19 +384,23 @@ export default class AddReviewPage extends Component {
   }
 
   componentDidMount() {
+    window.addEventListener("focus", this.onFocus)
     getRestaurantMeta()
     .then(
       meta => this.setState({restaurantMeta: Object.values(meta)})
     );
   }
 
+  componentWilUnmount() {
+      window.removeEventListener("focus", this.onFocus)
+  }
 
   render() {
     const { 
       restaurantMeta, seats, restaurant, newRestaurant, meals, newMeal, description, meal, mealError,
       restaurantError, descriptionError, website, websiteError, address, addressError, tasteScore, heat,
       mealReview, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
-      portionSize, extrasScore, waitTime, payInAdvance
+      portionSize, extrasScore, waitTime, payInAdvance, username
     } = this.state;
     const restaurants = List(restaurantMeta).map(meta => meta.name).toArray();
 
@@ -421,7 +441,7 @@ export default class AddReviewPage extends Component {
               <SimpleSelect id="portion-size" label="Portionsstorlek" value={portionSize} onChange={this.updatePortionSize} options={potionSizeOptions}/>
             </GridRow>
             <GridRow>
-              <Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={loginUsername === "hampus" ? 10 : 1}/>
+              <Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={username === "hampus" ? 10 : 1}/>
             </GridRow>
             <GridRow>
               <Score label="Omgivning" score={environmentScore} updateScore={this.updateEnviroment} />

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
-import { getAggregatedReviews, getPepperIcons, getRateCircles, mode, cleanGet } from './utils.js'
+import React, { Component } from "react";
+import _ from "lodash";
+import { getAggregatedReviews, getPepperIcons, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
 
 
 export default class MealReviewCard extends Component {
@@ -11,7 +11,7 @@ export default class MealReviewCard extends Component {
 
     const aggregatedReviews = getAggregatedReviews(reviews);
     let reviewsItems = [];
-    _.filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={review.timestamp}><p><i className="fas fa-quote-left"/><i className="p-2">{review.review}</i><i className="fas fa-quote-right"/></p></div>));
+    _.filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={reviewToKey(review)}><p><i className="fas fa-quote-left"/><i className="p-2">{review.review}</i><i className="fas fa-quote-right"/></p></div>));
     var tasteIcons = getRateCircles(aggregatedReviews.tasteScore)
     
     return (

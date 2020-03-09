@@ -15,8 +15,8 @@ export default class SearchBar extends Component {
                   Sortera på
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item id="tastePrecise" key="tastePrecise" onClick={sortBy} >Bäst smak</Dropdown.Item>
-                  <Dropdown.Item id="valueScore" key="valueScore" onClick={sortBy} >Mest värde</Dropdown.Item>
+                  <Dropdown.Item id="tasteScore" key="tasteScore" onClick={sortBy} >Bäst smak</Dropdown.Item>
+                  <Dropdown.Item id="evnironmentScore" key="environmentScore" onClick={sortBy} >Bäst omgivning</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>

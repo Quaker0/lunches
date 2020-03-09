@@ -14,7 +14,7 @@ export function getRestaurantReviews(reviewPointer) {
 }
 
 export async function addReview(data) {
-  const response = await fetch("https://gykcy8at42.execute-api.eu-north-1.amazonaws.com/Prod/add-review", {
+  return await fetch("https://gykcy8at42.execute-api.eu-north-1.amazonaws.com/Prod/add-review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,5 +23,4 @@ export async function addReview(data) {
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
   });
-  return await response.json();
 }

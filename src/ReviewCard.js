@@ -5,18 +5,19 @@ import { originMap, getPepperIcons} from './utils.js'
 
 export default class ReviewCard extends Component {
 	render() {
-		const { review } = this.props;
+		const { review, restaurantsMeta } = this.props;
     if (!review.restaurant) {
       return ""
     }
+    const restaurantMeta = _.get(restaurantsMeta, review["pointer"], {})
     const pepperIcons = getPepperIcons(review.heat);
-    const firstOrigin = review.origin.split(",")[0];
+    const firstOrigin = (restaurantMeta.origin || "").split(",")[0];
     const restaurantRedirect = `/restaurant/${review.restaurant}`;
 
   	return (
   		<div className="col-sm-12 col-md-6 card-item">
-        <Link to={{pathname: "/restaurants", search: "?origin=" + review.origin}}>
-          <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {review.origin}</i>
+        <Link to={{pathname: "/restaurants", search: "?origin=" + restaurantMeta.origin}}>
+          {firstOrigin ? <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {restaurantMeta.origin}</i> : <></>}
         </Link>
   			<Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{review.restaurant}</h2></Link>
 		     <h3 className="font-weight-light">{review.meal}</h3> 

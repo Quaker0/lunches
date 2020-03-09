@@ -110,7 +110,6 @@ export default function LoginForm() {
 function Form(props) {
 	const classes = useStyles();
 	const {setUsername, setPassword, onSubmit, username, password, usernameDisabled, actionMessage } = props;
-	console.log("isLoggedIn", isLoggedIn());
 
 	return (
 		<Container component="main" maxWidth="xs">

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import RestaurantCard from './RestaurantCard.js';
 import SearchBar from './SearchBar.js';
-import { getAggregatedReviews, filterSearchedReviews, sortReviews, groupReviews } from './utils.js'
+import { filterSearchedReviews, sortReviews, groupReviews } from './utils.js'
+import _ from 'lodash';
 
 export default class RestaurantReviewsPage extends Component {
   constructor(props) {
@@ -22,10 +23,11 @@ export default class RestaurantReviewsPage extends Component {
   removeOriginFilter() {
     this.setState({originFilter: null});
   }
+
   sortBy(event) {
-    const sortedReviews = sortReviews(Object.values(this.state.groupedReviews).flat(), this.state.aggregatedReviews, event.target.id);
-    this.setState({groupedReviews: groupReviews(sortedReviews)});
+    this.setState({sortBy: event.target.id});
   }
+
   search(event) {
     if (event.target.value !== this.state.searchPhrase) {
       this.setState({"searchPhrase": event.target.value});
@@ -33,18 +35,12 @@ export default class RestaurantReviewsPage extends Component {
   }
 
   componentDidMount() {
-    fetch('https://www.sthlmlunch.se/reviews.json')
+    fetch('https://www.sthlmlunch.se/restaurants/meta.json')
     .then((response) => {
       response.json()
-      .then((reviews) => {
-        if (reviews) {
-          const groupedReviews = groupReviews(reviews);
-          const aggregatedReviews = {};
-          Object.keys(groupedReviews).forEach( restaurant => {
-              aggregatedReviews[restaurant] = getAggregatedReviews(groupedReviews[restaurant])
-            }
-          )
-          this.setState({groupedReviews: groupedReviews, aggregatedReviews: aggregatedReviews});
+      .then((meta) => {
+        if (meta) {
+          this.setState({restaurantsMeta: meta});
         }
       }
       );
@@ -52,22 +48,32 @@ export default class RestaurantReviewsPage extends Component {
   }
 
   render() {
-    const { groupedReviews, aggregatedReviews, searchPhrase, originFilter } = this.state;  
-    var filteredReviews = Object.assign({}, groupedReviews);
+    const { restaurantsMeta, searchPhrase, originFilter, sortBy } = this.state;  
+    var filteredMeta = Object.assign({}, restaurantsMeta);
     if (searchPhrase) {
-      filteredReviews = filterSearchedReviews(filteredReviews, searchPhrase);
+      filteredMeta = filterSearchedReviews(filteredMeta, searchPhrase);
     }
     if (originFilter) {
-      Object.keys(filteredReviews).forEach(restaurant => {
-        if (!filteredReviews[restaurant][0].origin.includes(originFilter)) {
-          delete filteredReviews[restaurant];
+      Object.keys(filteredMeta).forEach(pointer => {
+        if (!filteredMeta[pointer].origin.includes(originFilter)) {
+          delete filteredMeta[pointer];
         }
       });
     }
 
+    var metaData = Object.values(filteredMeta)
+
+    if (sortBy) {
+      metaData = _(metaData).chain()
+      .sortBy(meta => meta.name)
+      .sortBy(meta => meta[sortBy])
+      .reverse()
+      .value()
+    }
+
     let restaurantCards = [];
-    Object.keys(filteredReviews).forEach(restaurant => restaurantCards.push(
-      <RestaurantCard key={restaurant} restaurant={restaurant} reviews={filteredReviews[restaurant]} aggregatedReviews={aggregatedReviews[restaurant]} />
+    metaData.forEach(meta => restaurantCards.push(
+      <RestaurantCard key={meta.name} restaurantMeta={meta} />
     ));
     return (
       <>

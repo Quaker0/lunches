@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
-import { getAggregatedReviews, getRateCircles, mode, cleanGet } from './utils.js'
-import MealReviewCard from './MealReviewCard.js';
+import React, { Component } from "react";
+import _ from "lodash";
+import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
+import MealReviewCard from "./MealReviewCard.js";
 
 
 export default class RestaurantPage extends Component {
@@ -16,23 +16,33 @@ export default class RestaurantPage extends Component {
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-    fetch("https://www.sthlmlunch.se/reviews.json")
+
+    fetch("https://www.sthlmlunch.se/restaurants/meta.json")
     .then((response) => {
       response.json()
-      .then((allReviews) => {
-        if (allReviews) {
-          let reviews = _.get(_.groupBy(allReviews, r => r.restaurant.toLowerCase()), this.state.restaurant.toLowerCase(), []);
-          const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
-          let reviewCards = [];
-          Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={mealReviews[0].meal} reviews={mealReviews} />));
-          this.setState({"reviewCards": reviewCards, "reviews": reviews});
+      .then((restaurantsMeta) => {
+        if (restaurantsMeta) {
+          const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase() === this.state.restaurant.toLowerCase())[0];
+          this.setState({"restaurantMeta": meta});
+          if (this.state.restaurant) {
+            fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)
+            .then((response) => {
+              response.json()
+              .then((reviews) => {
+                const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
+                let reviewCards = [];
+                Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={reviewToKey(mealReviews[0])} reviews={mealReviews} />));
+                this.setState({reviewCards: reviewCards, reviews: reviews});
+              });
+            });
+          }
         }
       });
     });
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
+    window.removeEventListener("resize", this.updateWindowDimensions);
   }
 
   updateWindowDimensions() {
@@ -54,13 +64,13 @@ export default class RestaurantPage extends Component {
   }
 
   render() {
-    const { reviewCards, reviews, width } = this.state;
+    const { reviewCards, reviews, width, restaurantMeta } = this.state;
     if (!reviews.length) {
       return "";
     }
 
     const aggregatedReviews = getAggregatedReviews(reviews);
-    const seats = cleanGet(reviews, "seats");
+    const seats = restaurantMeta.seats;
     const portionSize = cleanGet(reviews, "portionSize");
     const waitTime = cleanGet(reviews, "waitTime");
     const prices = cleanGet(reviews, "price");
@@ -68,8 +78,8 @@ export default class RestaurantPage extends Component {
     const topPrice = Math.max(...prices);
     const minPrice = Math.min(...prices);
     const mapWidth = width > 1200 ? "600" : width > 1000 ? "500" : "400";
-    const mapURL = `https://maps.googleapis.com/maps/api/staticmap?&zoom=13&size=${mapWidth}x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C${reviews[0].address}&key=AIzaSyCQWr60KEp4VnNMdwb7AzQkIuptT3D2zNc`;
-    const mapLink = `https://maps.google.com/maps?q=${reviews[0].address}`;
+    const mapURL = `https://maps.googleapis.com/maps/api/staticmap?&zoom=13&size=${mapWidth}x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurantMeta.address}&key=AIzaSyCQWr60KEp4VnNMdwb7AzQkIuptT3D2zNc`;
+    const mapLink = `https://maps.google.com/maps?q=${restaurantMeta.address}`;
 
     var envIcons = getRateCircles(aggregatedReviews.envAvg);
 
@@ -87,12 +97,12 @@ export default class RestaurantPage extends Component {
               <tbody>
                 <tr>
                   <th scope="row">Address</th>
-                  <td><i className="fas fa-sm fa-map-marker-alt"/> <a href={mapLink}>{reviews[0].address}</a></td>
+                  <td><i className="fas fa-sm fa-map-marker-alt"/> <a href={mapLink}>{restaurantMeta.address}</a></td>
                 </tr>
-                { seats.length ?
+                { seats ?
                   <tr>
                     <th scope="row">Sittplatser</th>
-                    <td>{mode(seats)}</td>
+                    <td>{seats}</td>
                   </tr>
                   : <></>
                 }

@@ -6,7 +6,6 @@ const poolData = {
 	ClientId: "10ckl84jpvm8sjidd1knmcql1r",
 };
 var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-export var loginUsername = "";
 
 function newCognitoIdentityCredentials(result) {
 	return new AWS.CognitoIdentityCredentials({
@@ -36,7 +35,6 @@ export function login(username, password, callback) {
 		onSuccess: function(result) {
 			AWS.config.region = "eu-central-1";
 			AWS.config.credentials = newCognitoIdentityCredentials(result);
-			loginUsername = username;
 			callback({type: "success"});
 		},
 		newPasswordRequired: function(userAttributes, requiredAttributes) {
