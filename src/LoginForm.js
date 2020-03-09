@@ -30,6 +30,23 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
+
+const getPasswordError = password => {
+	var passwordError = null;
+	if (password) {
+		if (password.length < 8) {
+			passwordError = "För kort!";
+		} else if (!password.match(/[0-9]/g)) {
+			passwordError = "Inga siffror!";
+		} else if (!password.match(/[a-zåäö]/g)) {
+			passwordError = "Inga gemener!";
+		} else if (!password.match(/[A-ZÅÄÖ]/g)) {
+			passwordError = "Inga versaler!";
+		}
+	}
+	return passwordError;
+}
+
 export default function LoginForm() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -41,41 +58,38 @@ export default function LoginForm() {
 			if (result.type === "updatePassword") {
 				console.log("updatePassword");
 				return (
-					<Dialog open >
-			        	<Form 
-							setUsername={setUsername} 
-							setPassword={setPassword} 
-							onSubmit={(event) => submitSignup(event, result.callback)} 
-							username={username}
-							password={password}
-							usernameDisabled={true}
-							actionMessage="Nytt lösenord"
-						/>
-				    </Dialog>
+					<NewPasswordDialog 
+						validate
+						username={username} 
+						password={password} 
+						setUsername={setUsername} 
+						setPassword={setPassword} 
+						onSubmit={submitSignup}
+						passwordError={getPasswordError(password)}
+					/>
 				);
 			}
 			else if (result.type === "failure") {
 				alert(result.message);
+				setLoginResult(null)
 			}
 			else if (result.type === "success") {
 				console.log("Success");
 				setOpen(false);
 			}
 			else {
+				alert("Unknown error!")
 				console.error(result);
+				setLoginResult(null);
 			}
-			return (
-				<Dialog open={open && !isLoggedIn()}>
-			        <Form
-						username={username}
-						password={password}
-						setUsername={setUsername} 
-						setPassword={setPassword} 
-						onSubmit={submitLogin} 
-					/>
-			    </Dialog>
-			);
 		}
+	}
+
+	const submitSignup = (event) => {
+		event.preventDefault();
+		loginResult.callback(password);
+		setLoginResult(null);
+		setOpen(false);
 	}
 
 	const submitLogin = (event) => {
@@ -85,31 +99,54 @@ export default function LoginForm() {
 		setLoginResult(result);
 	}
 
-	const submitSignup = (event, callback) => {
-		event.preventDefault();
-		callback(password);
-	}
 
 	if (open && loginResult) {
 		return handleLoginResult(loginResult);
 	}
 
 	return (
-		<Dialog open={open && !isLoggedIn()}>
-			<Form
-				username={username}
-				password={password}
-				setUsername={setUsername} 
-				setPassword={setPassword} 
-				onSubmit={submitLogin} 
-			/>
-		</Dialog>
+		<LoginDialog 
+			open={open} 
+			username={username} 
+			password={password} 
+			setUsername={setUsername} 
+			setPassword={setPassword} 
+			onSubmit={submitLogin}
+		/>
 	);
 }
 
+const LoginDialog = props => (
+	<Dialog open={props.open && !isLoggedIn()}>
+		<Form
+			username={props.username}
+			password={props.password}
+			setUsername={props.setUsername} 
+			setPassword={props.setPassword} 
+			onSubmit={props.onSubmit} 
+		/>
+	</Dialog>
+);
+
+const NewPasswordDialog = props => (
+	<Dialog open >
+    	<Form 
+			setUsername={props.setUsername} 
+			setPassword={props.setPassword} 
+			onSubmit={props.onSubmit} 
+			username={props.username}
+			password={props.password}
+			passwordError={props.passwordError}
+			usernameDisabled={true}
+			actionMessage="Nytt lösenord"
+		/>
+    </Dialog>
+);
+
+
 function Form(props) {
 	const classes = useStyles();
-	const {setUsername, setPassword, onSubmit, username, password, usernameDisabled, actionMessage } = props;
+	const {setUsername, setPassword, onSubmit, username, password, usernameDisabled, actionMessage, passwordError } = props;
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -136,7 +173,9 @@ function Form(props) {
 		        autoFocus
 		      />
 		      <TextField
+		      	error={!!passwordError}
 		        variant="outlined"
+		        helperText={passwordError}
 		        margin="normal"
 		        required
 		        fullWidth

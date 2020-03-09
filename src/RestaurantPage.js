@@ -24,7 +24,7 @@ export default class RestaurantPage extends Component {
         if (restaurantsMeta) {
           const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase() === this.state.restaurant.toLowerCase())[0];
           this.setState({"restaurantMeta": meta});
-          if (this.state.restaurant) {
+          if (meta && this.state.restaurant) {
             fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)
             .then((response) => {
               response.json()
@@ -65,6 +65,7 @@ export default class RestaurantPage extends Component {
 
   render() {
     const { reviewCards, reviews, width, restaurantMeta } = this.state;
+
     if (!reviews.length) {
       return "";
     }
@@ -93,7 +94,7 @@ export default class RestaurantPage extends Component {
         <div className="row justify-content-around">
           <a href={mapLink}><img alt="Map" src={mapURL} className="rounded"/></a>
           <div>
-            <table className="table" style={{width:"400px"}}>
+            <table className="table">
               <tbody>
                 <tr>
                   <th scope="row">Address</th>
@@ -117,6 +118,13 @@ export default class RestaurantPage extends Component {
                   <tr>
                     <th scope="row">Väntetid innan servering</th>
                     <td>{mode(waitTime)}</td>
+                  </tr>
+                  : <></>
+                }
+                { restaurantMeta.payInAdvance ?
+                  <tr>
+                    <th scope="row">Betala innan du sätter dig</th>
+                    <td>{restaurantMeta.payInAdvance}</td>
                   </tr>
                   : <></>
                 }

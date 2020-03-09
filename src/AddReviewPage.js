@@ -27,14 +27,14 @@ const waitTimeOptions = ["< 5 min", "< 10 min", "< 20 min", "< 30 min", "> 30 mi
 const defaultState = {
   newRestaurant:false, newMeal:false, description:"", price:"", portionSize: "Medel",
   meal:"", restaurant:"", address:"", website:"", seats:null, reviewError:false,
-  mealReview:"", restaurantComment:"", tasteScore:5, environmentScore:5, innovationScore:5,
-  extrasScore:5, heat:"Ingen hetta", waitTime:"< 20 min", payInAdvance:"Ja"
+  review:"", restaurantComment:"", tasteScore:5, environmentScore:5, innovationScore:5,
+  extrasScore:5, heat:"Ingen hetta", waitTime:"< 20 min", payInAdvance:"Ja", timestamp:new Date().toISOString().slice(0, 10)
 };
 
 const saveWhiteList = [
   "tasteScore", "environmentScore", "meal", "description", "price",
   "totalPrice", "portionSize", "heat", "waitTime", "totalTime", "extrasScore", 
-  "innovationScore", "restaurantComment", "mealReview", "timestamp"
+  "innovationScore", "restaurantComment", "review", "timestamp"
 ]
 
 const theme = createMuiTheme({
@@ -51,9 +51,11 @@ function buildReviewRequest(state) {
   }
   review.reviewer = firstLetterUpperCase(state.username);
   const request = { review: review };
-  var tags = [];
-  state.tags.forEach(tag => tags.push(tag.title))
   if (state.newRestaurant) {
+    var tags = [];
+    if (state.tags) {
+      state.tags.forEach(tag => tags.push(tag.title))
+    }
     request.restaurant = {
       name: state.restaurant,
       tags: tags.sort().join(", "),
@@ -247,7 +249,7 @@ const ReviewDate = props => (
       id="review-date"
       label="Datum recenserat"
       type="date"
-      defaultValue={new Date().toISOString().slice(0, 10)}
+      value={props.value}
       InputLabelProps={{shrink: true}}
       onChange={props.updateDate}
       style={{width: "50vw", margin:10}}
@@ -299,7 +301,7 @@ export default class AddReviewPage extends Component {
     this.updateTaste = (event, value) => this.setState({tasteScore: value});
     this.updateExtras = (event, value) => this.setState({extrasScore: value});
     this.updateInnovation = (event, value) => this.setState({innovationScore: value});
-    this.updateReview = (event) => this.setState({mealReview: firstLetterUpperCase(event.target.value), reviewError:false});
+    this.updateReview = (event) => this.setState({review: firstLetterUpperCase(event.target.value), reviewError:false});
     this.updateComment = (event) => this.setState({restaurantComment: firstLetterUpperCase(event.target.value)});
     this.updateEnviroment = (event, value) => this.setState({environmentScore: value});
     this.updateHeat = (event) => this.setState({heat: event.target.value});
@@ -343,10 +345,10 @@ export default class AddReviewPage extends Component {
 
   validateFields() {
     const { 
-      meal, restaurant, restaurantMeta, description, website, address, mealReview, price
+      meal, restaurant, restaurantMeta, description, website, address, review, price
     } = this.state;
     const isNewRestaurant = !restaurantMeta.some(meta => meta.name === restaurant);
-    const missingDefaultValues = [meal, restaurant, mealReview, price].filter(v => !v).length;
+    const missingDefaultValues = [meal, restaurant, review, price].filter(v => !v).length;
     const missingNewRestaurantValues = isNewRestaurant && [description, website, address].filter(v => !v).length;
 
 
@@ -359,7 +361,7 @@ export default class AddReviewPage extends Component {
     if (!price) {
       this.setState({"priceError": true});
     }
-    if (!mealReview) {
+    if (!review) {
       this.setState({"reviewError": true});
     }
     if (!restaurant) {
@@ -399,8 +401,8 @@ export default class AddReviewPage extends Component {
     const { 
       restaurantMeta, seats, restaurant, newRestaurant, meals, newMeal, description, meal, mealError,
       restaurantError, descriptionError, website, websiteError, address, addressError, tasteScore, heat,
-      mealReview, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
-      portionSize, extrasScore, waitTime, payInAdvance, username
+      review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
+      portionSize, extrasScore, waitTime, payInAdvance, username, timestamp
     } = this.state;
     const restaurants = List(restaurantMeta).map(meta => meta.name).toArray();
 
@@ -426,7 +428,7 @@ export default class AddReviewPage extends Component {
           </Grid>
           <Grid container spacing={2} >
             <GridRow>
-              <ReviewDate updateDate={this.updateDate} />
+              <ReviewDate value={timestamp} updateDate={this.updateDate} />
             </GridRow>  
             <GridRow>
               <TextField required value={price} onChange={this.updatePrice} error={priceError} id="price-field" label="Pris" style={{width: "50vw", margin:10}} InputProps={{endAdornment: <InputAdornment position="end">kr</InputAdornment>}} />
@@ -456,7 +458,7 @@ export default class AddReviewPage extends Component {
               <TextField value={restaurantComment} onChange={this.updateComment} id="comment-field" label="Restaurang kommentar" style={{width: "50vw", margin: 10}} />
             </GridRow>
             <GridRow>
-              <TextField required value={mealReview} onChange={this.updateReview} error={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
+              <TextField required value={review} onChange={this.updateReview} error={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
             </GridRow>
             <GridRow>
               <SaveButton state={this.state} clear={this.clear} validate={this.validateFields} />

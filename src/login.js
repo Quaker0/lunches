@@ -49,6 +49,7 @@ export function login(username, password, callback) {
 						return result;
 					},
 					onFailure: (err) => {
+						alert(err.message);
 						console.error(err);
 					}
             	})

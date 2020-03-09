@@ -6,20 +6,27 @@ import { originMap, getPepperIcons} from './utils.js'
 export default class ReviewCard extends Component {
 	render() {
 		const { review, restaurantsMeta } = this.props;
-    if (!review.restaurant) {
+    if (!review.pointer) {
       return ""
     }
-    const restaurantMeta = _.get(restaurantsMeta, review["pointer"], {})
+    const restaurantMeta = _.get(restaurantsMeta, review.pointer, {})
     const pepperIcons = getPepperIcons(review.heat);
     const firstOrigin = (restaurantMeta.origin || "").split(",")[0];
-    const restaurantRedirect = `/restaurant/${review.restaurant}`;
+    var restaurantRedirect = "#";
+    if (restaurantMeta.name) {
+      restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase()}`;
+    }
 
   	return (
   		<div className="col-sm-12 col-md-6 card-item">
-        <Link to={{pathname: "/restaurants", search: "?origin=" + restaurantMeta.origin}}>
-          {firstOrigin ? <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {restaurantMeta.origin}</i> : <></>}
-        </Link>
-  			<Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{review.restaurant}</h2></Link>
+        {
+          firstOrigin ? 
+          <Link to={{pathname: "/restaurants", search: "?origin=" + restaurantMeta.origin}}>
+            <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {restaurantMeta.origin}</i>
+          </Link> 
+          : <></>
+        }
+  			<Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{restaurantMeta.name}</h2></Link>
 		     <h3 className="font-weight-light">{review.meal}</h3> 
          {pepperIcons}
   			<div>{review.description}</div>

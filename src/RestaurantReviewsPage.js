@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RestaurantCard from './RestaurantCard.js';
 import SearchBar from './SearchBar.js';
-import { filterSearchedReviews, sortReviews, groupReviews } from './utils.js'
+import { filterSearchedReviews } from './utils.js'
 import _ from 'lodash';
 
 export default class RestaurantReviewsPage extends Component {
