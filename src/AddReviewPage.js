@@ -15,8 +15,9 @@ import { getUsername } from './login.js';
 import _ from 'lodash';
 
 const tagOptions = [
-  {"id": "takeaway", "title": "Take Away"},
-  {"id": "bookable", "title": "Bokningsbar"}
+  {"id": "takeaway", "title": "Take away"},
+  {"id": "bookable", "title": "Bokningsbar"},
+  {"id": "businessLunch", "title": "Business lunch"}
 ];
 const originOptions = [
   "Afrika", "Asien", "Mellanöstern", "Nordamerika", "Nordeuropa", "Sydamerika", "Sydeuropa"
@@ -154,21 +155,19 @@ const ComboBox = function(props) {
     }
   }
   return (
-    <>
-      <Autocomplete
-        freeSolo
-        forcePopupIcon
-        clearOnEscape
-        id={`${props.id}-combo-box`}
-        value={props.value}
-        options={props.options}
-        noOptionsText=""
-        openText={props.openText}
-        style={{width: "50vw"}}
-        renderInput={params => <TextField {...params} required error={props.error} label={props.label} />}
-        onInputChange={onInputChange}
-      />
-    </>
+    <Autocomplete
+      autoComplete
+      clearOnEscape
+      freeSolo
+      id={`${props.id}-combo-box`}
+      options={props.options}
+      noOptionsText=""
+      getOptionSelected={(x, y) => x && y && x.toLowerCase() === y.toLowerCase()}
+      openText={props.openText}
+      style={{width: "50vw"}}
+      renderInput={params => <TextField {...params} required error={props.error} label={props.label} />}
+      onInputChange={onInputChange}
+    />
   );
 }
 const RestaurantSelect = function(props) {
@@ -213,7 +212,7 @@ const NewMeal = props => (
 const RestaurantSeats = props => (
   <div className="py-2">
     <FormLabel id="seats-range-slider" component="legend">Sittplatser</FormLabel>
-    <RadioGroup row aria-label="seats" name="Seats" value={props.value || "25-35"} onChange={props.updateSeats}>
+    <RadioGroup row aria-label="seats" name="Seats" value={props.seats || "25-35"} onChange={props.updateSeats}>
       <FormControlLabel value="<15" control={<Radio />} label="<15" />
       <FormControlLabel value="15-25" control={<Radio />} label="15-25" />
       <FormControlLabel value="25-35" control={<Radio />} label="25-35" />
@@ -289,8 +288,22 @@ export default class AddReviewPage extends Component {
     this.state = {
       restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
     };
-    this.toggleNewRestaurant = (show) => this.setState({newRestaurant: show});
-    this.toggleNewMeal = (show) => this.setState({newMeal: show});
+    this.toggleNewRestaurant = (show) => {
+      const { restaurantMeta, restaurant } = this.state;
+      if (restaurantMeta.some(meta => meta.name.toLowerCase() === restaurant.toLowerCase())) {
+        this.setState({newRestaurant: false});
+      } else {
+        this.setState({newRestaurant: show});
+      }
+    }
+    this.toggleNewMeal = (show) => {
+      const { meals, meal } = this.state;
+      if (Object.keys(meals).some(m => m.toLowerCase() === meal.toLowerCase())) {
+        this.setState({newMeal: false});
+      } else {
+        this.setState({newMeal: show});
+      }
+    }
     this.updateMeal = (event, value) => this.setState({meal: firstLetterUpperCase(value), mealError:false});
     this.updateNewMealDesc = (event) => this.setState({description: firstLetterUpperCase(event.target.value), descriptionError:false});
     this.updateWebsite = (event) => this.setState({website: event.target.value, websiteError:false});
@@ -325,7 +338,7 @@ export default class AddReviewPage extends Component {
     this.setState({restaurant: value, restaurantError: false})
 
     restaurantMeta.forEach(restaurant => {
-      if (value === restaurant.name) {
+      if (value.toLowerCase() === restaurant.name.toLowerCase()) {
         getRestaurantReviews(restaurant.reviewPointer)
         .then(reviews => {;
           var meals = {};
@@ -335,10 +348,10 @@ export default class AddReviewPage extends Component {
             }
           });
 
-          this.setState({"meals": meals});
+          this.setState({meals: meals, newRestaurant: false, restaurant: restaurant.name});
         });
       } else {
-        this.setState({"meals": []});
+        this.setState({meals: []});
       }
     });
   }
