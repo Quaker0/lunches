@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { 
-  Button, TextField, Grid, Chip, Slider, Radio, RadioGroup, FormControlLabel, 
-  FormLabel, InputAdornment, MenuItem, Select, FormControl, InputLabel
+  Button, TextField, Grid, Chip, Slider, Radio, RadioGroup, FormControlLabel, FormControl,
+  FormLabel, InputAdornment, MenuItem, Select, InputLabel, List, ListItem, ListItemText, Typography
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import SaveIcon from "@material-ui/icons/Save";
@@ -11,7 +11,7 @@ import Explore from '@material-ui/icons/Explore';
 import { svSE } from "@material-ui/core/locale";
 import { firstLetterUpperCase } from "./utils.js"
 import { getRestaurantMeta, getRestaurantReviews, addReview } from "./api.js"
-import { List } from 'immutable';
+import { List as ImmutableList } from 'immutable';
 import LoginForm from './LoginForm.js';
 import { getUsername } from './login.js';
 import _ from 'lodash';
@@ -21,6 +21,49 @@ const tagOptions = [
   {"id": "bookable", "title": "Bokningsbar"},
   {"id": "businessLunch", "title": "Business lunch"}
 ];
+
+const TasteHelp = () => (
+  <>
+    <Typography variant="h6" justify-self="center">
+        Betygssättning av smak
+    </Typography>
+    <Grid container direction="row" spacing={0}>
+      <List dense >
+        <ListItem>
+          <ListItemText primary="1 - Inte gott" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="2 - Varierande kvalité eller smaklöst" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="3 - Lite tråkigt" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="4 - Bra men väldigt standard" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="5 - Goda komponenter men ingen perfekt rätt" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="6 - God rätt, äter den gärna igen" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="7 - God rätt som sticker ut i hur välkomponerad den är eller i kvaliteten av råvarorna" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="8 - Imponerande rätt, inkluderar smaker som är svårhittade i Stockholm" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="9 - En matupplevelse" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="10 - Bästa maträtten i Stockholm (i sin kategori)" />
+        </ListItem>
+      </List>
+    </Grid>
+  </>
+);
+
 const originOptions = [
   "Afrika", "Asien", "Mellanöstern", "Nordamerika", "Nordeuropa", "Sydamerika", "Sydeuropa"
 ];
@@ -242,7 +285,7 @@ const Score = props => (
     </FormLabel>
     <Slider
       step={1/props.multiplier}
-      min={0}
+      min={1}
       max={10}
       scale={x => props.multiplier*x}
       onChange={props.updateScore}
@@ -282,7 +325,7 @@ const SimpleSelect = props => (
       value={props.value}
       onChange={props.onChange}
     >
-      {List(props.options).map(item => <MenuItem value={item} key={item}>{item}</MenuItem>).toArray()}
+      {ImmutableList(props.options).map(item => <MenuItem value={item} key={item}>{item}</MenuItem>).toArray()}
     </Select>
   </FormControl>
   )
@@ -437,7 +480,7 @@ export default class AddReviewPage extends Component {
       review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
       portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType
     } = this.state;
-    const restaurants = List(restaurantMeta).map(meta => meta.name).toArray();
+    const restaurants = ImmutableList(restaurantMeta).map(meta => meta.name).toArray();
 
     return (
       <>
@@ -477,6 +520,9 @@ export default class AddReviewPage extends Component {
             </GridRow>
             <GridRow>
               <SimpleSelect id="portion-size" label="Portionsstorlek" value={portionSize} onChange={this.updatePortionSize} options={potionSizeOptions}/>
+            </GridRow>
+            <GridRow>
+              <TasteHelp />
             </GridRow>
             <GridRow>
               <Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={username === "hampus" ? 10 : 1}/>
