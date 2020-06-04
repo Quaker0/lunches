@@ -14,6 +14,7 @@ export default class EditRestaurantPage extends Component {
 		this.selectReview = this.selectReview.bind(this);
 		this.deleteReview = this.deleteReview.bind(this);
 	}
+
 	componentDidMount() {
 		fetch(`https://www.sthlmlunch.se/restaurants/${this.props.reviewPointer}`)
         .then((response) => {
@@ -31,14 +32,14 @@ export default class EditRestaurantPage extends Component {
         let reviewCards = [];
         Object.values(mealsReviews).forEach((mealReviews) => {
         	mealReviews.forEach(review => {
-        		if (review.reviewer.toLowerCase() === this.state.username.toLowerCase() || (userGroups && userGroups.includes("admins"))) {
-        			reviewCards.push(
-            			<GridRow key={reviewToKey(review)}>
-            				<Button onClick={() => this.selectReview(review)}>{review.meal} - {review.timestamp} - {review.reviewer}
-            				</Button>
-            			</GridRow>
-            		);
-            	}
+        		const show = review.reviewer.toLowerCase() === this.state.username.toLowerCase() || (userGroups && userGroups.includes("admins"));
+    			reviewCards.push(
+        			<GridRow key={reviewToKey(review)}>
+        				<Button variant="contained" disabled={!show} onClick={() => this.selectReview(review)}>
+        					{review.meal} - {review.timestamp} - {review.reviewer}
+        				</Button>
+        			</GridRow>
+        		);
         	});
         });
         return reviewCards;
@@ -63,8 +64,8 @@ export default class EditRestaurantPage extends Component {
 		};
 		return (
 			<>
-				<h1 className="page-header text-center">{this.props.name}</h1>
-				{reviewCards}
+				<h1 className="page-header text-center">{ this.props.name }</h1>
+				{ reviewCards }
 			</>
 		);
 	}
