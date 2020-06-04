@@ -40,7 +40,6 @@ export function getAggregatedReviews(reviews) {
   const valueScore = ((tasteScore + (envAvg / 2) + weightedExtrasAvg || 0) / (priceAvg / 12));
   const bestTaste = tasteScore + weightedExtrasAvg >= 10;
   const mostInnovation = innovationAvg >= 8;
-  const bestDate = envAvg >= 7 && tasteScore >= 6 && priceAvg > 120 && !reviews[0].origin.includes("Nordamerika");
 
   return {
     "numReviews": reviews.length,
@@ -56,7 +55,6 @@ export function getAggregatedReviews(reviews) {
     "mostValue": valueScore > 1,
     "bestTaste": bestTaste,
     "mostInnovation": mostInnovation,
-    "bestDate": bestDate,
     "description": mode(cleanGet(reviews, "description")),
     "meal": mode(cleanGet(reviews, "meal"))
   }

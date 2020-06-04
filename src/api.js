@@ -14,8 +14,44 @@ export function getRestaurantReviews(reviewPointer) {
 }
 
 export async function addReview(data) {
-  return await fetch("https://gykcy8at42.execute-api.eu-north-1.amazonaws.com/Prod/add-review", {
+  return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/add-review", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+}
+
+export async function editReview(data) {
+  return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/edit-review", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+}
+
+export async function editRestaurant(data) {
+  return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/edit-restaurant", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+}
+
+export async function deleteReview(data) {
+  return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/delete-review", {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       "Authorization": getIdToken()

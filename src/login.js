@@ -1,5 +1,6 @@
 import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
 import * as AWS from "aws-sdk/global";
+import jwtDecode from "jwt-decode";
 
 const poolData = {
 	UserPoolId: "eu-central-1_845hqElSt",
@@ -85,6 +86,10 @@ export function getIdToken() {
 	    });
 	}
 	return false;
+}
+
+export function getDecodedJWT() {
+	return jwtDecode(getIdToken());
 }
 
 export function getUsername() {
