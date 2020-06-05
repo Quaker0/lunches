@@ -21,13 +21,13 @@ export default class EditRestaurantPage extends Component {
           response.json()
           .then((reviews) => {
             const userGroups = this.state.jwt["cognito:groups"]
-            const reviewCards = this.buildReviewCards(reviews, userGroups);
-            this.setState({reviewCards: <Grid container spacing={2}>{reviewCards}</Grid>, reviews: reviews});
+            const reviewGrid = this.buildReviewGrid(reviews, userGroups);
+            this.setState({reviewGrid: reviewGrid, reviews: reviews});
           });
         });
 	  }
 
-	  buildReviewCards(reviews, userGroups) {
+	  buildReviewGrid(reviews, userGroups) {
 	  	const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
         let reviewCards = [];
         Object.values(mealsReviews).forEach((mealReviews) => {
@@ -42,7 +42,7 @@ export default class EditRestaurantPage extends Component {
         		);
         	});
         });
-        return reviewCards;
+        return <Grid container spacing={2}>{reviewCards}</Grid>;
 	  }
 
 	 selectReview(review) {
@@ -52,20 +52,20 @@ export default class EditRestaurantPage extends Component {
 	 deleteReview(review) {
 	 	let { reviews } = this.state;
 	 	const userGroups = this.state.jwt["cognito:groups"]
-        const new_reviews = _.filter(reviews, (r) => r.timestamp === review.timestamp && r.reviewer === review.reviewer && r.meal === review.meal)
-        const reviewCards = this.buildReviewCards(new_reviews, userGroups);
-	 	this.setState({"review": null, reviewCards: reviewCards, reviews: new_reviews});
+        const new_reviews = _.filter(reviews, (r) => !(r.timestamp === review.timestamp && r.reviewer === review.reviewer && r.meal === review.meal))
+        const reviewGrid = this.buildReviewGrid(new_reviews, userGroups);
+	 	this.setState({"review": null, reviewGrid: reviewGrid, reviews: new_reviews});
 	 }
 
 	render() {
-		const { review, reviewCards } = this.state;
+		const { review, reviewGrid } = this.state;
 		if (review) {
 			return <EditReviewPage review={review} deleteReview={this.deleteReview} reviewPointer={this.props.reviewPointer}/>;
 		};
 		return (
 			<>
 				<h1 className="page-header text-center">{ this.props.name }</h1>
-				{ reviewCards }
+				{ reviewGrid }
 			</>
 		);
 	}

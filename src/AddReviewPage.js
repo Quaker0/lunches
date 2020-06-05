@@ -7,13 +7,13 @@ import { List as ImmutableList } from "immutable";
 import { getRestaurantMeta, getRestaurantReviews } from "./api.js"
 import { getUsername } from "./login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview } from "./adminReviewUtils.js";
+import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal } from "./adminReviewUtils.js";
 
 export default class AddReviewPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
+      openSaveModal: false, restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
     };
     this.toggleNewRestaurant = (show) => {
       const { restaurantMeta, restaurant } = this.state;
@@ -57,10 +57,11 @@ export default class AddReviewPage extends Component {
     this.updatePayInAdvance = (event) => this.setState({payInAdvance: event.target.value});
     this.updateTags = (event, value) => this.setState({tags: value});
     this.updateOrigin = (event, value) => this.setState({origin: value});
-    this.clear = this.clear.bind(this);
     this.validateFields = this.validateFields.bind(this);
     this.updateRestaurant = this.updateRestaurant.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.sendReview = this.sendReview.bind(this);
+    this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
   }
 
   onFocus() {
@@ -74,11 +75,11 @@ export default class AddReviewPage extends Component {
     restaurantMeta.forEach(restaurant => {
       if (value.toLowerCase() === restaurant.name.toLowerCase()) {
         getRestaurantReviews(restaurant.reviewPointer)
-        .then(reviews => {;
+        .then(reviews => {
           var meals = {};
           reviews.forEach(review => {
             if (!meals[review.meal]) {
-              meals[review.meal] = review.description
+              meals[review.meal] = review.description;
             }
           });
 
@@ -128,20 +129,30 @@ export default class AddReviewPage extends Component {
     return false;
   }
 
-  clear() {
-    this.setState(defaultState);
+  sendReview() {
+    if (this.validateFields()) {
+      saveNewReview(this.state).then(success => {
+        if (success) {
+          this.setState({...defaultState, ...{openSaveModal: true}});
+        } else {
+          alert("APIet misslyckades med att spara recensionen");
+        }
+      });
+    }
+  }
+
+  handleCloseSaveModal() {
+    this.setState({openSaveModal: false});
   }
 
   componentDidMount() {
-    window.addEventListener("focus", this.onFocus)
+    window.addEventListener("focus", this.onFocus);
     getRestaurantMeta()
-    .then(
-      meta => this.setState({restaurantMeta: Object.values(meta)})
-    );
+    .then(meta => this.setState({restaurantMeta: Object.values(meta)}));
   }
 
   componentWillUnmount() {
-      window.removeEventListener("focus", this.onFocus)
+      window.removeEventListener("focus", this.onFocus);
   }
 
   render() {
@@ -193,10 +204,11 @@ export default class AddReviewPage extends Component {
               <TextField required value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
             </GridRow>
             <GridRow>
-              <SaveButton state={this.state} onClick={saveNewReview} clear={this.clear} validate={this.validateFields} />
+              <SaveButton onClick={this.sendReview} />
             </GridRow>
           </Grid>
         </ThemeProvider>
+        <SimpleModal text="Tack for din recension!" open={this.state.openSaveModal} handleClose={this.handleCloseSaveModal} />
       </>
     );
   }

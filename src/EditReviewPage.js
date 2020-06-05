@@ -5,13 +5,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { getUsername } from "./login.js";
 import { firstLetterUpperCase } from "./utils.js"
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview } from "./adminReviewUtils.js";
+import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
 
 export default class EditReviewPage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review};
+    this.state = {openSaveModal: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review};
     this.updateMenuType = (event, value) => this.setState({menuType: value});
     this.updatePrice = (event) => this.setState({price: parseInt(event.target.value.replace(/[^0-9,]/g, "") || 0)});
     this.updateTasteScore = (event, value) => this.setState({tasteScore: value});
@@ -23,25 +23,51 @@ export default class EditReviewPage extends Component {
     this.updateHeat = (event) => this.setState({heat: event.target.value});
     this.updatePortionSize = (event) => this.setState({portionSize: event.target.value});
     this.updateWaitTime = (event) => this.setState({waitTime: event.target.value});
-    this.cleanupReview = this.cleanupReview.bind(this);
+    this.save = this.save.bind(this);
+    this.delete = this.delete.bind(this);
+    this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
+    this.handleCloseDeleteModal = this.handleCloseDeleteModal.bind(this);
   }
 
-  cleanupReview(state) {
-    deleteReview(state)
-    this.props.deleteReview(state)
+  delete() {
+    deleteReview(this.state).then(success => {
+      if (success) {
+        this.setState({openDeleteModal: true});
+      } else {
+        alert("APIet misslyckades med att radera recensionen");
+      }
+    });
+  }
+
+  save() {
+    saveReview(this.state).then(success => {
+      if (success) {
+        this.setState({openSaveModal: true});
+      } else {
+        alert("APIet misslyckades med att uppdatera recensionen");
+      }
+    });
+  }
+
+  handleCloseSaveModal() {
+    this.setState({openSaveModal: false});
+  }
+
+  handleCloseDeleteModal() {
+    this.props.deleteReview(this.state);
   }
 
   render() {
     const { 
       tasteScore, heat, review, environmentScore, restaurantComment, innovationScore, price,
-      portionSize, extrasScore, waitTime, username, timestamp, menuType
+      portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal
     } = this.state;
     return (
       <>
         <ThemeProvider theme={theme}>
           <h1 className="page-header text-center">Redigera recension</h1>
           <Grid container spacing={2} >
-            <ReviewDate value={timestamp}/>
+            <ReviewDate value={timestamp} disabled/>
             <MenuType menuType={menuType} updateMenuType={this.updateMenuType}/>
             <GridRow>
               <TextField required value={price} onChange={this.updatePrice} id="price-field" label="Pris" style={{width: "50vw", margin:10}} InputProps={{endAdornment: <InputAdornment position="end">kr</InputAdornment>}} />
@@ -61,11 +87,13 @@ export default class EditReviewPage extends Component {
               <TextField required value={review} onChange={this.updateReview} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
             </GridRow>
             <GridRow>
-              <SaveButton state={this.state} onClick={saveReview} />
-              <DeleteButton state={this.state} onClick={this.cleanupReview} />
+              <SaveButton onClick={this.save} />
+              <DeleteButton onClick={this.delete} />
             </GridRow>
           </Grid>
         </ThemeProvider>
+        <SimpleModal text="Recensionen har uppdaterats!" open={openSaveModal} handleClose={this.handleCloseSaveModal} />
+        <SimpleModal text="Recensionen har raderats!" open={openDeleteModal} handleClose={this.handleCloseDeleteModal} />
       </>
     );
   }

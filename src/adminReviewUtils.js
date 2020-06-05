@@ -25,15 +25,13 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Explore from "@material-ui/icons/Explore";
 import { firstLetterUpperCase } from "./utils.js"
 import { List as ImmutableList } from "immutable";
+import Modal from "@material-ui/core/Modal";
+import { makeStyles } from "@material-ui/core/styles";
 import * as api from "./api.js"
 import _ from "lodash";
 
 export const tagOptions = [
-  {"id": "takeaway", "title": "Take away"},
-  {"id": "bookable", "title": "Bokningsbar"},
-  {"id": "businessLunch", "title": "Business lunch"},
-  {"id": "vegetarian", "title": "Vegetariskt"},
-  {"id": "vegan", "title": "Veganskt"}
+  "Take away", "Bokningsbar", "Företag", "Vegetariskt", "Veganskt"
 ];
 
 export const TasteHelp = () => (
@@ -127,11 +125,11 @@ function buildReviewRequest(state) {
     };
   } else {    
     if (state.reviewPointer) {
-      request.reviewPointer = state.reviewPointer
+      request.reviewPointer = state.reviewPointer;
     } else {
       state.restaurantMeta.forEach(restaurant => {
         if (restaurant.name === state.restaurant) {
-          request.reviewPointer = restaurant.reviewPointer
+          request.reviewPointer = restaurant.reviewPointer;
         }
       });
     }
@@ -140,38 +138,21 @@ function buildReviewRequest(state) {
 }
 
 
-export function saveNewReview(state, clear, validate) {
-  if (!validate || validate()) {
-    api.addReview(buildReviewRequest(state)).then(response => {
-      if (response.status !== 201) {
-        alert(`Failed to add review! Error code: ${response.status}.`);
-      }
-    });
-    if (clear) {
-      clear();
-    }
-  }
+export function saveNewReview(state) {
+  return api.addReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function saveReview(state) {
-  api.editReview(buildReviewRequest(state)).then(response => {
-    if (response.status !== 201) {
-      alert(`Failed to edit review! Error code: ${response.status}.`);
-    }
-  });
+  return api.editReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function deleteReview(state) {
-  api.deleteReview(buildReviewRequest(state)).then(response => {
-    if (response.status !== 201) {
-      alert(`Failed to delete review! Error code: ${response.status}.`);
-    }
-  });
+  return api.deleteReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export const SaveButton = function(props) {
   return (
-    <Button onClick={() => props.onClick(props.state, props.clear, props.validate)} style={{"margin": 50}}>
+    <Button onClick={props.onClick} style={{"margin": 50}}>
       <SaveIcon fontSize="large" style={{ color: "green"}}/>
       Spara
     </Button>
@@ -180,7 +161,7 @@ export const SaveButton = function(props) {
 
 export const DeleteButton = function(props) {
   return (
-    <Button onClick={() => props.onClick(props.state)} style={{"margin": 50}}>
+    <Button onClick={props.onClick} style={{"margin": 50}}>
       <DeleteIcon fontSize="large" style={{ color: "red"}}/>
       Radera
     </Button>
@@ -191,16 +172,16 @@ export const TagSelect = function(props) {
   return (
     <Autocomplete
       multiple
-      id="tag-selector"
+      freeSolo
       options={tagOptions}
-      getOptionLabel={option => option.title}
+      id="tag-selector"
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
-          <Chip label={option.title} {...getTagProps({ index })} />
+          <Chip label={option} {...getTagProps({ index })} />
         ))
       }
       noOptionsText=""
-      getOptionSelected={(x, y) => x && y && x.id === y.id}
+      getOptionSelected={(x, y) => x && y && x.toLowerCase() === y.toLowerCase()}
       onChange={props.onChange}
       style={{ width: "50vw", margin: 10 }}
       renderInput={params => (
@@ -357,6 +338,7 @@ export const ReviewDate = props => (
         InputLabelProps={{shrink: true}}
         onChange={props.updateDate}
         style={{width: "50vw", margin:10}}
+        disabled={props.disabled}
       />
     </form>
   </GridRow>
@@ -388,3 +370,46 @@ export const GridRow = (props) => (
     </div>
   </Grid>
   )
+
+export function SimpleModal(props) {
+  const classes = useStyles();
+  const [modalStyle] = React.useState(getModalStyle);
+
+  return (
+    <div>
+      <Modal
+        aria-labelledby="modal-title"
+        open={props.open}
+        onClose={props.handleClose}
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <h2 id="modal-title text-center">{props.text}</h2>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    position: "absolute",
+    width: 500,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    border: "2px solid green",
+    padding: theme.spacing(4),
+    margin: "auto",
+    textAlign: "center"
+  },
+}));
