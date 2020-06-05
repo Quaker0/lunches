@@ -1,105 +1,105 @@
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 @media(max-width: 400px) {
-  .sthlm-cover {
-    background-attachment: scroll !important;
-  }
-  .site-logo {
-    width: 60%;
-  }
-  h1, h2 {
-    font-size: 20px !important;
-  }
-  .h3, h3,.h4, h4 {
-    font-size: 16px !important;
-  }
-  body {
-    font-size: 70% !important;
-  }
-  .navbar {
-    text-align: center;
-    padding: 10px 0 !important;
-    justify-content: space-around;
-  }
-  .navbar > a {    
-    padding: 8px;
-    margin: 4px;
-    font-size: 16px;
-    flex: 1;
-  }
+	.sthlm-cover {
+		background-attachment: scroll !important;
+	}
+	.site-logo {
+		width: 60%;
+	}
+	h1, h2 {
+		font-size: 20px !important;
+	}
+	.h3, h3,.h4, h4 {
+		font-size: 16px !important;
+	}
+	body {
+		font-size: 70% !important;
+	}
+	.navbar {
+		text-align: center;
+		padding: 10px 0 !important;
+		justify-content: space-around;
+	}
+	.navbar > a {	
+		padding: 8px;
+		margin: 4px;
+		font-size: 16px;
+		flex: 1;
+	}
 }
 
 @media(min-width:400px) {
-  .navbar {
-    justify-content: center !important;
-    padding-top: 2vh !important;
-  }
-  .navbar > a {
-    padding: 0.5vw 1vw;
-    margin: 0 1vw; 
-  }
-  .site-logo {
-    width: 200px;
-  }
+	.navbar {
+		justify-content: center !important;
+		padding-top: 2vh !important;
+	}
+	.navbar > a {
+		padding: 0.5vw 1vw;
+		margin: 0 1vw; 
+	}
+	.site-logo {
+		width: 200px;
+	}
 }
 
 @media(max-width:767px) {
-  .navbar {
-    justify-content: center !important;
-  }
+	.navbar {
+	justify-content: center !important;
+	}
 }
 
 *:focus {
-    outline: none !important;
+	outline: none !important;
 }
 
 .card-item {
-  padding: 1vmax 3vw !important;
+	padding: 1vmax 3vw !important;
 }
 
 a {
-  color: black !important;
+	color: black !important;
 }
 
 a:hover {
-  color: black !important;
-  text-decoration: underline;
+	color: black !important;
+	text-decoration: underline;
 }
 
 .navbar > a {
-  color: black !important;
+	color: black !important;
 }
 
 .navbar > a:hover {
-  color: black !important;
-  background-color: #00000060;
-  color: white !important;
-  text-decoration: none;
+	color: black !important;
+	background-color: #00000060;
+	color: white !important;
+	text-decoration: none;
 }
 
 .navbar .active {
-  background-color: #00000060;
+	background-color: #00000060;
 }
 
 .navbar .active a {
-  opacity: 100% !important;
+	opacity: 100% !important;
 }
 
 .page-header {
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #e1e5eb;
+	padding: 20px;
+	margin-bottom: 20px;
+	background-color: #e1e5eb;
 }
 
 .circle-icon {
-    background: lightskyblue;
-    border-radius: 50%;
-    text-align: center;
-    vertical-align: middle;
-    padding: 3px;
+	background: lightskyblue;
+	border-radius: 50%;
+	text-align: center;
+	vertical-align: middle;
+	padding: 3px;
 }
 
 .button-icon:hover {

@@ -8,32 +8,31 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
 import AddReviewPage from "./AddReviewPage.js";
-import LoginForm from './LoginForm.js';
-import EditPage from './EditPage.js';
+import LoginForm from "./LoginForm.js";
+import EditPage from "./EditPage.js";
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+	const { children, value, index, ...other } = props;
 
-  return (
-    <Typography
-      component="div"
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {value === index && <Box py={3}>{children}</Box>}
-    </Typography>
-  );
+	return (
+		<Typography
+			component="div"
+			id={`simple-tabpanel-${index}`}
+			{...other}
+		>
+			{value === index && <Box py={3}>{children}</Box>}
+		</Typography>
+	);
 }
 
 export default function AdminPage() {
 	const [value, setValue] = React.useState(0);
-
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 	return (
 		<>
-        	<LoginForm/>
+			<LoginForm/>
 			<AppBar position="static" color="inherit">
 				<Tabs value={value} onChange={handleChange} indicatorColor="primary" variant="fullWidth">
 					<Tab icon={<AddIcon />} label="Lägg till" />

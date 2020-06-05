@@ -38,12 +38,12 @@ export function login(username, password, callback) {
 			AWS.config.credentials = newCognitoIdentityCredentials(result);
 			callback({type: "success"});
 		},
-		newPasswordRequired: function(userAttributes, requiredAttributes) {
+		newPasswordRequired: function(userAttributes) {
 			console.log("newPasswordRequired");
 			delete userAttributes.email_verified;
-            callback({
-            	type: "updatePassword",
-            	callback: (newPassword) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
+			callback({
+				type: "updatePassword",
+				callback: (newPassword) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
 					onSuccess: (result) => {
 						console.log("NEW PASSWORD COMPLETED");
 						AWS.config.credentials = newCognitoIdentityCredentials(result);
@@ -53,9 +53,9 @@ export function login(username, password, callback) {
 						alert(err.message);
 						console.error(err);
 					}
-            	})
-            });
-        },
+				})
+			});
+		},
 		onFailure: function(err) {
 			callback({
 				type: "failure", 
@@ -68,10 +68,10 @@ export function login(username, password, callback) {
 export function isLoggedIn() {
 	var cognitoUser = userPool.getCurrentUser();
 	if (cognitoUser != null) {
-	    return cognitoUser.getSession(function(err, session) {
-	        if (err) { return false }
-	        return session.isValid();
-	    });
+		return cognitoUser.getSession(function(err, session) {
+			if (err) { return false }
+			return session.isValid();
+		});
 	}
 	return false;
 }
@@ -79,11 +79,11 @@ export function isLoggedIn() {
 export function getIdToken() {
 	var cognitoUser = userPool.getCurrentUser();
 	if (cognitoUser != null) {
-	    return cognitoUser.getSession(function(err, session) {
-	    	if (!err && session.isValid()){
-	    		return session.getIdToken().getJwtToken();
-	    	}  
-	    });
+		return cognitoUser.getSession(function(err, session) {
+			if (!err && session.isValid()){
+				return session.getIdToken().getJwtToken();
+			}	
+		});
 	}
 	return false;
 }

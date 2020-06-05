@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { login, isLoggedIn } from "./login.js";
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from "@material-ui/core/Dialog";
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -130,7 +130,7 @@ const LoginDialog = props => (
 
 const NewPasswordDialog = props => (
 	<Dialog open >
-    	<Form 
+		<Form 
 			setUsername={props.setUsername} 
 			setPassword={props.setPassword} 
 			onSubmit={props.onSubmit} 
@@ -140,7 +140,7 @@ const NewPasswordDialog = props => (
 			usernameDisabled={true}
 			actionMessage="Nytt lösenord"
 		/>
-    </Dialog>
+	</Dialog>
 );
 
 
@@ -150,53 +150,53 @@ function Form(props) {
 
 	return (
 		<Container component="main" maxWidth="xs">
-		  <CssBaseline />
-		  <div className={classes.paper}>
-		    <Avatar className={classes.avatar}>
-		      <LockOutlinedIcon />
-		    </Avatar>
-		    <Typography component="h1" variant="h5">
-		      { actionMessage || "Logga in" }
-		    </Typography>
-		    <form className={classes.form} noValidate onSubmit={onSubmit}>
-		      <TextField
-		        variant="outlined"
-		        margin="normal"
-		        required
-		        fullWidth
-		        disabled={usernameDisabled}
-		        id="username"
-		        label="Användarnamn"
-		        name="username"
-		        value={username}
-		        onChange={event => setUsername(event.target.value)}
-		        autoFocus
-		      />
-		      <TextField
-		      	error={!!passwordError}
-		        variant="outlined"
-		        helperText={passwordError}
-		        margin="normal"
-		        required
-		        fullWidth
-		        name="password"
-		        label="Lösenord"
-		        type="password"
-		        id="password"
-		        value={password}
-		        onChange={event => setPassword(event.target.value)}
-		      />
-		      <Button
-		        type="submit"
-		        fullWidth
-		        variant="contained"
-		        color="primary"
-		        className={classes.submit}
-		      >
-		        {actionMessage || "Logga in"}
-		      </Button>
-		    </form>
-		  </div>
+			<CssBaseline />
+			<div className={classes.paper}>
+			<Avatar className={classes.avatar}>
+				<LockOutlinedIcon />
+			</Avatar>
+			<Typography component="h1" variant="h5">
+				{ actionMessage || "Logga in" }
+			</Typography>
+			<form className={classes.form} noValidate onSubmit={onSubmit}>
+				<TextField
+				variant="outlined"
+				margin="normal"
+				required
+				fullWidth
+				disabled={usernameDisabled}
+				id="username"
+				label="Användarnamn"
+				name="username"
+				value={username}
+				onChange={event => setUsername(event.target.value)}
+				autoFocus
+				/>
+				<TextField
+					error={!!passwordError}
+				variant="outlined"
+				helperText={passwordError}
+				margin="normal"
+				required
+				fullWidth
+				name="password"
+				label="Lösenord"
+				type="password"
+				id="password"
+				value={password}
+				onChange={event => setPassword(event.target.value)}
+				/>
+				<Button
+				type="submit"
+				fullWidth
+				variant="contained"
+				color="primary"
+				className={classes.submit}
+				>
+				{actionMessage || "Logga in"}
+				</Button>
+			</form>
+			</div>
 		</Container>
 	);
 }

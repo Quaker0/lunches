@@ -3,20 +3,20 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { GridRow } from "./adminReviewUtils.js";
 import EditRestaurantPage from "./EditRestaurantPage.js";
-import SearchBar from './SearchBar.js';
+import SearchBar from "./SearchBar.js";
 
 export default class EditPage extends Component {
 	constructor() {
 		super();
-		this.state = {"restaurantsMeta": {}, searchPhrase: ""}
+		this.state = {restaurantsMeta: {}, searchPhrase: ""}
 		this.selectRestaurant = this.selectRestaurant.bind(this);
 		this.search = this.search.bind(this);
 	}
 
 	buildMetaRows(restaurantsMeta, searchPhrase) {
 		if (restaurantsMeta) {
-	    	const metaRows = Object.entries(restaurantsMeta).map(([key, meta]) => {
-	    		if (!searchPhrase || meta.name.toLowerCase().includes(searchPhrase.toLowerCase())) {
+			const metaRows = Object.entries(restaurantsMeta).map(([key, meta]) => {
+				if (!searchPhrase || meta.name.toLowerCase().includes(searchPhrase.toLowerCase())) {
 					return (
 						<GridRow key={ key }>
 							<Button onClick={ () => this.selectRestaurant(key, meta) }>
@@ -27,24 +27,24 @@ export default class EditPage extends Component {
 				} else {
 					return null;
 				}
-	    	});
-	    	return <Grid>{ metaRows }</Grid>
-	    }
+			});
+			return <Grid>{ metaRows }</Grid>
+		}
 	}
 
 	componentDidMount() {
-	    fetch("https://www.sthlmlunch.se/restaurants/meta.json")
-	    .then((response) => {
-	    	response.json()
-	    	.then((restaurantsMeta) => {
-	    		this.setState({
-	    			restaurantsMeta: restaurantsMeta, 
-	    			metaRows: this.buildMetaRows(restaurantsMeta)
-	    		})
-	        }
-	      );
-	    });
-	  }
+		fetch("https://www.sthlmlunch.se/restaurants/meta.json")
+		.then((response) => {
+			response.json()
+			.then((restaurantsMeta) => {
+				this.setState({
+					restaurantsMeta: restaurantsMeta, 
+					metaRows: this.buildMetaRows(restaurantsMeta)
+				})
+			}
+			);
+		});
+		}
 
 	search(event) {
 		if (event.target.value !== this.state.searchPhrase) {
@@ -56,9 +56,9 @@ export default class EditPage extends Component {
 		}
 	}
 
-	 selectRestaurant(key, meta) {
-	 	this.setState({"restaurantKey": key, restaurantMeta: meta})
-	 }
+	selectRestaurant(key, meta) {
+		this.setState({restaurantKey: key, restaurantMeta: meta})
+	}
 
 	render() {
 		const { restaurantMeta, metaRows } = this.state;
