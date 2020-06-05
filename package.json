@@ -26,7 +26,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "deploy": "aws s3 sync build/ s3://www.sthlmlunch.se --acl public-read",
-    "clean": "aws s3 rm s3://www.sthlmlunch.se --recursive --exclude reviews.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
