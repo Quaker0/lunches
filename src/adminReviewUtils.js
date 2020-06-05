@@ -103,7 +103,6 @@ export const theme = createMuiTheme({
 
 
 function buildReviewRequest(state) {
-  console.log(state)
   const review = _.pick(state, saveWhiteList)
   if (!review.description) {
     review.description = state.meals[review.meal];
@@ -139,14 +138,17 @@ function buildReviewRequest(state) {
 
 
 export function saveNewReview(state) {
+  window.mixpanel.track("Add review", {"reviewer": state.username});
   return api.addReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function saveReview(state) {
+  window.mixpanel.track("Edit review", {"reviewer": state.username});
   return api.editReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function deleteReview(state) {
+  window.mixpanel.track("Delete review", {"reviewer": state.username});
   return api.deleteReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
