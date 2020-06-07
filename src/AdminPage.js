@@ -4,12 +4,14 @@ import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
+import TimelineIcon from "@material-ui/icons/Timeline";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
 import AddReviewPage from "./AddReviewPage.js";
 import LoginForm from "./LoginForm.js";
 import EditPage from "./EditPage.js";
+import StatPage from "./StatPage.js";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -37,6 +39,7 @@ export default function AdminPage() {
 				<Tabs value={value} onChange={handleChange} indicatorColor="primary" variant="fullWidth">
 					<Tab icon={<AddIcon />} label="Lägg till" />
 					<Tab icon={<EditIcon />} label="Redigera" />
+          <Tab icon={<TimelineIcon />} label="Statistik" />
 				</Tabs>
 			</AppBar>
 			
@@ -46,6 +49,9 @@ export default function AdminPage() {
 			<TabPanel value={value} index={1}>
 				<EditPage />
 			</TabPanel>
+      <TabPanel value={value} index={2}>
+        <StatPage />
+      </TabPanel>
 		</>
 	);
 }

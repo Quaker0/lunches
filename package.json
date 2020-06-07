@@ -20,13 +20,14 @@
 		"react-dom": "^16.12.0",
 		"react-router-dom": "5.1.2",
 		"react-scripts": "3.4.0",
+		"react-vis": "1.11.7",
 		"yarn": "1.22.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"deploy": "aws s3 sync build/ s3://www.sthlmlunch.se --acl public-read",
-    "lint": "eslint src --fix"
+		"lint": "eslint src --fix"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
