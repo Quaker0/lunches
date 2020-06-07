@@ -44,7 +44,7 @@ export default class EditPage extends Component {
 			}
 			);
 		});
-		}
+	}
 
 	search(event) {
 		if (event.target.value !== this.state.searchPhrase) {
@@ -63,7 +63,7 @@ export default class EditPage extends Component {
 	render() {
 		const { restaurantMeta, metaRows } = this.state;
 		if (restaurantMeta) {
-			return (<EditRestaurantPage {...restaurantMeta}/>);
+			return <EditRestaurantPage back={this.selectRestaurant} {...restaurantMeta}/>;
 		}
 		return (
 			<>

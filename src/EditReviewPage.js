@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { getUsername } from "./login.js";
 import { firstLetterUpperCase } from "./utils.js"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
 
 export default class EditReviewPage extends Component {
@@ -64,6 +67,9 @@ export default class EditReviewPage extends Component {
 		return (
 			<>
 				<ThemeProvider theme={theme}>
+          <Box mt={-3}>
+            <Button variant="contained" onClick={() => this.props.back()}><ChevronLeftIcon /></Button>
+          </Box>
 					<h1 className="page-header text-center">Redigera recension</h1>
 					<Grid container spacing={2} >
 						<ReviewDate value={timestamp} disabled/>

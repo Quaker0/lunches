@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 import { GridRow } from "./adminReviewUtils.js";
 import { reviewToKey } from "./utils.js";
 import { getDecodedJWT, getUsername }	from "./login.js";
 import EditReviewPage from "./EditReviewPage.js";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import _ from "lodash";
 
 export default class EditRestaurantPage extends Component {
@@ -60,10 +62,13 @@ export default class EditRestaurantPage extends Component {
 	render() {
 		const { review, reviewGrid } = this.state;
 		if (review) {
-			return <EditReviewPage review={review} deleteReview={this.deleteReview} reviewPointer={this.props.reviewPointer}/>;
+			return <EditReviewPage review={review} deleteReview={this.deleteReview} reviewPointer={this.props.reviewPointer} back={this.selectReview}/>;
 		}
 		return (
 			<>
+        <Box mt={-3}>
+            <Button variant="contained" onClick={() => this.props.back()}><ChevronLeftIcon /></Button>
+          </Box>
 				<h1 className="page-header text-center">{ this.props.name }</h1>
 				{ reviewGrid }
 			</>
