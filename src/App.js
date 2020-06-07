@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NotFoundPage from "./NotFoundPage.js";
 import AllReviewsPage from "./AllReviewsPage.js";
-import AdminPage from "./AdminPage.js";
+import AdminPage from "./admin/AdminPage.js";
 import RestaurantReviewsPage from "./RestaurantReviewsPage.js";
 import RestaurantPage from "./RestaurantPage.js";
 import Head from "./Head.js";

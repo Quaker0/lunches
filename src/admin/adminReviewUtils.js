@@ -23,11 +23,11 @@ import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Explore from "@material-ui/icons/Explore";
-import { firstLetterUpperCase } from "./utils.js"
+import { firstLetterUpperCase } from "../utils.js"
 import { List as ImmutableList } from "immutable";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import * as api from "./api.js"
+import * as api from "../api.js"
 import _ from "lodash";
 
 export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Vegetariskt", "Veganskt"];

@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { firstLetterUpperCase } from "./utils.js"
+import { firstLetterUpperCase } from "../utils.js"
 import { List as ImmutableList } from "immutable";
-import { getRestaurantMeta, getRestaurantReviews } from "./api.js"
-import { getUsername } from "./login.js";
+import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
+import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal } from "./adminReviewUtils.js";
 
@@ -166,7 +166,6 @@ export default class AddReviewPage extends Component {
 		return (
 			<>
 				<ThemeProvider theme={theme}>
-					<h1 className="page-header text-center">Recensera</h1>
 					<Grid container spacing={2} >
 						<GridRow>
 							<RestaurantSelect restaurant={restaurant} error={!!restaurantError} helperText={restaurantError} restaurants={restaurants} updateRestaurant={this.updateRestaurant} addNew={this.toggleNewRestaurant}/>
