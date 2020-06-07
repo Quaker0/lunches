@@ -21,9 +21,7 @@ export default class ReviewCard extends Component {
 			<div className="col-sm-12 col-md-6 card-item">
 				{
 					firstOrigin ? 
-					<Link to={{pathname: "/restaurants", search: "?origin=" + restaurantMeta.origin}}>
-					<i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"} > {restaurantMeta.origin}</i>
-					</Link> 
+					<i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"}>{restaurantMeta.origin}</i>
 					: <></>
 				}
 				<Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{restaurantMeta.name}</h2></Link>

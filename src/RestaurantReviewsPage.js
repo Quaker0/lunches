@@ -7,13 +7,9 @@ import _ from "lodash";
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
-		const params = new URLSearchParams(this.props.location.search); 
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
-		const originFilter = params.get("origin");
-		Object.keys(params).forEach(filterItem => window.mixpanel.track("Filter used", {"filterType": filterItem}));
-
 		this.state = {
-			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: originFilter
+			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null
 		};
 		this.removeOriginFilter = this.removeOriginFilter.bind(this);
 		this.sortBy = this.sortBy.bind(this);
@@ -75,7 +71,6 @@ export default class RestaurantReviewsPage extends Component {
 		));
 		return (
 			<>
-				<h2 className="page-header text-center">Restauranger</h2>
 				<SearchBar search={this.search} sortBy={this.sortBy}/>
 				<div className="container-fluid">
 					{originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}

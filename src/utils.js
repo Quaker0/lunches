@@ -1,6 +1,11 @@
-import _ from "lodash";
 import React from "react";
 import { List } from "immutable";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import AppBar from "@material-ui/core/AppBar";
+import _ from "lodash";
 
 export const originMap = {"Asien": "asia", "Nordeuropa": "europe", "Sydeuropa": "europe", "Mellanöstern": "asia", "Nordamerika": "americas", "Sydamerika": "americas", "Afrika": "africa"};
 export const pepperValues = ["Ingen hetta", "Lite hetta", "Lagom hetta", "Stark", "För stark", "Alldeles för stark"];
@@ -127,4 +132,38 @@ export function mode(arr) {
 
 export function cleanGet(reviews, key) {
 	return _.compact(List(reviews).map(review => review[key]).toArray());
+}
+
+export function TabMenu(props) {
+  return (
+    <>
+      <AppBar position="static" color="inherit">
+        <Tabs value={props.value} onChange={props.handleChange} indicatorColor="primary" variant="fullWidth">
+          { List(props.tabs).map((tab) => <Tab icon={tab.icon} label={tab.title} key={tab.title.toLowerCase()}/>).toArray() }
+        </Tabs>
+      </AppBar>
+      
+      {
+        List(props.tabs).map((tab, index) => (
+          <TabPanel key={index} value={props.value} index={index}>
+            { tab.page }
+          </TabPanel>
+        )).toArray()
+      }
+    </>
+  );
+}
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      id={`simple-tabpanel-${index}`}
+      {...other}
+    >
+      {value === index && <Box py={3}>{children}</Box>}
+    </Typography>
+  );
 }

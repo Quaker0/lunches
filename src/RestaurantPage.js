@@ -1,15 +1,42 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import _ from "lodash";
-import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
+import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
 import MealReviewCard from "./MealReviewCard.js";
+import AllReviewsPage from "./AllReviewsPage.js";
+import RestaurantReviewsPage from "./RestaurantReviewsPage.js";
 
+let tabs = [
+  {title: "Recensioner", page: <AllReviewsPage/>}, 
+  {title: "Restauranger", page: <RestaurantReviewsPage/>}
+];
 
-export default class RestaurantPage extends Component {
+export default function RestaurantPage(props) {
+  const [value, setValue] = React.useState(2);
+  const restaurant = props.restaurant || props.match.params.restaurant;
+  const [tab, setTab] = React.useState({title: restaurant || "", page: <RestaurantInfo {...props}/>});
+  useEffect(() => {
+    if (tabs.length === 2 || restaurant !== tabs[2].title) {
+      setTab({title: restaurant || "", page: <RestaurantInfo {...props}/>})
+      setValue(2);
+    }
+  }, [restaurant, props]);
+  if (value === 2) {
+    tabs[2] = tab;
+  } else {
+    tabs.length = 2;
+  }
+  const handleChange = (event, newValue) => { setValue(newValue) };
+  return (
+    <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
+  );
+}
+
+class RestaurantInfo extends Component {
 	constructor(props) {
 		super(props);
-		const restaurant = this.props.match.params.restaurant;
+		const restaurant = this.props.restaurant || this.props.match.params.restaurant;
+    window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
 		this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0};
-		window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 	}
 

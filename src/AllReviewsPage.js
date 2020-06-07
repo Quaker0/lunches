@@ -55,7 +55,6 @@ export default class AllReviewsPage extends Component {
 		));
 		return (
 			<>
-				<h1 className="page-header text-center">Recensioner</h1>
 				<div className="container-fluid">
 					<div id="reviews" className="row">
 					{ reviewCards }

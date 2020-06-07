@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { NavLink } from "react-router-dom";
 import stockholmjp2 from "./content/stockholm.jp2"
 import stockholmwebp from "./content/stockholm.webp"
 import logo from "./content/sthlm-lunch-logo.png"
@@ -15,10 +14,6 @@ export default class Head extends PureComponent {
 				<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"/>
 
 				<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"60vh", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
-					<div className="row navbar justify-content-start">
-						<NavLink exact to="/" className="border border-dark rounded" title="Senaste Lunch Recensioner">Recensioner</NavLink>
-						<NavLink exact to="/restaurants" className="border border-dark rounded" title="Lunch Restauranger - Best Lunch Stockholm - Bäst Lunch Stockholm">Restauranger</NavLink>
-					</div>
 					<div className="row h-75 justify-content-center align-items-center">
 						<img src={logo} alt="STHLM LUNCH" className="site-logo"/>
 					</div>
