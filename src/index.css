@@ -3,7 +3,7 @@
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-  min-height: 500px
+  min-height: 1000px
 }
 
 @media(max-width: 400px) {

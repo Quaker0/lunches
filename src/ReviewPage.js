@@ -9,8 +9,8 @@ const tabs = [
 	{title: "Restauranger", page: <RestaurantReviewsPage/>}
 ];
 
-export default function ReviewPage() {
-	const [value, setValue] = React.useState(0);
+export default function ReviewPage(props) {
+	const [value, setValue] = React.useState(props.tab || 0);
 	const handleChange = (event, newValue) => { setValue(newValue) };
 	return <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>;
 }

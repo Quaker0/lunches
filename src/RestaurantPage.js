@@ -1,35 +1,31 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import _ from "lodash";
 import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
 import MealReviewCard from "./MealReviewCard.js";
-import AllReviewsPage from "./AllReviewsPage.js";
-import RestaurantReviewsPage from "./RestaurantReviewsPage.js";
+import { Redirect } from "react-router";
 
-let tabs = [
-  {title: "Recensioner", page: <AllReviewsPage/>}, 
-  {title: "Restauranger", page: <RestaurantReviewsPage/>}
-];
 
 export default function RestaurantPage(props) {
-  const [value, setValue] = React.useState(2);
   const restaurant = props.restaurant || props.match.params.restaurant;
-  const [tab, setTab] = React.useState({title: restaurant || "", page: <RestaurantInfo {...props}/>});
-  useEffect(() => {
-    if (tabs.length === 2 || restaurant !== tabs[2].title) {
-      setTab({title: restaurant || "", page: <RestaurantInfo {...props}/>})
-      setValue(2);
+  const [tabs, setTabs] = React.useState([
+    {title: "Recensioner", page: <Redirect to="/"/>}, 
+    {title: `Restauranger > ${restaurant}`, page: <RestaurantInfo restaurant={restaurant}/>}
+  ]);
+  const [value, setValue] = React.useState(1);
+  const handleChange = (event, newValue) => { 
+    if (value === newValue) {
+      setTabs([
+        {title: "Recensioner", page: <Redirect to="/"/>}, 
+        {title: "Restauranger", page: <Redirect to="/restaurants"/>}
+      ]);
     }
-  }, [restaurant, props]);
-  if (value === 2) {
-    tabs[2] = tab;
-  } else {
-    tabs.length = 2;
-  }
-  const handleChange = (event, newValue) => { setValue(newValue) };
+    setValue(newValue);
+  };
   return (
     <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
   );
 }
+
 
 class RestaurantInfo extends Component {
 	constructor(props) {
@@ -114,7 +110,7 @@ class RestaurantInfo extends Component {
 		return (	
 		<>	
 			<div className="page-header text-center">
-			<h2>{this.state.reviews[0].restaurant}</h2>
+			<h2>{restaurantMeta.name}</h2>
 			</div>
 
 			<div className="container-fluid">

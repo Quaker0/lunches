@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import RestaurantCard from "./RestaurantCard.js";
 import SearchBar from "./SearchBar.js";
+import RestaurantPage from "./RestaurantPage.js";
 import { filterSearchedReviews } from "./utils.js"
 import _ from "lodash";
 
@@ -9,7 +10,7 @@ export default class RestaurantReviewsPage extends Component {
 		super(props);
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
 		this.state = {
-			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null
+			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant
 		};
 		this.removeOriginFilter = this.removeOriginFilter.bind(this);
 		this.sortBy = this.sortBy.bind(this);
@@ -43,7 +44,10 @@ export default class RestaurantReviewsPage extends Component {
 	}
 
 	render() {
-		const { restaurantsMeta, searchPhrase, originFilter, sortBy } = this.state;	
+		const { restaurant, restaurantsMeta, searchPhrase, originFilter, sortBy } = this.state;	
+    if (restaurant) {
+      return <RestaurantPage restaurant={restaurant} />
+    }
 		var filteredMeta = Object.assign({}, restaurantsMeta);
 		if (searchPhrase) {
 			filteredMeta = filterSearchedReviews(filteredMeta, searchPhrase);
