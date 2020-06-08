@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { firstLetterUpperCase } from "../utils.js"
-import { List as ImmutableList } from "immutable";
 import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
 import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -90,41 +89,36 @@ export default class AddReviewPage extends Component {
 		});
 	}
 
+  enforceFields(requiredFields) {
+    let errors = {};
+    requiredFields.forEach((entry) => { errors[entry[0]] = null; });
+    requiredFields.forEach((entry) => {
+      if (!entry[1]) { errors[entry[0]] = "Värde saknas" }
+    });
+    return errors;
+  }
+
 	validateFields() {
 		const { 
-			meal, restaurant, restaurantMeta, description, website, address, review, price
+			meal, restaurant, newRestaurant, description, website, address, review, price
 		} = this.state;
-		const isNewRestaurant = !restaurantMeta.some(meta => meta.name === restaurant);
-		const missingDefaultValues = [meal, restaurant, review, price].filter(v => !v).length;
-		const missingNewRestaurantValues = isNewRestaurant && [description, website, address].filter(v => !v).length;
-
+		const missingDefaultValues = [meal, restaurant, price].filter(v => !v).length;
+		const missingNewRestaurantValues = newRestaurant && [review, description, website, address].filter(v => !v).length;
 
 		if (!missingDefaultValues && !missingNewRestaurantValues) {
 			return true;
 		}
-		if (!meal) {
-			this.setState({"mealError": "Missing value"});
+    const requiredFields = [["mealError", meal], ["priceError", price], ["restaurantError", restaurant]];
+    let errors = this.enforceFields(requiredFields);
+		
+		if (newRestaurant) {
+      const requiredRestaurantFields = [
+        ["reviewError", review], ["descriptionError", description], ["websiteError", website], ["addressError", address]
+      ];
+      errors = {errors, ...this.enforceFields(requiredRestaurantFields)};
 		}
-		if (!price) {
-			this.setState({"priceError": "Missing value"});
-		}
-		if (!review) {
-			this.setState({"reviewError": "Missing value"});
-		}
-		if (!restaurant) {
-			this.setState({"restaurantError": "Missing value"});
-		}
-		if (isNewRestaurant) {
-			if (!description) {
-				this.setState({"descriptionError": "Missing value"});
-			}
-			if (!website) {
-				this.setState({"websiteError": "Missing value"});
-			}
-			if (!address) {
-				this.setState({"addressError": "Missing value"});
-			}
-		}
+
+    this.setState(errors)
 		return false;
 	}
 
@@ -161,7 +155,7 @@ export default class AddReviewPage extends Component {
 			review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
 			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType
 		} = this.state;
-		const restaurants = ImmutableList(restaurantMeta).map(meta => meta.name).toArray();
+		const restaurants = restaurantMeta.map(meta => meta.name);
 
 		return (
 			<>
@@ -199,7 +193,7 @@ export default class AddReviewPage extends Component {
 							<TextField value={restaurantComment} onChange={this.updateComment} id="comment-field" label="Restaurang kommentar" style={{width: "50vw", margin: 10}} />
 						</GridRow>
 						<GridRow>
-							<TextField required value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
+							<TextField required={!!newRestaurant} value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
 						</GridRow>
 						<GridRow>
 							<SaveButton onClick={this.sendReview} />
