@@ -23,11 +23,11 @@ export default class StatPage extends Component {
 			Object.keys(stats.series.values).forEach((event) => {
 				let series = [];
 				Object.entries(stats.series.values[event]).forEach((entry) => {
-					const current_datetime = new Date(entry[0])
-					const formatted_date = current_datetime.getDate() + " " + months[current_datetime.getMonth()]
-					series.push({x: formatted_date, y: entry[1]});
+					const currentDatetime = new Date(entry[0])
+					const formattedDate = currentDatetime.getDate() + " " + months[currentDatetime.getMonth()]
+					series.push({x: formattedDate, y: entry[1], i: 12 * currentDatetime.getMonth() + currentDatetime.getDate()});
 				});
-				eventSeries[event] = series;
+				eventSeries[event] = _.sortBy(series, "i");
 			});
 			this.setState({eventSeries: eventSeries});
 		});
@@ -64,13 +64,14 @@ export default class StatPage extends Component {
 					</Button>
 				</Box>
 				<XYPlot
+          margin={{left: 60, right: 60}}
 					xType="ordinal"
 					width={screenWidth}
-					height={300}
+					height={200}
 				>
 					<HorizontalGridLines />
 					<VerticalGridLines />
-					<XAxis />
+					<XAxis/>
 					<YAxis yDomain={[0, maxY]} />
 					{ lines }
 				</XYPlot>

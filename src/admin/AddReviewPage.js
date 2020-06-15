@@ -126,9 +126,9 @@ export default class AddReviewPage extends Component {
 		if (this.validateFields()) {
 			saveNewReview(this.state).then(success => {
 				if (success) {
-					this.setState({...defaultState, ...{openSaveModal: true}});
+					this.setState({openSaveModal: true});
 				} else {
-					alert("APIet misslyckades med att spara recensionen");
+					alert("Misslyckades med att spara recensionen");
 				}
 			});
 		}

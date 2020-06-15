@@ -1,11 +1,11 @@
 import React from "react";
 
 import { TabMenu } from "./utils.js";
-import AllReviewsPage from "./AllReviewsPage.js";
+import RecentReviewsPage from "./RecentReviewsPage.js";
 import RestaurantReviewsPage from "./RestaurantReviewsPage.js";
 
 const tabs = [
-	{title: "Recensioner", page: <AllReviewsPage/>}, 
+	{title: "Recensioner", page: <RecentReviewsPage/>}, 
 	{title: "Restauranger", page: <RestaurantReviewsPage/>}
 ];
 

@@ -64,11 +64,10 @@ body {
 }
 
 a {
-	color: black !important;
+  color: #184794 !important;
 }
 
 a:hover {
-	color: black !important;
 	text-decoration: underline;
 }
 

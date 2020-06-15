@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
 import MealReviewCard from "./MealReviewCard.js";
+import { getUsername } from "./login.js";
 import { Redirect } from "react-router";
+import Fab from "@material-ui/core/Fab";
+import Box from "@material-ui/core/Box";
 
 
 export default function RestaurantPage(props) {
@@ -32,7 +35,7 @@ class RestaurantInfo extends Component {
 		super(props);
 		const restaurant = this.props.restaurant || this.props.match.params.restaurant;
     window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
-		this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0};
+		this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0, username: getUsername()};
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 	}
 
@@ -87,7 +90,7 @@ class RestaurantInfo extends Component {
 	}
 
 	render() {
-		const { reviewCards, reviews, width, restaurantMeta } = this.state;
+		const { reviewCards, reviews, width, restaurantMeta, username } = this.state;
 
 		if (!reviews.length) {
 			return "";
@@ -95,6 +98,7 @@ class RestaurantInfo extends Component {
 
 		const aggregatedReviews = getAggregatedReviews(reviews);
 		const seats = restaurantMeta.seats;
+    const website = restaurantMeta.website;
 		const portionSize = cleanGet(reviews, "portionSize");
 		const waitTime = cleanGet(reviews, "waitTime");
 		const prices = cleanGet(reviews, "price");
@@ -108,7 +112,8 @@ class RestaurantInfo extends Component {
 		var envIcons = getRateCircles(aggregatedReviews.envAvg);
 
 		return (	
-		<>	
+		<>
+      { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
 			<div className="page-header text-center">
 			<h2>{restaurantMeta.name}</h2>
 			</div>
@@ -123,6 +128,13 @@ class RestaurantInfo extends Component {
 							<th scope="row">Address</th>
 							<td><i className="fas fa-sm fa-map-marker-alt"/> <a href={mapLink}>{restaurantMeta.address}</a></td>
 						</tr>
+            { website ?
+              <tr>
+              <th scope="row">Hemsida</th>
+              <td><a href={`${website}?utm_source=sthlmlunch.se&utm_medium=referral`}>{website.slice(0, 65)}</a></td>
+              </tr>
+              : <></>
+            }
 						{ seats ?
 							<tr>
 							<th scope="row">Sittplatser</th>

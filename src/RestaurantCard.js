@@ -13,7 +13,7 @@ export default class RestaurantCard extends Component {
 		return (
 			<div className="col-sm-12 col-md-6 col-xl-4 card-item">
 				<div className="inline-block">
-					<Link to={redirect} className="h3 text-dark">{restaurantMeta.name}</Link>
+					<Link to={redirect} className="h3">{restaurantMeta.name}</Link>
 				</div>
 				<div>Smak: {tasteScore>0 ? tasteScore/10 + "/10" : "–"}</div>
 				<div>Omgivning: {environmentScore>0 ? environmentScore/10 + "/10" : "–"}</div>

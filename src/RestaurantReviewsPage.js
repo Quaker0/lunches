@@ -3,14 +3,18 @@ import RestaurantCard from "./RestaurantCard.js";
 import SearchBar from "./SearchBar.js";
 import RestaurantPage from "./RestaurantPage.js";
 import { filterSearchedReviews } from "./utils.js"
+import { getUsername } from "./login.js";
 import _ from "lodash";
+import Fab from "@material-ui/core/Fab";
+import Box from "@material-ui/core/Box";
 
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
 		this.state = {
-			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant
+			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant,
+      username: getUsername()
 		};
 		this.removeOriginFilter = this.removeOriginFilter.bind(this);
 		this.sortBy = this.sortBy.bind(this);
@@ -44,7 +48,7 @@ export default class RestaurantReviewsPage extends Component {
 	}
 
 	render() {
-		const { restaurant, restaurantsMeta, searchPhrase, originFilter, sortBy } = this.state;	
+		const { restaurant, restaurantsMeta, searchPhrase, originFilter, sortBy, username } = this.state;	
     if (restaurant) {
       return <RestaurantPage restaurant={restaurant} />
     }
@@ -75,6 +79,7 @@ export default class RestaurantReviewsPage extends Component {
 		));
 		return (
 			<>
+        { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
 				<SearchBar search={this.search} sortBy={this.sortBy}/>
 				<div className="container-fluid">
 					{originFilter ? <p className="d-inline-block text-info px-2">Filtrerat på <strong>{originFilter}</strong> <button onClick={this.removeOriginFilter} type="button" className="btn p-1" style={{"marginTop": "-2px"}} ><i className="fas fa-times"/></button></p> : <></>}

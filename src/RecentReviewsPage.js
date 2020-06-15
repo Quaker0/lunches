@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import ReviewCard from "./ReviewCard.js";
 import { reviewToKey } from "./utils.js";
+import { getUsername } from "./login.js";
 import _ from "lodash";
+import Fab from "@material-ui/core/Fab";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 
 export default class AllReviewsPage extends Component {
 	constructor(props) {
 		window.mixpanel.track("Page view", {"page": "Reviews page"});
 		super(props);
-		this.state = {"reviews": []};
+		this.state = {reviews: [], username: getUsername()};
 		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
 	}
 
@@ -41,7 +45,7 @@ export default class AllReviewsPage extends Component {
 	}
 
 	render() {
-		const { reviews, restaurantsMeta, reviewerFilter } = this.state;
+		const { reviews, restaurantsMeta, reviewerFilter, username } = this.state;
 		let filteredReviews = [];
 		if (reviewerFilter) {
 			filteredReviews = _.filter(reviews, review => review.reviewer.toLowerCase() === reviewerFilter);
@@ -55,11 +59,12 @@ export default class AllReviewsPage extends Component {
 		));
 		return (
 			<>
-				<div className="container-fluid">
-					<div id="reviews" className="row">
-					{ reviewCards }
-					</div>
-				</div>
+        { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
+          <Box m={3}>
+            <Grid container spacing={5}>
+            { reviewCards }
+            </Grid>
+					</Box>
 			</>
 		);
 	}

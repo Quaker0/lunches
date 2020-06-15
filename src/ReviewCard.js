@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import { originMap, getPepperIcons} from "./utils.js"
+import Grid from "@material-ui/core/Grid";
 
 export default class ReviewCard extends Component {
 	render() {
@@ -18,7 +19,7 @@ export default class ReviewCard extends Component {
 		}
 
 		return (
-			<div className="col-sm-12 col-md-6 card-item">
+      <Grid item sm={12} md={6}>
 				{
 					firstOrigin ? 
 					<i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"}>{restaurantMeta.origin}</i>
@@ -38,7 +39,7 @@ export default class ReviewCard extends Component {
 						</div>
 					</div>
 				<div className="font-italic py-3">recenserad av {review.reviewer}</div>
-			</div>
-		);
+      </Grid>
+  	);
 	}
 }
