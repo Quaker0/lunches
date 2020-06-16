@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
-import stockholmjp2 from "./content/stockholm.jp2"
-import stockholmwebp from "./content/stockholm.webp"
-import logo from "./content/sthlm-lunch-logo.png"
+import stockholmjp2 from "./content/stockholm-brown.jp2"
+import stockholmwebp from "./content/stockholm-brown.webp"
+import textLogo from "./content/sthlm-lunch-slope.png"
 
 export default class Head extends PureComponent {
 	render() {
@@ -15,7 +15,7 @@ export default class Head extends PureComponent {
 
 				<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"60vh", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
 					<div className="row h-75 justify-content-center align-items-center">
-						<img src={logo} alt="STHLM LUNCH" className="site-logo"/>
+            <img src={textLogo} alt="STHLM LUNCH" className="site-logo-text mt-5" height="100%"/>
 					</div>
 				</div>
 			</>
