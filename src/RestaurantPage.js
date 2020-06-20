@@ -11,14 +11,16 @@ import Box from "@material-ui/core/Box";
 export default function RestaurantPage(props) {
   const restaurant = props.restaurant || props.match.params.restaurant;
   const [tabs, setTabs] = React.useState([
-    {title: "Recensioner", page: <Redirect to="/"/>}, 
+    {title: "Topplista", page: <Redirect to="/"/>},
+    {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 
     {title: `Restauranger > ${restaurant}`, page: <RestaurantInfo restaurant={restaurant}/>}
   ]);
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(2);
   const handleChange = (event, newValue) => { 
     if (value === newValue) {
       setTabs([
-        {title: "Recensioner", page: <Redirect to="/"/>}, 
+        {title: "Topplista", page: <Redirect to="/"/>},
+        {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 
         {title: "Restauranger", page: <Redirect to="/restaurants"/>}
       ]);
     }
@@ -33,8 +35,10 @@ export default function RestaurantPage(props) {
 class RestaurantInfo extends Component {
 	constructor(props) {
 		super(props);
-		const restaurant = this.props.restaurant || this.props.match.params.restaurant;
-    window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
+		let restaurant = this.props.restaurant || this.props.match.params.restaurant;
+    restaurant = restaurant.toLowerCase().replace(/\s/g, "");
+    console.log(restaurant)
+    // window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
 		this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0, username: getUsername()};
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 	}
@@ -48,7 +52,8 @@ class RestaurantInfo extends Component {
 			response.json()
 			.then((restaurantsMeta) => {
 				if (restaurantsMeta) {
-					const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase() === this.state.restaurant.toLowerCase())[0];
+          console.log(this.state.restaurant)
+					const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
 					this.setState({"restaurantMeta": meta});
 					if (meta && this.state.restaurant) {
 						fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)

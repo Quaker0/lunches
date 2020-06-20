@@ -1,7 +1,4 @@
 import React, { PureComponent } from "react";
-import stockholmjp2 from "./content/stockholm-brown.jp2"
-import stockholmwebp from "./content/stockholm-brown.webp"
-import textLogo from "./content/sthlm-lunch-slope.png"
 
 export default class Head extends PureComponent {
 	render() {
@@ -13,11 +10,7 @@ export default class Head extends PureComponent {
 				<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossOrigin="anonymous"/>
 				<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"/>
 
-				<div className="container-fluid sthlm-cover" style={{backgroundImage: `url(${stockholmwebp}), url(${stockholmjp2})`, width:"100%", height:"60vh", backgroundAttachment: "fixed", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} >
-					<div className="row h-75 justify-content-center align-items-center">
-            <img src={textLogo} alt="STHLM LUNCH" className="site-logo-text mt-5" height="100%"/>
-					</div>
-				</div>
+				<div className="container-fluid sthlm-cover" />
 			</>
 		);
 	}

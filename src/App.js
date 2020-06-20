@@ -13,9 +13,14 @@ export default class App extends Component {
 				<>
 					<Route component={Head} />
 					<Switch>
-						<Route exact path="/" component={ReviewPage}/>
+            <Route exact path="/" >
+              <ReviewPage tab={0}/>
+            </Route>
+            <Route exact path="/recentReviews" >
+              <ReviewPage tab={1}/>
+            </Route>
 						<Route exact path="/restaurants" >
-							<ReviewPage tab={1}/>
+							<ReviewPage tab={2}/>
 						</Route>
 						<Route exact path="/restaurant/:restaurant" component={RestaurantPage}/>
 						<Route exact path="/admin" component={AdminPage}/>

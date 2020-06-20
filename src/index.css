@@ -3,15 +3,23 @@
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-  min-height: 1000px
+  min-height: 1000px;
+}
+
+.sthlm-cover {
+  background-attachment: fixed;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%; 
+  height: 500px;
+  background-image: url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.webp), 
+  url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.jp2);
 }
 
 @media(max-width: 400px) {
 	.sthlm-cover {
 		background-attachment: scroll !important;
-	}
-	.site-logo {
-		width: 60%;
 	}
 	h1, h2 {
 		font-size: 20px !important;
@@ -74,18 +82,6 @@ a:hover {
 .page-header {
 	padding: 20px;
 	margin-bottom: 20px;
-}
-
-.circle-icon {
-	background: lightskyblue;
-	border-radius: 50%;
-	text-align: center;
-	vertical-align: middle;
-	padding: 3px;
-}
-
-.button-icon:hover {
-	background: lightskyblue;
 }
 
 .circle-half {
