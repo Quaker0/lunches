@@ -14,5 +14,10 @@ const tabs = [
 export default function ReviewPage(props) {
 	const [value, setValue] = React.useState(props.tab || 0);
 	const handleChange = (event, newValue) => { setValue(newValue) };
-	return <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>;
+	return (
+    <>
+      <div className="container-fluid sthlm-cover" />
+      <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
+    </>
+  );
 }

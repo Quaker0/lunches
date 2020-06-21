@@ -4,6 +4,7 @@ import AdminPage from "./admin/AdminPage";
 import RestaurantPage from "./RestaurantPage";
 import Head from "./Head";
 import ReviewPage from "./ReviewPage";
+import AsiaPage from "./AsiaPage";
 import { HashRouter, Route, Switch } from "react-router-dom";
 
 export default class App extends Component {
@@ -24,6 +25,7 @@ export default class App extends Component {
 						</Route>
 						<Route exact path="/restaurant/:restaurant" component={RestaurantPage}/>
 						<Route exact path="/admin" component={AdminPage}/>
+            <Route exact path="/asia" component={AsiaPage}/>
 						<Route path="*" component={NotFoundPage} />
 					</Switch>
 				</>
