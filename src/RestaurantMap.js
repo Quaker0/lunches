@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 500,
+    maxWidth: 600,
     margin: 30
   },
   position: {
@@ -25,9 +25,6 @@ const useStyles = makeStyles(() => ({
     fontSize: "300%",
     padding: "20px",
     color: "goldenrod"
-  },
-  cover: {
-    width: 151,
   },
 }));
 
@@ -55,7 +52,7 @@ function RankCard(props) {
 export default class RestaurantMap extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {width: window.innerWidth *.55};
+		this.state = {width: window.innerWidth *.8};
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);
 	}
@@ -63,7 +60,7 @@ export default class RestaurantMap extends Component {
   componentDidMount() {
     window.addEventListener("resize", this.updateWindowDimensions);
     const img = this.refs.image
-    img.onload = () => setTimeout(this.drawCircle(this.state.width), 5000);
+    img.onload = () => setTimeout(this.drawCircle(Math.min(this.state.width, 600)), 5000);
   }
 
 	componentWillUnmount() {
@@ -71,7 +68,7 @@ export default class RestaurantMap extends Component {
 	}
 
 	updateWindowDimensions() {
-    const newWidth = window.innerWidth *.55;
+    const newWidth = Math.min(window.innerWidth *.8, 600);
 		this.setState({ width: newWidth});
     this.drawCircle(newWidth)
 	}
@@ -125,9 +122,9 @@ export default class RestaurantMap extends Component {
           </Grid>
         </Grid>
         <Box style={{textAlign: "center"}}>
-          <img src={map} ref="image" alt="STHLM LUNCH MAP" width={width} style={{backgroundColor: "black", borderRadius: "50%"}}/>          
+          <img src={map} ref="image" alt="STHLM LUNCH MAP" width={width} style={{backgroundColor: "black", borderRadius: "5%"}}/>          
         </Box>
-        <canvas ref="canvas" width={width} height={Math.max(width, 500) / 1.5}/>
+        <canvas ref="canvas" width={width} height={width / 1.5}/>
       </>
 
 		);

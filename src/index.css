@@ -10,28 +10,74 @@ body {
   background-attachment: fixed;
   background-position: top center;
   background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%; 
-  height: 500px;
-  background-image: url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.webp), 
-  url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.jp2);
+  background-size: 100% auto;
+  height: 50vw;
 }
 
 .asia-cover {
-  background-attachment: fixed;
   background-position: top center;
   background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 600px;
-  background-image: url(https://www.sthlmlunch.se/asia-cover-se.png);
+  background-size: 100% auto;
+  height: 50vw;
 }
 
 .asia-banner {
   position: absolute;
-  right: 60px;
+  right: 5vw;
+  width: 12%;
   animation-duration: 3s;
   animation-name: slidein;
+}
+
+@media (max-width: 400px) {
+  .sthlm-cover {
+    background-attachment: scroll !important;
+    background-image: url(https://www.sthlmlunch.se/stockholm-lunch-bg-small.png);
+    height: 80vw;
+  }
+  .asia-cover {
+    background-image: url(https://www.sthlmlunch.se/asia-cover-400.png);
+    height: 80vw;
+  }
+  .asia-banner {
+    width: 21%;
+  }
+  h1, h2 {
+    font-size: 20px !important;
+  }
+  .h3, h3,.h4, h4 {
+    font-size: 16px !important;
+  }
+  body {
+    font-size: 70% !important;
+  }
+  .navbar {
+    text-align: center;
+    padding: 10px 0 !important;
+    justify-content: space-around;
+  }
+  .navbar > a { 
+    padding: 8px;
+    margin: 4px;
+    font-size: 16px;
+    flex: 1;
+  }
+}
+
+@media(min-width: 400px) {
+  .sthlm-cover {
+    background-image: url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.webp), 
+    url(https://www.sthlmlunch.se/stockholm-lunch-bg-clean.jp2);
+  }
+  .asia-cover {
+    background-image: url(https://www.sthlmlunch.se/asia-cover.png);
+  }
+}
+
+@media(min-width: 800px) {
+  .asia-cover {
+    background-image: url(https://www.sthlmlunch.se/asia-cover-se.png);
+  }
 }
 
 @keyframes slidein {
@@ -41,52 +87,6 @@ body {
   to {
     top: 0px;
   }
-}
-
-@media(max-width: 400px) {
-	.sthlm-cover {
-		background-attachment: scroll !important;
-	}
-	h1, h2 {
-		font-size: 20px !important;
-	}
-	.h3, h3,.h4, h4 {
-		font-size: 16px !important;
-	}
-	body {
-		font-size: 70% !important;
-	}
-	.navbar {
-		text-align: center;
-		padding: 10px 0 !important;
-		justify-content: space-around;
-	}
-	.navbar > a {	
-		padding: 8px;
-		margin: 4px;
-		font-size: 16px;
-		flex: 1;
-	}
-}
-
-@media(min-width:400px) {
-	.navbar {
-		justify-content: center !important;
-		padding-top: 2vh !important;
-	}
-	.navbar > a {
-		padding: 0.5vw 1vw;
-		margin: 0 1vw; 
-	}
-	.site-logo {
-		width: 200px;
-	}
-}
-
-@media(max-width:767px) {
-	.navbar {
-	justify-content: center !important;
-	}
 }
 
 *:focus {

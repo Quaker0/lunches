@@ -27,7 +27,10 @@ export default function RestaurantPage(props) {
     setValue(newValue);
   };
   return (
-    <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
+    <>
+      <div className="container-fluid sthlm-cover" />
+      <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
+    </>
   );
 }
 
