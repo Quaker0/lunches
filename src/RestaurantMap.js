@@ -50,28 +50,28 @@ function RankCard(props) {
 
 
 export default class RestaurantMap extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {width: window.innerWidth *.8};
-		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {width: Math.min(window.innerWidth *.8, 600)};
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);
-	}
+  }
 
   componentDidMount() {
     window.addEventListener("resize", this.updateWindowDimensions);
     const img = this.refs.image
-    img.onload = () => setTimeout(this.drawCircle(Math.min(this.state.width, 600)), 5000);
+    img.onload = () => setTimeout(() => this.drawCircle(Math.min(this.state.width, 600)), 1000);
   }
 
-	componentWillUnmount() {
-		window.removeEventListener("resize", this.updateWindowDimensions);
-	}
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
 
-	updateWindowDimensions() {
+  updateWindowDimensions() {
     const newWidth = Math.min(window.innerWidth *.8, 600);
-		this.setState({ width: newWidth});
+    this.setState({ width: newWidth});
     this.drawCircle(newWidth)
-	}
+  }
 
   drawCircle(width) {
     const height = width / 1.5;
@@ -88,7 +88,7 @@ export default class RestaurantMap extends Component {
     ctx.fillStyle = "black";
 
     if (width > 550) {
-      ctx.font = "normal small-caps bold 2.5vw roboto"
+      ctx.font = "normal small-caps bold 2vw roboto"
       ctx.fillText("1", width * 0.38, height * 0.33);
       ctx.fillText("2", width * 0.32, height * 0.49);
       ctx.fillText("3", width * 0.47, height * 0.35);
@@ -110,9 +110,9 @@ export default class RestaurantMap extends Component {
     ctx.closePath();
   }
 
-	render() {
-		const { width } = this.state;
-		return (
+  render() {
+    const { width } = this.state;
+    return (
       <>
         <Grid container spacing={1} justify="center" align="center">
           <Grid item xs={12}>
@@ -127,6 +127,6 @@ export default class RestaurantMap extends Component {
         <canvas ref="canvas" width={width} height={width / 1.5}/>
       </>
 
-		);
-	}
+    );
+  }
 }

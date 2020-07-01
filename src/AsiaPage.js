@@ -6,7 +6,7 @@ import ramenImg from "./content/ramen.png"
 import Grid from "@material-ui/core/Grid";
 
 
-export default function AsiaPage(props) {
+export default function AsiaPage() {
   const [value, setValue] = React.useState(3);
   const handleChange = (event, newValue) => { setValue(newValue) };
   const tabs = [

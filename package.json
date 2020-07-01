@@ -10,6 +10,7 @@
 		"@testing-library/react": "^9.3.2",
 		"@testing-library/user-event": "^7.1.2",
 		"amazon-cognito-identity-js": "3.2.5",
+		"animated-scroll-to": "2.0.10",
 		"aws-sdk": "2.630.0",
 		"immutable": "4.0.0-rc.12",
 		"js-cookie": "2.2.1",
