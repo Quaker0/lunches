@@ -15,7 +15,7 @@ export default class ReviewCard extends Component {
     const firstOrigin = (restaurantMeta.origin || "").split(",")[0];
     var restaurantRedirect = "#";
     if (restaurantMeta.name) {
-      restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase()}`;
+      restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
     }
 
     return (

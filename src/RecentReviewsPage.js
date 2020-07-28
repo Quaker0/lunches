@@ -9,8 +9,9 @@ import Grid from "@material-ui/core/Grid";
 
 export default class AllReviewsPage extends Component {
 	constructor(props) {
+    super(props);
 		window.mixpanel.track("Page view", {"page": "Reviews page"});
-		super(props);
+    window.ga("send", "pageview", "/recentReviews");
 		this.state = {reviews: [], username: getUsername()};
 		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
 	}

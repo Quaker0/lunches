@@ -10,6 +10,8 @@ import Box from "@material-ui/core/Box";
 
 export default function RestaurantPage(props) {
   const restaurant = props.restaurant || props.match.params.restaurant;
+  window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
+  window.ga("send", "pageview", props.location.pathname);
   const [tabs, setTabs] = React.useState([
     {title: "Topplista", page: <Redirect to="/"/>},
     {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 
@@ -40,8 +42,6 @@ class RestaurantInfo extends Component {
 		super(props);
 		let restaurant = this.props.restaurant || this.props.match.params.restaurant;
     restaurant = restaurant.toLowerCase().replace(/\s/g, "");
-    console.log(restaurant)
-    // window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
 		this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0, username: getUsername()};
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 	}
@@ -55,7 +55,6 @@ class RestaurantInfo extends Component {
 			response.json()
 			.then((restaurantsMeta) => {
 				if (restaurantsMeta) {
-          console.log(this.state.restaurant)
 					const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
 					this.setState({"restaurantMeta": meta});
 					if (meta && this.state.restaurant) {

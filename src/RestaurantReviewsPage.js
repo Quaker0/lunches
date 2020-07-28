@@ -12,6 +12,7 @@ export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
+    window.ga("send", "pageview", "/restaurants");
 		this.state = {
 			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant,
       username: getUsername()

@@ -52,6 +52,7 @@ function RankCard(props) {
 export default class RestaurantMap extends Component {
   constructor(props) {
     super(props);
+    window.ga("send", "pageview", "/");
     this.state = {width: Math.min(window.innerWidth *.8, 600)};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);

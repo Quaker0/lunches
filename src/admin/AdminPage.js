@@ -12,7 +12,7 @@ import StatPage from "./StatPage.js";
 import UserPage from "./UserPage.js";
 import LoginForm from "./LoginForm.js";
 import { TabMenu } from "../utils.js";
-import { isLoggedIn } from "../login.js";
+import { isLoggedIn, getUsername } from "../login.js";
 
 const tabs = [
 		{title: "Användare", icon: <AccountCircleIcon />, page: <UserPage/>}, 
@@ -24,9 +24,14 @@ const tabs = [
 export default function AdminPage() {
 	const [value, setValue] = React.useState(1);
 	const handleChange = (event, newValue) => { setValue(newValue) };
+  const loggedIn = isLoggedIn();
+  if(loggedIn) {
+    window.ga("set", "dimension1", getUsername());
+  }
+  window.ga("send", "pageview", "/admin");
 	return (
 		<>
-			{ !isLoggedIn() ? <LoginForm/> : <></> }
+			{ !loggedIn ? <LoginForm/> : <></> }
       <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#">Hemsida</Fab></Box>
 			<TabMenu tabs={tabs} handleChange={handleChange} value={value} />
 		</>
