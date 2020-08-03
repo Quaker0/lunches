@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import map from "./content/sthlm-map.png"
+import { ga } from "./utils.js";
 import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -52,7 +53,7 @@ function RankCard(props) {
 export default class RestaurantMap extends Component {
   constructor(props) {
     super(props);
-    window.ga("send", "pageview", "/");
+    ga.pageview("/");
     this.state = {width: Math.min(window.innerWidth *.8, 600)};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);

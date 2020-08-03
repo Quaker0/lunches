@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
+import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey, ga } from "./utils.js"
 import MealReviewCard from "./MealReviewCard.js";
 import { getUsername } from "./login.js";
 import { Redirect } from "react-router";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 
-
 export default function RestaurantPage(props) {
+  console.log(props)
   const restaurant = props.restaurant || props.match.params.restaurant;
   window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
-  window.ga("send", "pageview", props.location.pathname);
+  ga.pageview(props.location.pathname);
   const [tabs, setTabs] = React.useState([
     {title: "Topplista", page: <Redirect to="/"/>},
     {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 

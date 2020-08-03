@@ -11,7 +11,7 @@ import EditPage from "./EditPage.js";
 import StatPage from "./StatPage.js";
 import UserPage from "./UserPage.js";
 import LoginForm from "./LoginForm.js";
-import { TabMenu } from "../utils.js";
+import { TabMenu, ga } from "../utils.js";
 import { isLoggedIn, getUsername } from "../login.js";
 
 const tabs = [
@@ -26,9 +26,9 @@ export default function AdminPage() {
 	const handleChange = (event, newValue) => { setValue(newValue) };
   const loggedIn = isLoggedIn();
   if(loggedIn) {
-    window.ga("set", "dimension1", getUsername());
+    ga.set({"dimension1": getUsername()});
   }
-  window.ga("send", "pageview", "/admin");
+  ga.pageview("/admin");
 	return (
 		<>
 			{ !loggedIn ? <LoginForm/> : <></> }

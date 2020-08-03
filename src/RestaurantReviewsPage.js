@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import RestaurantCard from "./RestaurantCard.js";
 import SearchBar from "./SearchBar.js";
 import RestaurantPage from "./RestaurantPage.js";
-import { filterSearchedReviews } from "./utils.js"
+import { filterSearchedReviews, ga } from "./utils.js"
 import { getUsername } from "./login.js";
 import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
@@ -12,7 +12,7 @@ export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
-    window.ga("send", "pageview", "/restaurants");
+    ga.pageview("/restaurants");
 		this.state = {
 			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant,
       username: getUsername()

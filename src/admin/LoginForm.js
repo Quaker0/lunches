@@ -84,7 +84,8 @@ export default function LoginForm() {
         setOpen(false);
       }
       else if (result.type === "passwordResetted") {
-        setForgottenPassword(null)
+        setForgottenPassword(false)
+        setLoginResult(null);
       }
       else {
         console.error(result);

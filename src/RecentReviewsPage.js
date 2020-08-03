@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReviewCard from "./ReviewCard.js";
-import { reviewToKey } from "./utils.js";
+import { reviewToKey, ga } from "./utils.js";
 import { getUsername } from "./login.js";
 import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
@@ -11,7 +11,7 @@ export default class AllReviewsPage extends Component {
 	constructor(props) {
     super(props);
 		window.mixpanel.track("Page view", {"page": "Reviews page"});
-    window.ga("send", "pageview", "/recentReviews");
+    ga.pageview("/recentReviews");
 		this.state = {reviews: [], username: getUsername()};
 		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
 	}

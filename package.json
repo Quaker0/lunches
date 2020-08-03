@@ -19,14 +19,15 @@
 		"react": "^16.12.0",
 		"react-bootstrap": "1.0.0-beta.16",
 		"react-dom": "^16.12.0",
+		"react-ga": "3.1.2",
 		"react-router-dom": "5.1.2",
 		"react-scripts": "3.4.0",
 		"react-vis": "1.11.7",
 		"yarn": "1.22.0"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"start": "REACT_APP_ENV=dev react-scripts start",
+		"build": "REACT_APP_ENV=prod react-scripts build",
 		"deploy": "aws s3 sync build/ s3://www.sthlmlunch.se --acl public-read",
 		"lint": "eslint src --fix"
 	},
