@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { getUsername } from "../login.js";
-import { firstLetterUpperCase } from "../utils.js"
+import { firstLetterUpperCase, ga } from "../utils.js"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
 
@@ -52,6 +52,7 @@ export default class EditReviewPage extends Component {
 	}
 
 	handleCloseSaveModal() {
+    ga.ga()("send", "event", "admin", "editReview", {"metric3": 1});
 		this.setState({openSaveModal: false});
 	}
 

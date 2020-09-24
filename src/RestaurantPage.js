@@ -8,9 +8,9 @@ import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 
 export default function RestaurantPage(props) {
-  console.log(props)
   const restaurant = props.restaurant || props.match.params.restaurant;
   window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
+  ga.set({ metric1: 1 });
   ga.pageview(props.location.pathname);
   const [tabs, setTabs] = React.useState([
     {title: "Topplista", page: <Redirect to="/"/>},

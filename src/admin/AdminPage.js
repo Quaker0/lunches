@@ -27,6 +27,7 @@ export default function AdminPage() {
   const loggedIn = isLoggedIn();
   if(loggedIn) {
     ga.set({"dimension1": getUsername()});
+    ga.ga()("send", "event", "admin", "login", {"metric2": 1});
   }
   ga.pageview("/admin");
 	return (
