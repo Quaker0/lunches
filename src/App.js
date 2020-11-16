@@ -6,6 +6,9 @@ import Head from "./Head";
 import ReviewPage from "./ReviewPage";
 import AsiaPage from "./AsiaPage";
 import { HashRouter, Route, Switch } from "react-router-dom";
+import TagManager from "react-gtm-module";
+
+TagManager.initialize({gtmId: "GTM-KPMF3NT"})
 
 export default class App extends Component {
 	render() {

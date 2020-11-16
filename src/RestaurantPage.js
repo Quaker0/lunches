@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey, ga } from "./utils.js"
+import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey, ga, gtm } from "./utils.js"
 import MealReviewCard from "./MealReviewCard.js";
 import { getUsername } from "./login.js";
 import { Redirect } from "react-router";
