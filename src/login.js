@@ -73,6 +73,7 @@ export function login(username, password, callback) {
     onSuccess: function(result) {
       AWS.config.region = "eu-central-1";
       AWS.config.credentials = newCognitoIdentityCredentials(result);
+      window.gtag("event", "login", { "method": "Cognito" });
       callback({type: "loggedIn"});
     },
     newPasswordRequired: function(userAttributes) {
@@ -83,6 +84,7 @@ export function login(username, password, callback) {
         callback: (newPassword) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
           onSuccess: (result) => {
             console.log("NEW PASSWORD COMPLETED");
+            window.gtag("event", "password_recovery", { "method": "Cognito" });
             AWS.config.credentials = newCognitoIdentityCredentials(result);
             return result;
           },

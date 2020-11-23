@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import RestaurantCard from "./RestaurantCard.js";
 import SearchBar from "./SearchBar.js";
 import RestaurantPage from "./RestaurantPage.js";
-import { filterSearchedReviews, ga } from "./utils.js"
+import { filterSearchedReviews } from "./utils.js"
 import { getUsername } from "./login.js";
 import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
+import { Helmet } from "react-helmet";
 
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
 		window.mixpanel.track("Page view", {"page": "Restaurants page"});
-    ga.pageview("/restaurants");
 		this.state = {
 			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant,
       username: getUsername()
@@ -80,6 +80,9 @@ export default class RestaurantReviewsPage extends Component {
 		));
 		return (
 			<>
+        <Helmet>
+          <title>STHLM LUNCH - Restaurants</title>
+        </Helmet>
         { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
 				<SearchBar search={this.search} sortBy={this.sortBy}/>
 				<div className="container-fluid">

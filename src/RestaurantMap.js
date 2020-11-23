@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import map from "./content/sthlm-map.png"
-import { ga } from "./utils.js";
 import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,6 +10,7 @@ import Box from "@material-ui/core/Box";
 import brisketAndFriends from "./content/brisket&friends.png"
 import menoMaleIcon from "./content/menomale.svg"
 import IngersKitchenLogo from "./content/ingerskitchenlogo.png"
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,7 +53,6 @@ function RankCard(props) {
 export default class RestaurantMap extends Component {
   constructor(props) {
     super(props);
-    ga.pageview("/");
     this.state = {width: Math.min(window.innerWidth *.8, 600)};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);
@@ -116,6 +115,9 @@ export default class RestaurantMap extends Component {
     const { width } = this.state;
     return (
       <>
+        <Helmet>
+          <title>{`STHLM LUNCH - Top Restaurants`}</title>
+        </Helmet>
         <Grid container spacing={1} justify="center" align="center">
           <Grid item xs={12}>
             <RankCard index={1} restaurant="Brisket & Friends" description="Ensam i sin kategory att servera rökt bringa och annat kött av bästa kvalité med amerikanska tillbehör." nameIcon={brisketAndFriends}/>
