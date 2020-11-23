@@ -116,7 +116,7 @@ export default class RestaurantMap extends Component {
     return (
       <>
         <Helmet>
-          <title>{`STHLM LUNCH - Top Restaurants`}</title>
+          <title>{"STHLM LUNCH - Top Restaurants"}</title>
         </Helmet>
         <Grid container spacing={1} justify="center" align="center">
           <Grid item xs={12}>

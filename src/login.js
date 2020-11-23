@@ -26,7 +26,7 @@ export async function forgotPassword(username, callback) {
   };
   var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
   cognitoUser.forgotPassword({
-    onSuccess: (result) => {
+    onSuccess: () => {
       callback({type: "forgotPasswordPending"});
     },
     onFailure: (err) => {
@@ -45,7 +45,7 @@ export function confirmPassword(confirmationCode, username, newPassword, callbac
   };
   var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
   cognitoUser.confirmPassword(confirmationCode, newPassword, {
-    onSuccess: (result) => {
+    onSuccess: () => {
       callback({type: "passwordResetted"});
     },
     onFailure: (err) => {
