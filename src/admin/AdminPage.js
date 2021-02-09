@@ -12,7 +12,7 @@ import StatPage from "./StatPage.js";
 import UserPage from "./UserPage.js";
 import LoginForm from "./LoginForm.js";
 import { TabMenu } from "../utils.js";
-import { isLoggedIn, getUsername } from "../login.js";
+import { isLoggedIn } from "../login.js";
 import { Helmet } from "react-helmet";
 
 const tabs = [

@@ -74,6 +74,19 @@ export const TasteHelp = () => (
 	</GridRow>
 );
 
+
+export const ImportImageHelp = (props) => (
+  <GridRow>
+    <Typography variant="h6" justify-self="center">
+      Importera en bild på din måltid
+    </Typography>
+    <Typography variant="p" justify-self="center">
+      Maila din bild till <a href="pics@sthlmlunch.se">pics@sthlmlunch.se</a> och ange ref={props.imageRef ? props.imageRef : "complete-form-to-see"} som rubrik/ämne.<br/>
+      Ta bilden vertikalt med mycket död-yta runtomkring (kommer skalas och skäras till 480x480).
+    </Typography>
+  </GridRow>
+);
+
 export const originOptions = ["Afrika", "Asien", "Mellanöstern", "Nordamerika", "Nordeuropa", "Sydamerika", "Sydeuropa"];
 export const heatOptions = ["Ingen hetta", "Lagom hetta", "Stark", "För stark", "Alldeles för stark"];
 export const potionSizeOptions = ["Lite", "Under medel", "Medel", "Över medel", "Mycket"];

@@ -6,7 +6,6 @@ import { getUsername } from "./login.js";
 import { Redirect } from "react-router";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
-import { Helmet } from "react-helmet";
 
 export default function RestaurantPage(props) {
   const restaurant = props.restaurant || props.match.params.restaurant;
@@ -55,6 +54,7 @@ class RestaurantInfo extends Component {
 			.then((restaurantsMeta) => {
 				if (restaurantsMeta) {
 					const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
+          document.title = `STHLM LUNCH - ${meta.name}`
 					this.setState({"restaurantMeta": meta});
 					if (meta && this.state.restaurant) {
 						fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)
@@ -119,9 +119,6 @@ class RestaurantInfo extends Component {
 
 		return (	
 		<>
-      <Helmet>
-        <title>{`STHLM LUNCH - ${restaurantMeta.name}`}</title>
-      </Helmet>
       { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
 			<div className="page-header text-center">
 			<h2>{restaurantMeta.name}</h2>

@@ -10,7 +10,6 @@ import Box from "@material-ui/core/Box";
 import brisketAndFriends from "./content/brisket&friends.png"
 import menoMaleIcon from "./content/menomale.svg"
 import IngersKitchenLogo from "./content/ingerskitchenlogo.png"
-import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -59,6 +58,7 @@ export default class RestaurantMap extends Component {
   }
 
   componentDidMount() {
+    document.title = "STHLM LUNCH - Top Restaurants"
     window.addEventListener("resize", this.updateWindowDimensions);
     const img = this.refs.image
     img.onload = () => setTimeout(() => this.drawCircle(Math.min(this.state.width, 600)), 1000);
@@ -115,9 +115,6 @@ export default class RestaurantMap extends Component {
     const { width } = this.state;
     return (
       <>
-        <Helmet>
-          <title>{"STHLM LUNCH - Top Restaurants"}</title>
-        </Helmet>
         <Grid container spacing={1} justify="center" align="center">
           <Grid item xs={12}>
             <RankCard index={1} restaurant="Brisket & Friends" description="Ensam i sin kategory att servera rökt bringa och annat kött av bästa kvalité med amerikanska tillbehör." nameIcon={brisketAndFriends}/>

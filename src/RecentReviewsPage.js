@@ -6,11 +6,11 @@ import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { Helmet } from "react-helmet";
 
 export default class AllReviewsPage extends Component {
 	constructor(props) {
     super(props);
+    document.title = "STHLM LUNCH - Recent Reviews"
 		window.mixpanel.track("Page view", {"page": "Reviews page"});
 		this.state = {reviews: [], username: getUsername()};
 		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
@@ -60,9 +60,6 @@ export default class AllReviewsPage extends Component {
 		));
 		return (
 			<>
-        <Helmet>
-          <title>STHLM LUNCH - Recent Reviews</title>
-        </Helmet>
         { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
           <Box m={3}>
             <Grid container spacing={5}>

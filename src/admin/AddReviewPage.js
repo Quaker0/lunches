@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { firstLetterUpperCase } from "../utils.js"
+import { firstLetterUpperCase, toPointer } from "../utils.js"
 import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
 import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal } from "./adminReviewUtils.js";
+import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp } from "./adminReviewUtils.js";
 
 export default class AddReviewPage extends Component {
 	constructor(props) {
@@ -195,6 +195,7 @@ export default class AddReviewPage extends Component {
 						<GridRow>
 							<TextField required={!!newRestaurant} value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
 						</GridRow>
+            <ImportImageHelp imageRef={meal && restaurant ? `${toPointer(restaurant.replace(/\s/, ""))}#${toPointer(meal.replace(/\s/, ""))}#${username}` : null}/>
 						<GridRow>
 							<SaveButton onClick={this.sendReview} />
 						</GridRow>
