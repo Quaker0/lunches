@@ -117,6 +117,7 @@ function buildReviewRequest(state) {
 		review.description = state.meals[review.meal];
 	}
 	review.reviewer = firstLetterUpperCase(state.username);
+  review.id = state.reviewId
 	const request = { review: review };
 	if (state.newRestaurant) {
 		var tags = [];

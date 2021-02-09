@@ -2,17 +2,18 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { firstLetterUpperCase, toPointer } from "../utils.js"
+import { firstLetterUpperCase } from "../utils.js"
 import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
 import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
+import shortid from "shortid"
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp } from "./adminReviewUtils.js";
 
 export default class AddReviewPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			openSaveModal: false, restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
+			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
 		};
 		this.toggleNewRestaurant = (show) => {
 			const { restaurantMeta, restaurant } = this.state;
@@ -153,7 +154,7 @@ export default class AddReviewPage extends Component {
 			restaurantMeta, seats, restaurant, newRestaurant, meals, newMeal, description, meal, mealError,
 			restaurantError, descriptionError, website, websiteError, address, addressError, tasteScore, heat,
 			review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
-			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType
+			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType, reviewId
 		} = this.state;
 		const restaurants = restaurantMeta.map(meta => meta.name);
 
@@ -195,7 +196,7 @@ export default class AddReviewPage extends Component {
 						<GridRow>
 							<TextField required={!!newRestaurant} value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
 						</GridRow>
-            <ImportImageHelp imageRef={meal && restaurant ? `${toPointer(restaurant.replace(/\s/, ""))}#${toPointer(meal.replace(/\s/, ""))}#${username}` : null}/>
+            <ImportImageHelp imageRef={reviewId}/>
 						<GridRow>
 							<SaveButton onClick={this.sendReview} />
 						</GridRow>
