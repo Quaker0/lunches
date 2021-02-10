@@ -201,7 +201,7 @@ export default class AddReviewPage extends Component {
 						<SimpleSelect id="heat" label="Hetta" value={heat} onChange={this.updateHeat} options={heatOptions}/>
 						<SimpleSelect id="portion-size" label="Portionsstorlek" value={portionSize} onChange={this.updatePortionSize} options={potionSizeOptions}/>
 						<TasteHelp />
-						<Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={username === "hampus" ? 10 : 1}/>
+						<Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={["hampus", "niclas"].includes(username) ? 10 : 1}/>
 						<Score label="Omgivning" score={environmentScore} updateScore={this.updateEnviroment} />
 						<Score label="Nytänkande" score={innovationScore} updateScore={this.updateInnovation} />
 						<Score label="Tillbehör" score={extrasScore} updateScore={this.updateExtras} />

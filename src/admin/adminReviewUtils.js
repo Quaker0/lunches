@@ -142,14 +142,10 @@ function buildReviewRequest(state) {
   review.imageRef = state.imageRef || state.reviewId;
 	const request = { review: review };
 	if (state.newRestaurant) {
-		var tags = [];
-		if (state.tags) {
-			state.tags.forEach(tag => tags.push(tag.title))
-		}
 		request.restaurant = {
 			name: state.restaurant,
-			tags: tags.sort().join(", "),
-			origin: state.origin.sort().join(", "),
+			tags: state.tags.sort().filter(Boolean).join(", "),
+			origin: state.origin.sort().filter(Boolean).join(", "),
 			address: state.address,
 			website: state.website,
 			payInAdvance: state.payInAdvance
