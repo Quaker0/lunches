@@ -14,7 +14,7 @@ export default class AddReviewPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
+			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta: [], meals: [], username: getUsername(), ...defaultState
 		};
     fetch("https://sthlmlunch-pics.s3.amazonaws.com")
     .then(response => response.text())
@@ -144,7 +144,7 @@ export default class AddReviewPage extends Component {
 		if (this.validateFields()) {
 			saveNewReview(this.state).then(success => {
 				if (success) {
-					this.setState({openSaveModal: true});
+					this.setState({openSaveModal: true, ...defaultState});
 				} else {
 					alert("Misslyckades med att spara recensionen");
 				}

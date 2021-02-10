@@ -11,8 +11,9 @@ export default class MealReviewCard extends Component {
 
 	const aggregatedReviews = getAggregatedReviews(reviews);
 	let reviewsItems = [];
-	_.filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={reviewToKey(review)}><p><i className="fas fa-quote-left"/><i className="p-2">{review.review}</i><i className="fas fa-quote-right"/></p></div>));
+	_.filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={reviewToKey(review)}><p><i className="fas fa-quote-left"/><i className="pt-2">{review.review}</i><i className="fas fa-quote-right"/></p></div>));
 	var tasteIcons = getRateCircles(aggregatedReviews.tasteScore)
+  const imgSrc = _.find(reviews, r => r.imageRef).imageRef
 	
 	return (
 		<div className="col-sm-6 col-xl-4 card-item">
@@ -20,7 +21,8 @@ export default class MealReviewCard extends Component {
 				{ tasteIcons }
 				{ pepperIcons }
 			<p className="font-weight-light">{reviews[0].description}</p>
-				{ reviewsItems }
+			{ reviewsItems }
+      { imgSrc ? <img width={180} alt="meal" style={{borderRadius: "50%", display: "block", marginLeft: "auto", marginRight: "auto"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
 		</div>
 	);
 	}
