@@ -7,7 +7,8 @@ import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
 import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
 import shortid from "shortid"
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp } from "./adminReviewUtils.js";
+import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp, UnmatchedImages } from "./adminReviewUtils.js";
+import xmlParser from 'fast-xml-parser';
 
 export default class AddReviewPage extends Component {
 	constructor(props) {
@@ -15,14 +16,24 @@ export default class AddReviewPage extends Component {
 		this.state = {
 			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta:[], meals:[], username:getUsername(), ...defaultState
 		};
+    fetch("https://sthlmlunch-pics.s3.amazonaws.com")
+    .then(response => response.text())
+    .then(body => {
+      this.setState({unmatchedImages: xmlParser.parse(body).ListBucketResult.Contents.map(content => {
+        if (content.Key.startsWith("processed/unmatched")) {
+          return content.Key;
+        }
+        return null;
+      }).filter(Boolean)})
+    })
 		this.toggleNewRestaurant = (show) => {
-			const { restaurantMeta, restaurant } = this.state;
-			if (restaurantMeta.some(meta => meta.name.toLowerCase() === restaurant.toLowerCase())) {
-				this.setState({newRestaurant: false});
-			} else {
-				this.setState({newRestaurant: show});
-			}
-		}
+      const { restaurantMeta, restaurant } = this.state;
+      if (restaurantMeta.some(meta => meta.name.toLowerCase() === restaurant.toLowerCase())) {
+        this.setState({newRestaurant: false});
+      } else {
+        this.setState({newRestaurant: show});
+      }
+    }
 		this.toggleNewMeal = (show) => {
 			const { meals, meal } = this.state;
 			if (Object.keys(meals).some(m => m.toLowerCase() === meal.toLowerCase())) {
@@ -62,7 +73,13 @@ export default class AddReviewPage extends Component {
 		this.onFocus = this.onFocus.bind(this);
 		this.sendReview = this.sendReview.bind(this);
 		this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
+    this.setSelectedImageRef = this.setSelectedImageRef.bind(this);
 	}
+
+  setSelectedImageRef = (newImageRef) => {
+    const { imageRef } = this.state;
+    this.setState({imageRef: newImageRef !== imageRef ? newImageRef : null});
+  }
 
 	onFocus() {
 		this.setState({username: getUsername()});
@@ -154,14 +171,14 @@ export default class AddReviewPage extends Component {
 			restaurantMeta, seats, restaurant, newRestaurant, meals, newMeal, description, meal, mealError,
 			restaurantError, descriptionError, website, websiteError, address, addressError, tasteScore, heat,
 			review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
-			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType, reviewId
+			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType, imageRef, reviewId, unmatchedImages
 		} = this.state;
 		const restaurants = restaurantMeta.map(meta => meta.name);
 
 		return (
 			<>
 				<ThemeProvider theme={theme}>
-					<Grid container spacing={2} >
+					<Grid container spacing={2} direction="column" alignContent="center">
 						<GridRow>
 							<RestaurantSelect restaurant={restaurant} error={!!restaurantError} helperText={restaurantError} restaurants={restaurants} updateRestaurant={this.updateRestaurant} addNew={this.toggleNewRestaurant}/>
 						</GridRow>
@@ -175,8 +192,6 @@ export default class AddReviewPage extends Component {
 						<GridRow collapse={!newMeal}>
 							<NewMeal desc={description} updateDesc={this.updateNewMealDesc} error={descriptionError} />
 						</GridRow>
-						</Grid>
-						<Grid container spacing={2} >
 						<ReviewDate value={timestamp} updateDate={this.updateDate} />
 						<MenuType menuType={menuType} updateMenuType={this.updateMenuType}/>
 						<GridRow>
@@ -196,7 +211,8 @@ export default class AddReviewPage extends Component {
 						<GridRow>
 							<TextField required={!!newRestaurant} value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
 						</GridRow>
-            <ImportImageHelp imageRef={reviewId}/>
+            <ImportImageHelp reviewId={reviewId}/>
+            <UnmatchedImages imageKeys={unmatchedImages} onChange={this.setSelectedImageRef} selectedImageRef={imageRef}/>
 						<GridRow>
 							<SaveButton onClick={this.sendReview} />
 						</GridRow>

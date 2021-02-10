@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Slider from "@material-ui/core/Slider";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -74,17 +75,38 @@ export const TasteHelp = () => (
 	</GridRow>
 );
 
+export const UnmatchedImages = (props) => (
+  <Box display="flex" flexDirection="column" alignItems="center" p={2}>
+    <Typography variant="h6">
+      Eller använd en föruppladdad bild
+    </Typography>
+    {
+      props.imageKeys && props.imageKeys.length ? props.imageKeys.map(imageKey => (
+        <Box display="flex" justifyContent="center" alignContent="center" alignItems="center">
+          <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
+            <img width={150} height={150} alt="pre-sent" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/" + imageKey}/>
+            <input type="checkbox" value={imageKey.replace(/.+\//, "").replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(/.+\//, "").replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/>
+          </Box>
+         </Box>
+       )) : (
+        <Box component="p" width="50vw">
+          Inga bilder har laddats upp i förväg for tillfället! <br/>Du kan skicka bilder till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> utan att ange någonting och sedan välja den här.
+        </Box>
+      )
+    }
+  </Box>
+);
 
 export const ImportImageHelp = (props) => (
-  <GridRow>
-    <Typography variant="h6" justify-self="center">
+  <Box display="flex" flexDirection="column" alignItems="center">
+    <Typography variant="h6">
       Importera en bild på din måltid
     </Typography>
-    <Typography variant="p" justify-self="center">
-      Maila din bild till <a href="pics@sthlmlunch.se">pics@sthlmlunch.se</a> och ange ref={props.imageRef ? props.imageRef : "complete-form-to-see"} som rubrik/ämne.<br/>
-      Ta bilden vertikalt med mycket död-yta runtomkring (kommer skalas och skäras till 480x480).
-    </Typography>
-  </GridRow>
+    <Box component="p" width="50vw">
+      Maila din bild till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> och ange <code>ref={props.reviewId ? props.reviewId : "complete-form-to-see"}</code> som rubrik/ämne efter att du skickat din recension.
+      Ta bilden vertikalt med mycket död-yta runtomkring (kommer skalas och sen skäras till 480x480).
+    </Box>
+  </Box>
 );
 
 export const originOptions = ["Afrika", "Asien", "Mellanöstern", "Nordamerika", "Nordeuropa", "Sydamerika", "Sydeuropa"];
@@ -94,7 +116,7 @@ export const waitTimeOptions = ["< 5 min", "< 10 min", "< 20 min", "< 30 min", "
 export const defaultState = {
 	newRestaurant:false, newMeal:false, description:"", price:"", portionSize: "Medel",
 	meal:"", restaurant:"", address:"", website:"", seats:null, timestamp:new Date().toISOString().slice(0, 10),
-	review:"", restaurantComment:"", tasteScore:5, environmentScore:5, innovationScore:5,
+	review:"", restaurantComment:"", tasteScore:5, environmentScore:5, innovationScore:5, unmatchedImages:[],
 	extrasScore:5, heat:"Ingen hetta", waitTime:"< 20 min", payInAdvance:"Ja", menuType: "other"
 };
 
@@ -117,7 +139,7 @@ function buildReviewRequest(state) {
 		review.description = state.meals[review.meal];
 	}
 	review.reviewer = firstLetterUpperCase(state.username);
-  review.id = state.reviewId
+  review.imageRef = state.imageRef || state.reviewId;
 	const request = { review: review };
 	if (state.newRestaurant) {
 		var tags = [];
@@ -162,7 +184,7 @@ export function deleteReview(state) {
 
 export const SaveButton = function(props) {
 	return (
-		<Button onClick={props.onClick} style={{"margin": 50}}>
+		<Button onClick={props.onClick}>
 			<SaveIcon fontSize="large" style={{ color: "green"}}/>
 			Spara
 		</Button>
@@ -370,10 +392,10 @@ export const SimpleSelect = props => (
 );
 
 export const GridRow = (props) => (
-	<Grid container item direction="row" justify={props.justify || "center"} >
-		<div className={props.collapse ? "collapse in" : ""}>
+	<Grid container item direction="column" justify={props.justify || "center"} alignContent={props.alignContent || "center"} alignItems={props.alignItems || "center"}>
+		<Box className={props.collapse ? "collapse in" : ""}>
 			{props.children}
-		</div>
+		</Box>
 	</Grid>
 );
 
@@ -396,26 +418,29 @@ export function SimpleModal(props) {
 	);
 }
 
-function getModalStyle() {
-	const top = 50;
-	const left = 50;
-
-	return {
-		top: `${top}%`,
-		left: `${left}%`,
-		transform: `translate(-${top}%, -${left}%)`,
-	};
-}
-
 const useStyles = makeStyles(theme => ({
+  page: {
+    width: "80%"
+  },
 	paper: {
-	position: "absolute",
-	width: 500,
-	backgroundColor: theme.palette.background.paper,
-	boxShadow: theme.shadows[5],
-	border: "2px solid green",
-	padding: theme.spacing(4),
-	margin: "auto",
-	textAlign: "center"
+  	position: "absolute",
+  	width: 500,
+  	backgroundColor: theme.palette.background.paper,
+  	boxShadow: theme.shadows[5],
+  	border: "2px solid green",
+  	padding: theme.spacing(4),
+  	margin: "auto",
+  	textAlign: "center"
 	},
 }));
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
