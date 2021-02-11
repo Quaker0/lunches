@@ -120,7 +120,6 @@ class RestaurantInfo extends Component {
     return (  
     <>
       { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
-      <h2 style={{fontSize: "150px", position: "absolute", opacity: 0.2}}>{restaurantMeta.name}</h2>
       <div className="page-header text-center">
         <h2>{restaurantMeta.name}</h2>
       </div>
@@ -138,7 +137,7 @@ class RestaurantInfo extends Component {
             { website ?
               <tr>
               <th scope="row">Hemsida</th>
-              <td><a href={`${website}?utm_source=sthlmlunch.se&utm_medium=referral`}>{website.slice(0, 65)}</a></td>
+              <td><a href={`${website}?utm_source=sthlmlunch.se&utm_medium=referral`}>{website.replace(/https?:\/\//, "").slice(0, 65)}</a></td>
               </tr>
               : <></>
             }

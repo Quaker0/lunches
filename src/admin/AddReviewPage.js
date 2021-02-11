@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { firstLetterUpperCase } from "../utils.js"
 import { getRestaurantMeta, getRestaurantReviews } from "../api.js"
-import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
 import shortid from "shortid"
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp, UnmatchedImages } from "./adminReviewUtils.js";
@@ -14,7 +13,7 @@ export default class AddReviewPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta: [], meals: [], username: getUsername(), ...defaultState
+			reviewId: shortid.generate(), openSaveModal: false, restaurantMeta: [], meals: [], ...defaultState
 		};
     fetch("https://sthlmlunch-pics.s3.amazonaws.com")
     .then(response => response.text())
@@ -70,7 +69,6 @@ export default class AddReviewPage extends Component {
 		this.updateOrigin = (event, value) => this.setState({origin: value});
 		this.validateFields = this.validateFields.bind(this);
 		this.updateRestaurant = this.updateRestaurant.bind(this);
-		this.onFocus = this.onFocus.bind(this);
 		this.sendReview = this.sendReview.bind(this);
 		this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
     this.setSelectedImageRef = this.setSelectedImageRef.bind(this);
@@ -80,10 +78,6 @@ export default class AddReviewPage extends Component {
     const { imageRef } = this.state;
     this.setState({imageRef: newImageRef !== imageRef ? newImageRef : null});
   }
-
-	onFocus() {
-		this.setState({username: getUsername()});
-	}
 
 	updateRestaurant(event, value) {
 		const { restaurantMeta } = this.state;
@@ -157,13 +151,8 @@ export default class AddReviewPage extends Component {
 	}
 
 	componentDidMount() {
-		window.addEventListener("focus", this.onFocus);
 		getRestaurantMeta()
 		.then(meta => this.setState({restaurantMeta: Object.values(meta)}));
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener("focus", this.onFocus);
 	}
 
 	render() {
@@ -171,7 +160,7 @@ export default class AddReviewPage extends Component {
 			restaurantMeta, seats, restaurant, newRestaurant, meals, newMeal, description, meal, mealError,
 			restaurantError, descriptionError, website, websiteError, address, addressError, tasteScore, heat,
 			review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError,
-			portionSize, extrasScore, waitTime, payInAdvance, username, timestamp, menuType, imageRef, reviewId, unmatchedImages
+			portionSize, extrasScore, waitTime, payInAdvance, timestamp, menuType, imageRef, reviewId, unmatchedImages
 		} = this.state;
 		const restaurants = restaurantMeta.map(meta => meta.name);
 
@@ -201,7 +190,7 @@ export default class AddReviewPage extends Component {
 						<SimpleSelect id="heat" label="Hetta" value={heat} onChange={this.updateHeat} options={heatOptions}/>
 						<SimpleSelect id="portion-size" label="Portionsstorlek" value={portionSize} onChange={this.updatePortionSize} options={potionSizeOptions}/>
 						<TasteHelp />
-						<Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={["hampus", "niclas"].includes(username) ? 10 : 1}/>
+						<Score label="Smak" score={tasteScore} updateScore={this.updateTaste} multiplier={10}/>
 						<Score label="Omgivning" score={environmentScore} updateScore={this.updateEnviroment} />
 						<Score label="Nytänkande" score={innovationScore} updateScore={this.updateInnovation} />
 						<Score label="Tillbehör" score={extrasScore} updateScore={this.updateExtras} />

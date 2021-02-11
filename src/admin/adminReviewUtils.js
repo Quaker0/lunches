@@ -41,34 +41,34 @@ export const TasteHelp = () => (
     <Grid container direction="row" spacing={0}>
       <List dense >
         <ListItem>
-          <ListItemText primary="1 - Inte gott" />
+          <ListItemText primary="10 - Inte gott" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="2 - Varierande kvalité eller smaklöst" />
+          <ListItemText primary="20 - Varierande kvalité eller smaklöst" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="3 - Lite tråkigt" />
+          <ListItemText primary="30 - Lite tråkigt" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="4 - Bra men väldigt standard" />
+          <ListItemText primary="40 - Bra men väldigt standard" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="5 - Goda komponenter men ingen perfekt rätt" />
+          <ListItemText primary="50 - Goda komponenter men ingen perfekt rätt" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="6 - God rätt, äter den gärna igen" />
+          <ListItemText primary="60 - God rätt, äter den gärna igen" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="7 - God rätt som sticker ut i hur välkomponerad den är eller i kvaliteten av råvarorna" />
+          <ListItemText primary="70 - Välkomponerad rätt med bra råvarorna" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="8 - Imponerande rätt, inkluderar smaker som är svårhittade i Stockholm" />
+          <ListItemText primary="80 - Imponerande rätt, inkluderar smaker som är svårhittade i Stockholm" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="9 - En matupplevelse" />
+          <ListItemText primary="90 - En matupplevelse" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="10 - Bästa maträtten i Stockholm (i sin kategori)" />
+          <ListItemText primary="100 - Bästa maträtten i Stockholm (i sin kategori)" />
         </ListItem>
       </List>
     </Grid>
@@ -82,7 +82,7 @@ export const UnmatchedImages = (props) => (
     </Typography>
     {
       props.imageKeys && props.imageKeys.length ? props.imageKeys.map(imageKey => (
-        <Box key={imageKey} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+        <Box key={imageKey} display="flex" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center">
           <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
             <img width={150} height={150} alt="pre-sent" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/" + imageKey}/>
             <input type="checkbox" value={imageKey.replace(/.+\//, "").replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(/.+\//, "").replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/>
