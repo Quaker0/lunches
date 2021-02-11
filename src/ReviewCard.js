@@ -7,16 +7,14 @@ import Grid from "@material-ui/core/Grid";
 export default class ReviewCard extends Component {
   render() {
     const { review, restaurantsMeta } = this.props;
-    if (!review.pointer) {
-      return ""
-    }
-    const restaurantMeta = _.get(restaurantsMeta, review.pointer, {})
+    if (!review.pointer) return null
+    
+    const restaurantMeta = _.get(restaurantsMeta, review.pointer)
+    if (!restaurantMeta) return null
+    
     const pepperIcons = getPepperIcons(review.heat);
     const firstOrigin = (restaurantMeta.origin || "").split(",")[0];
-    var restaurantRedirect = "#";
-    if (restaurantMeta.name) {
-      restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
-    }
+    var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 
     return (
       <Grid item sm={12} md={6}>

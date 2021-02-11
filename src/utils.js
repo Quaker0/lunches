@@ -103,13 +103,13 @@ export function parseDate(timestamp) {
 	return date.toLocaleDateString();
 }
 
-export function getRateCircles(score) {
+export function getRateCircles(score, background="white") {
 	var icons = [];
 	for (let i = 0; i < 5; i++) {
 		if (Math.floor(score/2) > i) {
 			icons.push(<div key={i} className="circle"/>)
 		} else if(score/2 - i === .5) {
-			icons.push(<div key={i} className="circle-half"/>)
+			icons.push(<div key={i} className={`circle-half-${background}`}/>)
 		} else {
 			icons.push(<div key={i} className="circle-empty"/>)
 		}

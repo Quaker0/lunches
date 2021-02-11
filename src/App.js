@@ -5,13 +5,13 @@ import RestaurantPage from "./RestaurantPage";
 import Head from "./Head";
 import ReviewPage from "./ReviewPage";
 import AsiaPage from "./AsiaPage";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { history } from "./utils.js"
 
 export default class App extends Component {
 	render() {
 		return (
-			<HashRouter history={history}>
+			<Router history={history}>
 				<>
 					<Route component={Head} />
 					<Switch>
@@ -30,7 +30,7 @@ export default class App extends Component {
 						<Route path="*" component={NotFoundPage} />
 					</Switch>
 				</>
-			</HashRouter>
+			</Router>
 		);
 	}
 }

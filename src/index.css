@@ -110,12 +110,20 @@ a:hover {
 	margin-bottom: 20px;
 }
 
-.circle-half {
+.circle-half-white {
 	border: 1px solid green;
 	border-radius: 50%;
 	height: 20px;
 	width: 20px;
 	background: linear-gradient(to right, green 50%, white 50%);
+}
+
+.circle-half-whitesmoke {
+  border: 1px solid green;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  background: linear-gradient(to right, green 50%, whitesmoke 50%);
 }
 
 .circle {

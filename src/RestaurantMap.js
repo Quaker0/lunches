@@ -52,16 +52,16 @@ function RankCard(props) {
 export default class RestaurantMap extends Component {
   constructor(props) {
     super(props);
-    this.state = {width: Math.min(window.innerWidth *.8, 600)};
+    this.state = {width: Math.min(window.innerWidth *.8, 600), imageRef: React.createRef(), canvasRef: React.createRef()};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.drawCircle = this.drawCircle.bind(this);
   }
 
   componentDidMount() {
+    const { imageRef } = this.state;
     document.title = "STHLM LUNCH - Top Restaurants"
     window.addEventListener("resize", this.updateWindowDimensions);
-    const img = this.refs.image
-    img.onload = () => setTimeout(() => this.drawCircle(Math.min(this.state.width, 600)), 1000);
+    imageRef.current.onload = () => setTimeout(() => this.drawCircle(Math.min(this.state.width, 600)), 1000);
   }
 
   componentWillUnmount() {
@@ -75,15 +75,14 @@ export default class RestaurantMap extends Component {
   }
 
   drawCircle(width) {
+    const { imageRef, canvasRef } = this.state;
     const height = width / 1.5;
-    const canvas = this.refs.canvas
-    const img = this.refs.image
 
-    canvas.style.position = "absolute";
-    canvas.style.left = img.offsetLeft + "px";
-    canvas.style.top = img.offsetTop + "px";
+    canvasRef.current.style.position = "absolute";
+    canvasRef.current.style.left = imageRef.current.offsetLeft + "px";
+    canvasRef.current.style.top = imageRef.current.offsetTop + "px";
     
-    const ctx = canvas.getContext("2d")
+    const ctx = canvasRef.current.getContext("2d")
     ctx.lineWidth = "5";
     ctx.strokeStyle = "goldenrod";
     ctx.fillStyle = "black";
@@ -112,7 +111,7 @@ export default class RestaurantMap extends Component {
   }
 
   render() {
-    const { width } = this.state;
+    const { width, imageRef, canvasRef } = this.state;
     return (
       <>
         <Grid container spacing={1} justify="center" align="center">
@@ -123,9 +122,9 @@ export default class RestaurantMap extends Component {
           </Grid>
         </Grid>
         <Box style={{textAlign: "center"}}>
-          <img src={map} ref="image" alt="STHLM LUNCH MAP" width={width} style={{backgroundColor: "black", borderRadius: "5%"}}/>          
+          <img src={map} ref={imageRef} alt="STHLM LUNCH MAP" width={width} style={{backgroundColor: "black", borderRadius: "5%"}}/>          
         </Box>
-        <canvas ref="canvas" width={width} height={width / 1.5}/>
+        <canvas ref={canvasRef} width={width} height={width / 1.5}/>
       </>
 
     );

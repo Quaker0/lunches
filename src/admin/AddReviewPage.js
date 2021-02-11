@@ -8,7 +8,7 @@ import { getUsername } from "../login.js";
 import { ThemeProvider } from "@material-ui/core/styles";
 import shortid from "shortid"
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, theme, SaveButton, RestaurantSelect, NewRestaurant, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, ImportImageHelp, UnmatchedImages } from "./adminReviewUtils.js";
-import xmlParser from 'fast-xml-parser';
+import xmlParser from "fast-xml-parser";
 
 export default class AddReviewPage extends Component {
 	constructor(props) {
@@ -76,7 +76,7 @@ export default class AddReviewPage extends Component {
     this.setSelectedImageRef = this.setSelectedImageRef.bind(this);
 	}
 
-  setSelectedImageRef = (newImageRef) => {
+  setSelectedImageRef(newImageRef) {
     const { imageRef } = this.state;
     this.setState({imageRef: newImageRef !== imageRef ? newImageRef : null});
   }
