@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import ReviewCard from "./ReviewCard.js";
-import { reviewToKey } from "./utils.js";
 import { getUsername } from "./login.js";
 import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 
 export default class AllReviewsPage extends Component {
 	constructor(props) {
@@ -54,18 +52,16 @@ export default class AllReviewsPage extends Component {
 			filteredReviews = Object.assign([], reviews);
 		}
 		
-		let reviewCards = [];
-		filteredReviews.forEach((review) => reviewCards.push(
-			<ReviewCard key={reviewToKey(review)} review={review} restaurantsMeta={restaurantsMeta} />
-		));
 		return (
 			<>
         { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
-          <Box m={3}>
-            <Grid container spacing={5}>
-            { reviewCards }
-            </Grid>
-					</Box>
+          <div className="d-flex flex-column align-items-center">
+            { 
+              filteredReviews.map((review, idx) => (
+                <ReviewCard key={idx} idx={idx} review={review} restaurantsMeta={restaurantsMeta} />
+              )) 
+            }
+					</div>
 			</>
 		);
 	}

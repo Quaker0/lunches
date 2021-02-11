@@ -1,43 +1,32 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
-import { originMap, getPepperIcons} from "./utils.js"
-import Grid from "@material-ui/core/Grid";
 
-export default class ReviewCard extends Component {
-  render() {
-    const { review, restaurantsMeta } = this.props;
-    if (!review.pointer) return null
-    
-    const restaurantMeta = _.get(restaurantsMeta, review.pointer)
-    if (!restaurantMeta) return null
-    
-    const pepperIcons = getPepperIcons(review.heat);
-    const firstOrigin = (restaurantMeta.origin || "").split(",")[0];
-    var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
+export default function ReviewCard(props) {
+  const { review, idx, restaurantsMeta } = props;
+  const [imgError, setImgError] = useState(false);
 
-    return (
-      <Grid item sm={12} md={6}>
-        {
-          firstOrigin ? 
-          <i className={"fas fa-globe-" + _.get(originMap, firstOrigin, "asia") + " fa-sm float-right pb-2"}>{restaurantMeta.origin}</i>
-          : <></>
-        }
-        <Link to={restaurantRedirect}><h2 style={{width:"60%", }}>{restaurantMeta.name}</h2></Link>
-        <h3 className="font-weight-light">{review.meal}</h3> 
-        {pepperIcons}
-        <div>{review.description}</div>
-        <div className="font-weight-bold">Pris: {review.price}kr</div>
-          <div className="container">
-            <div className="row pt-4">
-              <div className="col-sm-12 col-md-6 font-weight-light">Smak: {review.tasteScore ? review.tasteScore + "/10" : "–"}</div>
-              <div className="col-sm-12 col-md-6 font-weight-light">Tillbehör: {review.extrasScore ? review.extrasScore + "/10" : "–"}</div>
-              <div className="col-sm-12 col-md-6 font-weight-light">Omgivning: {review.environmentScore ? review.environmentScore + "/10" : "–"}</div>
-              <div className="col-sm-12 col-md-6 font-weight-light">Nytänkande: {review.innovationScore ? review.innovationScore + "/10" : "–"}</div>
-            </div>
-          </div>
-        <div className="font-italic py-3">recenserad av {review.reviewer}</div>
-      </Grid>
-    );
-  }
+  if (!review.pointer || !review.imageRef || imgError) return null
+  
+  const restaurantMeta = _.get(restaurantsMeta, review.pointer)
+  if (!restaurantMeta) return null
+  
+  var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
+  const evenIdx = idx % 2 === 0;
+
+  return (
+    <div className={"d-flex w-100 position-relative justify-content-around flex-wrap flex-row" + (!evenIdx ? "-reverse" : "")} style={{borderRadius: "10px", border: "5px solid whitesmoke", boxShadow: "3px 3px lightgrey"}}>
+      <div className="p-5">
+        <img onError={setImgError} width={400} alt="meal-bg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
+        <img onError={setImgError} width={380} alt="meal" style={{borderRadius: "50%", margin: "10px 0 0 10px", border: "4px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
+      </div>
+      <div className="d-flex flex-column justify-content-center px-5">
+        <div className="d-flex flex-row align-items-baseline pb-4 pt-2">
+          <Link to={restaurantRedirect} className="pr-4"><h2 style={{fontVariant: "petite-caps"}}>{restaurantMeta.name}</h2></Link>
+          <h3 className="font-weight-light px-5" style={{fontVariant: "all-petite-caps"}}>{review.meal}</h3> 
+        </div>
+        <p className="pb-4" style={{maxWidth: 600, fontVariant: "all-petite-caps", fontSize: "large"}}>{review.description}</p> 
+      </div>  
+    </div>
+  );
 }

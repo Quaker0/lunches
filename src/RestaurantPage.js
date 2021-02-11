@@ -121,7 +121,7 @@ class RestaurantInfo extends Component {
     <>
       { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
       <div className="page-header text-center">
-        <h2>{restaurantMeta.name}</h2>
+        <h2 style={{fontVariant: "petite-caps"}}>{restaurantMeta.name}</h2>
       </div>
 
       <div className="container-fluid">
