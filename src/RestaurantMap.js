@@ -78,6 +78,8 @@ export default class RestaurantMap extends Component {
     const { imageRef, canvasRef } = this.state;
     const height = width / 1.5;
 
+    if (!canvasRef.current || !imageRef.current) return null;
+
     canvasRef.current.style.position = "absolute";
     canvasRef.current.style.left = imageRef.current.offsetLeft + "px";
     canvasRef.current.style.top = imageRef.current.offsetTop + "px";

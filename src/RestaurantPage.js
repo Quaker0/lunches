@@ -54,9 +54,9 @@ class RestaurantInfo extends Component {
       .then((restaurantsMeta) => {
         if (restaurantsMeta) {
           const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
-          document.title = `STHLM LUNCH - ${meta.name}`
-          this.setState({"restaurantMeta": meta});
           if (meta && this.state.restaurant) {
+            document.title = `STHLM LUNCH - ${meta.name}`
+            this.setState({"restaurantMeta": meta});
             fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)
             .then((response) => {
               response.json()

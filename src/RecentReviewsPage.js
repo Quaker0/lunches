@@ -14,14 +14,6 @@ export default class AllReviewsPage extends Component {
 		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
 	}
 
-	toggleReviewerFilter(reviewer) {
-	if (this.state.reviewerFilter === reviewer) {
-		this.setState({"reviewerFilter": null})
-	} else {
-		this.setState({"reviewerFilter": reviewer})
-	}
-	}
-
 	componentDidMount() {
 		fetch("https://www.sthlmlunch.se/recentReviews.json")
 		.then((response) => {
@@ -45,20 +37,15 @@ export default class AllReviewsPage extends Component {
 
 	render() {
 		const { reviews, restaurantsMeta, reviewerFilter, username } = this.state;
-		let filteredReviews = [];
-		if (reviewerFilter) {
-			filteredReviews = _.filter(reviews, review => review.reviewer.toLowerCase() === reviewerFilter);
-		} else {
-			filteredReviews = Object.assign([], reviews);
-		}
+    const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`));
 		
 		return (
 			<>
         { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
           <div className="d-flex flex-column align-items-center">
             { 
-              filteredReviews.map((review, idx) => (
-                <ReviewCard key={idx} idx={idx} review={review} restaurantsMeta={restaurantsMeta} />
+              deduplicatedReviews.map((review, idx) => (
+                <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} />
               )) 
             }
 					</div>
