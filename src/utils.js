@@ -165,7 +165,7 @@ export function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       {...other}
     >
-      {value === index && <Box py={3}>{children}</Box>}
+      {value === index && <div className="pb-2">{children}</div>}
     </Typography>
   );
 }
