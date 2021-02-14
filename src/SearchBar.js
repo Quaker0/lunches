@@ -13,7 +13,7 @@ export default class SearchBar extends Component {
 					</Dropdown.Toggle>
 					<Dropdown.Menu>
 						<Dropdown.Item id="tasteScore" key="tasteScore" onClick={sortBy} >Bäst smak</Dropdown.Item>
-						<Dropdown.Item id="evnironmentScore" key="environmentScore" onClick={sortBy} >Bäst omgivning</Dropdown.Item>
+						<Dropdown.Item id="environmentScore" key="environmentScore" onClick={sortBy} >Bäst omgivning</Dropdown.Item>
 					</Dropdown.Menu>
 				</Dropdown>
 			);

@@ -6,6 +6,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Explore from "@material-ui/icons/Explore";
 import SubwayIcon from "@material-ui/icons/Subway";
+import PhoneIcon from "@material-ui/icons/Phone";
 
 import { RestaurantSelect, SaveButton, SimpleSelect, saveRestaurant, TagSelect, OriginSelect, RestaurantSeats, GridRow, SimpleModal } from "./adminReviewUtils.js";
 import { firstLetterUpperCase, toPointer } from "../utils.js";
@@ -17,6 +18,7 @@ export default function AddRestaurantPage(props) {
   const [ restaurant, setRestaurant ] = React.useState("");
   const [ address, setAddress ] = React.useState("");
   const [ website, setWebsite ] = React.useState("");
+  const [ phoneNumber, setPhoneNumber ] = React.useState("");
   const [ tags, setTags ] = React.useState([]);
   const [ origins, setOrigins ] = React.useState([]);
   const [ seats, setSeats ] = React.useState("25-35");
@@ -31,10 +33,10 @@ export default function AddRestaurantPage(props) {
   const [ getPlacesTimeout, setGetPlacesTimeout ] = React.useState();
   const [ getPlaceDetailsTimeout, setGetPlaceDetailsTimeout ] = React.useState();
 
-  console.log(places)
+  const RESTAURANT_SEPARATOR = " — ";
 
   function validateWebsite() {
-    if (website && !website.match(/^https?:\/\/(www\.)?[\w\d]+\.[\w]+(\/[\w\d]+)*$/gi)){
+    if (website && !website.match(/^https?:\/\/(www\.)?[\w\d]+\.[\w]+(\/[-a-z\d%_~+]+)*$/gi)){
       setErrors({website: "Invalid URL (has to start with http and can't end with a slash)"});
       return false;
     }
@@ -43,7 +45,7 @@ export default function AddRestaurantPage(props) {
   }
 
   function validateRestaurant() {
-    const restaurantPointer = toPointer(restaurant.split(" - ")[0]);
+    const restaurantPointer = toPointer(restaurant.split(RESTAURANT_SEPARATOR)[0]);
     if (restaurantPointer in restaurantMeta){
       setErrors({restaurant: "Restaurangen finns redan!"});
       return false;
@@ -79,35 +81,51 @@ export default function AddRestaurantPage(props) {
     }
 
     if (!restaurant) {
-      setPlaces([])
       setLastRestaurantSearch("")
+      setPlaceSearch({})
+      setPlaces([])
+      setPlaceDetails([])
+      setPhoneNumber("")
+      setWebsite("")
+      setTags([])
+      setOrigins([])
     }
+
+    const lastSearchChanged = !lastRestaurantSearch || !restaurant.startsWith(lastRestaurantSearch) || Math.abs(lastRestaurantSearch.length - restaurant.length) > 2;
     
-    if (restaurant.length > 3 && places && (!lastRestaurantSearch || !restaurant.startsWith(lastRestaurantSearch) || Math.abs(lastRestaurantSearch.length - restaurant.length) > 2)) {
-      setLastRestaurantSearch(restaurant)
+    if (restaurant.length > 3 && !restaurant.includes(RESTAURANT_SEPARATOR) && places !== null && lastSearchChanged) {
       setGetPlacesTimeout(setTimeout(() => getPlaces(restaurant).then(data => {
-        console.log(data)
-        setPlaces(data && data.results)
+        setLastRestaurantSearch(restaurant)
+        if (data && data.results && data.results.length) {
+          setPlaces(data.results)
+        }
       }), 1000));
     }
 
-    console.log(places)
-
-    if(places && places.length && restaurant.includes(" - ")) {
-      const selectedPlace = places.find(place => `${place.name} - ${place.formatted_address}` === restaurant)
+    if(places && places.length && restaurant.includes(RESTAURANT_SEPARATOR)) {
+      const selectedPlace = places.find(place => `${place.name}${RESTAURANT_SEPARATOR}${place.formatted_address}` === restaurant)
       if (selectedPlace) {
         const geo = selectedPlace.geometry.location
-        console.log(geo)
         if (!lastPlaceSearch || (lastPlaceSearch.lat !== geo.lat || lastPlaceSearch.lng !== geo.lng)) {
-          setPlaceSearch(geo);
-          setGetPlaceDetailsTimeout(setTimeout(() => getPlaceDetails(geo.lat, geo.lng).then(data => {
-            console.log(data)
-            setPlaceDetails(data && data.results)
-          }), 1000));
+          setGetPlaceDetailsTimeout(setTimeout(() => {
+            setPlaceSearch(geo);
+            getPlaceDetails(geo).then(data => {
+              setPlaceDetails(data && data.results)
+            });
+            getPlaceDetails({placeId: selectedPlace.place_id}).then(data => {
+              if(data && data.result) {
+                setPhoneNumber(data.result.formatted_phone_number)
+                setWebsite(data.result.website.replace(/\/$/g, ""))
+              }
+            });
+        }, 1000));
         }
       }
     }
-    return () => clearTimeout(getPlacesTimeout);
+    return () => { 
+      clearTimeout(getPlacesTimeout);
+      clearTimeout(getPlaceDetailsTimeout);
+    }
   }, [restaurant]);
 
   React.useEffect(() => {
@@ -128,14 +146,15 @@ export default function AddRestaurantPage(props) {
       tags: tags.sort().filter(Boolean).join(", "),
     }
 
-    if (restaurant.includes(" - ")) {
-      const selectedPlace = places.find(place => `${place.name} - ${place.formatted_address}` === restaurant)
+    if (restaurant.includes(RESTAURANT_SEPARATOR)) {
+      const selectedPlace = places.find(place => `${place.name}${RESTAURANT_SEPARATOR}${place.formatted_address}` === restaurant)
       if (!selectedPlace) {
         setErrors({restaurant: "Ogiltigt restaurang namn!"});
         return null;
       } else {
         params.name = selectedPlace.name;
         params.address = selectedPlace.formatted_address;
+        params.phoneNumber = phoneNumber
         params.googlePlaceId = selectedPlace.place_id;
         if (placeDetails && placeDetails.length) {
           params.closestMetro = placeDetails[0].name;
@@ -149,6 +168,7 @@ export default function AddRestaurantPage(props) {
         setOpenSaveConfirmation(true);
         setAddress("")
         setWebsite("")
+        setPhoneNumber("")
         setTags([])
         setOrigins([])
         setPlaces([])
@@ -163,12 +183,10 @@ export default function AddRestaurantPage(props) {
     });
   }
 
-  console.log(places)
-
   return (
     <Grid container spacing={2} direction="column" alignContent="center">
       <GridRow>
-        <RestaurantSelect freeSolo restaurants={places ? places.map(p => `${p.name} - ${p.formatted_address}`) : []} updateRestaurant={(e, value) => setRestaurant(value)} error={!!errors.restaurant} helperText={errors.restaurant} />
+        <RestaurantSelect freeSolo restaurants={places ? places.map(p => `${p.name}${RESTAURANT_SEPARATOR}${p.formatted_address}`) : []} updateRestaurant={(e, value) => setRestaurant(value)} error={!!errors.restaurant} helperText={errors.restaurant} />
       </GridRow>
       { 
         placeDetails && placeDetails.length ? (
@@ -177,9 +195,16 @@ export default function AddRestaurantPage(props) {
           </GridRow>
         ) : <></>
       }
+      { 
+        phoneNumber ? (
+          <GridRow>
+            <TextField value={phoneNumber} disabled id="phone-number-field" label="Telefon" style={{width: "50vw"}} InputProps={{endAdornment: <InputAdornment position="end"><PhoneIcon /></InputAdornment>}} />
+          </GridRow>
+        ) : <></>
+      }
       <SimpleSelect id="pay-in-advance" label="Betalade i förväg" disabled={!restaurant} value={payInAdvance} onChange={e => setPayInAdvance(e.target.value)} options={["Ja", "Nej"]}/>
       {
-        !restaurant.includes(" - ") ? (
+        !restaurant.includes(RESTAURANT_SEPARATOR) ? (
           <GridRow>
             <TextField required value={address} onChange={e => setAddress(e.target.value)} disabled={!restaurant} error={!!errors.address} helperText={errors.address} id="restaurant-address-field" label="Address" style={{width: "50vw"}} InputProps={{endAdornment: <InputAdornment position="end"><LocationOnIcon /></InputAdornment>}} />
           </GridRow>
@@ -192,7 +217,7 @@ export default function AddRestaurantPage(props) {
       <OriginSelect value={origins} onChange={(e, values) => setOrigins(values)} disabled={!restaurant} />
       <RestaurantSeats seats={seats} onChange={e => setSeats(e.target.value)} disabled={!restaurant} />
       <GridRow>
-        <SaveButton disabled={saveDisabled || !(restaurant && (address || restaurant.includes(" - ")))} onClick={save} />
+        <SaveButton disabled={saveDisabled || !(restaurant && (address || restaurant.includes(RESTAURANT_SEPARATOR)))} onClick={save} />
       </GridRow>
       <SimpleModal text="Restaurang tillagd!" open={openSaveConfirmation} handleClose={() => setOpenSaveConfirmation(false)} />
     </Grid>

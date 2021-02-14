@@ -29,7 +29,7 @@ import * as api from "../api"
 import _ from "lodash";
 import { getUsername } from "../login"
 
-export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Vegetariskt", "Veganskt", "Buffé", "Pizza", "Ramen", "Hamburgare", "Kebab"];
+export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Café", "Vegetariskt", "Veganskt", "Buffé", "Pizza", "Taco", "Ramen", "Hamburgare", "Kebab"];
 
 export const TasteHelp = () => (
   <GridRow>

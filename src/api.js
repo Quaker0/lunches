@@ -72,9 +72,9 @@ export function getPlaces(query) {
   }).catch(e => {console.error(e)});
 }
 
-export function getPlaceDetails(lat, lng) {
-  if (!(lat && lng)) throw Error("Missing parameters sent");
-  return fetch(`https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/get-place-details?lat=${lat}&lng=${lng}`, {
+export function getPlaceDetails(params) {
+  const url = "https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/get-place-details?" + new URLSearchParams(params)
+  return fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -70,12 +70,11 @@ export default class RestaurantReviewsPage extends Component {
 			metaData = _(metaData).chain()
 			.sortBy(meta => meta.name)
 			.sortBy(meta => meta[sortBy])
-			.reverse()
 			.value();
 		}
 
 		let restaurantCards = [];
-		metaData.forEach(meta => restaurantCards.push(
+		metaData.reverse().forEach(meta => restaurantCards.push(
 			<RestaurantCard key={meta.name} restaurantMeta={meta} />
 		));
 		return (

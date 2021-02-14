@@ -1,4 +1,4 @@
-@import url("https://unpkg.com/react-vis/dist/style.css");
+@import "~react-vis/dist/style";
 
 body {
 	-webkit-font-smoothing: antialiased;
@@ -12,6 +12,10 @@ h1, h2 {
 
 h3, h4 {
   font-size: 2rem !important;
+}
+
+.tab-content {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .sthlm-cover {
@@ -121,6 +125,7 @@ h3, h4 {
   display: flex;
   width: 100%;
   position: relative;
+  padding: 5px;
 }
 
 @media (max-width: 1100px) {

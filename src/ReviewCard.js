@@ -15,7 +15,7 @@ export default function ReviewCard(props) {
   var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 
   return (
-    <div className={"meal-row" + (show ? " fade-in": " invisible")} style={{borderRadius: "10px", border: "5px solid whitesmoke", boxShadow: "3px 3px lightgrey"}}>
+    <div className={"meal-row" + (show ? " fade-in": " invisible")} style={{borderBottom: "8px solid whitesmoke"}}>
       <div className="py-5 meal-logos">
         <img onError={setImgError} onLoad={setShow} alt="meal-bg" className="meal-logo-bg-lg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
         <img onError={setImgError} onLoad={setShow} alt="meal" className="meal-logo-lg" style={{borderRadius: "50%", border: "4px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
