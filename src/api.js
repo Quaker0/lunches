@@ -1,7 +1,7 @@
 import { getIdToken } from "./login.js"
 
-export function getRestaurantMeta() {
-	return fetch("https://www.sthlmlunch.se/restaurants/meta.json")
+export function getRestaurantMeta(options) {
+	return fetch("https://www.sthlmlunch.se/restaurants/meta.json", options || {})
 	.then((response) => response.json());
 }
 
@@ -25,6 +25,23 @@ export async function addReview(data) {
 	});
 }
 
+export async function addRestaurant(data) {
+  return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/add-restaurant", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  }).then(response => {
+    if (response.status !== 200) {
+      return {error: response.text(), status: response.status};
+    }
+    return {status: response.status, success: true};
+  }).catch(e => {console.error(e)});
+}
+
 export async function editReview(data) {
 	return await fetch("https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/edit-review", {
 		method: "PATCH",
@@ -35,6 +52,42 @@ export async function editReview(data) {
 		referrerPolicy: "no-referrer",
 		body: JSON.stringify(data)
 	});
+}
+
+export function getPlaces(query) {
+  if (!query) throw Error("Missing parameter sent");
+  return fetch(`https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/get-places?query=${query}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer"
+  }).then(response => {
+    if (response.status !== 200) {
+      response.json().then(data => console.error(data));
+      return null;
+    }
+    return response.json()
+  }).catch(e => {console.error(e)});
+}
+
+export function getPlaceDetails(lat, lng) {
+  if (!(lat && lng)) throw Error("Missing parameters sent");
+  return fetch(`https://femvl1i8al.execute-api.eu-north-1.amazonaws.com/prod/get-place-details?lat=${lat}&lng=${lng}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": getIdToken()
+    },
+    referrerPolicy: "no-referrer"
+  }).then(response => {
+    if (response.status !== 200) {
+      response.json().then(data => console.error(data));
+      return null;
+    }
+    return response.json()
+  }).catch(e => {console.error(e)});
 }
 
 export async function editRestaurant(data) {

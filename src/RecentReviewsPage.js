@@ -11,7 +11,6 @@ export default class AllReviewsPage extends Component {
     document.title = "STHLM LUNCH - Recent Reviews"
 		window.mixpanel.track("Page view", {"page": "Reviews page"});
 		this.state = {reviews: [], username: getUsername()};
-		this.toggleReviewerFilter = this.toggleReviewerFilter.bind(this);
 	}
 
 	componentDidMount() {
@@ -36,7 +35,7 @@ export default class AllReviewsPage extends Component {
 	}
 
 	render() {
-		const { reviews, restaurantsMeta, reviewerFilter, username } = this.state;
+		const { reviews, restaurantsMeta, username } = this.state;
     const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`));
 		
 		return (

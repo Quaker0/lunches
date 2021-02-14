@@ -6,7 +6,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 
-import AddReviewPage from "./AddReviewPage.js";
+import AddPage from "./AddPage.js";
 import EditPage from "./EditPage.js";
 import StatPage from "./StatPage.js";
 import UserPage from "./UserPage.js";
@@ -15,17 +15,18 @@ import { TabMenu } from "../utils.js";
 import { isLoggedIn } from "../login.js";
 import { Helmet } from "react-helmet";
 
-const tabs = [
-		{title: "Användare", icon: <AccountCircleIcon />, page: <UserPage/>}, 
-		{title: "Lägg till", icon: <AddIcon />, page: <AddReviewPage/>}, 
-		{title: "Redigera", icon: <EditIcon />, page: <EditPage/>},
-		{title: "Statistik", icon: <TimelineIcon />, page: <StatPage/>}
-	];
-
 export default function AdminPage() {
 	const [value, setValue] = React.useState(1);
+  const [loggedIn, setLoggedIn] = React.useState(isLoggedIn());
 	const handleChange = (event, newValue) => { setValue(newValue) };
-  const loggedIn = isLoggedIn();
+
+  const tabs = [
+    {title: "Användare", icon: <AccountCircleIcon />, page: <UserPage/>}, 
+    {title: "Lägg till", icon: <AddIcon />, page: <AddPage setLoggedIn={setLoggedIn} />}, 
+    {title: "Redigera", icon: <EditIcon />, page: <EditPage/>},
+    {title: "Statistik", icon: <TimelineIcon />, page: <StatPage/>}
+  ];
+
   if(loggedIn) {
     window.gtag("set", "user_properties", {
       role: "admin"

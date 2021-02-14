@@ -13,7 +13,7 @@ import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, Menu
 export default class EditReviewPage extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {openSaveModal: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review};
+		this.state = {openSaveModal: false, buttonsDisabled: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review};
 		this.updateMenuType = (event, value) => this.setState({menuType: value});
 		this.updatePrice = (event) => this.setState({price: parseInt(event.target.value.replace(/[^0-9,]/g, "") || 0)});
 		this.updateTasteScore = (event, value) => this.setState({tasteScore: value});
@@ -32,22 +32,26 @@ export default class EditReviewPage extends Component {
 	}
 
 	delete() {
+    this.setState({buttonsDisabled: true})
 		deleteReview(this.state).then(success => {
 			if (success) {
 				this.setState({openDeleteModal: true});
 			} else {
 				alert("APIet misslyckades med att radera recensionen");
 			}
+      this.setState({buttonsDisabled: false})
 		});
 	}
 
 	save() {
+    this.setState({buttonsDisabled: true})
 		saveReview(this.state).then(success => {
 			if (success) {
 				this.setState({openSaveModal: true});
 			} else {
 				alert("APIet misslyckades med att uppdatera recensionen");
 			}
+      this.setState({buttonsDisabled: false})
 		});
 	}
 
@@ -62,7 +66,7 @@ export default class EditReviewPage extends Component {
 
 	render() {
 		const { 
-			tasteScore, heat, review, environmentScore, restaurantComment, innovationScore, price,
+			tasteScore, heat, review, environmentScore, restaurantComment, innovationScore, price, buttonsDisabled,
 			portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal
 		} = this.state;
 		return (
@@ -93,8 +97,8 @@ export default class EditReviewPage extends Component {
 							<TextField required value={review} onChange={this.updateReview} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
 						</GridRow>
 						<GridRow>
-							<SaveButton onClick={this.save} />
-							<DeleteButton onClick={this.delete} />
+							<SaveButton onClick={this.save} disabled={buttonsDisabled} />
+							<DeleteButton onClick={this.delete} disabled={buttonsDisabled} />
 						</GridRow>
 					</Grid>
 				</ThemeProvider>

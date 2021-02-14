@@ -65,7 +65,7 @@ export default class RestaurantReviewsPage extends Component {
 			});
 		}
 
-		var metaData = Object.values(filteredMeta);
+		var metaData = Object.values(filteredMeta).filter(meta => meta.reviewPointer && meta.tasteScore);
 		if (sortBy) {
 			metaData = _(metaData).chain()
 			.sortBy(meta => meta.name)

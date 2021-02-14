@@ -4,6 +4,7 @@ import _ from "lodash";
 
 export default function ReviewCard(props) {
   const { review, restaurantsMeta } = props;
+  const [show, setShow] = useState(false);
   const [imgError, setImgError] = useState(false);
 
   if (!review.pointer || !review.imageRef || imgError) return null
@@ -14,10 +15,10 @@ export default function ReviewCard(props) {
   var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 
   return (
-    <div className="d-flex w-100 position-relative flex-wrap flex-row" style={{borderRadius: "10px", border: "5px solid whitesmoke", boxShadow: "3px 3px lightgrey"}}>
-      <div className="py-5" style={{paddingLeft: "5%", paddingRight: "7%"}}>
-        <img onError={setImgError} width={400} alt="meal-bg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
-        <img onError={setImgError} width={380} alt="meal" style={{borderRadius: "50%", margin: "10px 0 0 10px", border: "4px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
+    <div className={"d-flex w-100 position-relative flex-wrap flex-row" + (show ? "fade-in": " invisible")} style={{borderRadius: "10px", border: "5px solid whitesmoke", boxShadow: "3px 3px lightgrey"}}>
+      <div className="py-5" style={{paddingLeft: "4%", paddingRight: "6%"}}>
+        <img onError={setImgError} onLoad={setShow} width={400} alt="meal-bg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
+        <img onError={setImgError} onLoad={setShow} width={380} alt="meal" style={{borderRadius: "50%", margin: "10px 0 0 10px", border: "4px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${review.imageRef}.jpg`} />
       </div>
       <div className="d-flex flex-column justify-content-center" style={{paddingRight: "10%"}}>
         <div className="d-flex flex-row align-items-baseline pb-4 pt-2">

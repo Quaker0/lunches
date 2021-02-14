@@ -118,7 +118,7 @@ export function getRateCircles(score, background="white") {
 }
 
 export function toPointer(restaurant) {
-	return restaurant.toLowerCase().replace("[^a-zA-Zåäö]", "");
+	return restaurant.toLowerCase().replace(/[^a-zåäö0-9]+/g, "");
 }
 
 export function reviewToKey(review) {
@@ -156,7 +156,7 @@ export function TabMenu(props) {
   );
 }
 
-function TabPanel(props) {
+export function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
