@@ -56,7 +56,7 @@ export default class UserPage extends Component {
 
 		return (
 			<>
-				<Box textAlign="center" mb={4}>
+				<Box textAlign="center" m={4}>
 					<h1>{reviewer}</h1>
 				</Box>
 				<Box m={4}>

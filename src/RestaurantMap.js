@@ -115,7 +115,7 @@ export default class RestaurantMap extends Component {
   render() {
     const { width, imageRef, canvasRef } = this.state;
     return (
-      <>
+      <div className="p-4">
         <Grid container spacing={1} justify="center" align="center">
           <Grid item xs={12}>
             <RankCard index={1} restaurant="Brisket & Friends" description="Ensam i sin kategory att servera rökt bringa och annat kött av bästa kvalité med amerikanska tillbehör." nameIcon={brisketAndFriends}/>
@@ -127,7 +127,7 @@ export default class RestaurantMap extends Component {
           <img src={map} ref={imageRef} alt="STHLM LUNCH MAP" width={width} style={{backgroundColor: "black", borderRadius: "5%"}}/>          
         </Box>
         <canvas ref={canvasRef} width={width} height={width / 1.5}/>
-      </>
+      </div>
 
     );
   }

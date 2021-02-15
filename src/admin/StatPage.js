@@ -55,7 +55,7 @@ export default class StatPage extends Component {
 
 		return (
 			<>
-				<Box display="flex" justifyContent="flex-start" ml={5} >
+				<Box display="flex" justifyContent="flex-start" m={5} >
 					<Button variant="contained" color={chart === "line" ? "primary" : "default"} onClick={() => this.setState({chart: "line"})} >
 						<TimelineIcon/>
 					</Button>

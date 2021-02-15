@@ -16,6 +16,7 @@ export default function AddPage(props) {
           onChange={(e, tab) => setTab(tab)}
           aria-label="Lägg till meny"
           indicatorColor="primary"
+          style={{margin: 30}}
           centered
         >
           <Tab label="Ny restaurang" />

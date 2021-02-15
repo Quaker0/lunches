@@ -21,6 +21,7 @@ import { svSE } from "@material-ui/core/locale";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CachedIcon from "@material-ui/icons/Cached";
 import { firstLetterUpperCase } from "../utils"
 import { List as ImmutableList } from "immutable";
 import Modal from "@material-ui/core/Modal";
@@ -74,23 +75,23 @@ export const TasteHelp = () => (
 );
 
 export const UnmatchedImages = (props) => (
-  <Box display="flex" flexDirection="column" alignItems="center" p={2}>
+  <Box display="flex" flexDirection="column" alignItems="center" alignContent="center" p={2}>
     <Typography variant="h6">
        Inkludera en bild på måltiden
     </Typography>
-    <p>Maila din bild till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> för att se den här och använda den i din recension.</p>
+    <Typography align="center" paragraph>Maila din bild till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> för att se den här och använda den i din recension.</Typography>
     {
       props.imageKeys && props.imageKeys.length ? props.imageKeys.map(imageKey => (
         <Box key={imageKey} display="flex" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center">
           <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
-            <img width={150} height={150} alt="pre-sent" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/" + imageKey}/>
-            <input type="checkbox" value={imageKey.replace(/.+\//, "").replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(/.+\//, "").replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/>
+            <img width={150} height={150} alt="pre-sent" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/processed/" + imageKey}/>
+            <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/>
           </Box>
          </Box>
        )) : (
-        <Box component="p">
+        <Typography align="center" paragraph>
           Inga bilder har laddats upp i förväg! <br/>Du kan skicka bilder till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> utan att ange någonting och sedan välja den här.
-        </Box>
+        </Typography>
       )
     }
   </Box>
@@ -102,12 +103,12 @@ export const potionSizeOptions = ["Lite", "Under medel", "Medel", "Över medel",
 export const waitTimeOptions = ["< 5 min", "< 10 min", "< 20 min", "< 30 min", "> 30 min"];
 export const defaultState = {
   newMeal: false, description: "", price: "", portionSize: "Medel", tasteScore: 5, environmentScore: 5, innovationScore: 5, unmatchedImages: [], menuType: "other",
-  meal: "", restaurant: "", timestamp: new Date().toISOString().slice(0, 10), review: "", restaurantComment: "", extrasScore: 5, heat: "Ingen hetta", waitTime: "< 20 min"
+  meal: "", restaurant: "", timestamp: new Date().toISOString().slice(0, 10), review: "", extrasScore: 5, heat: "Ingen hetta", waitTime: "< 20 min"
 };
 
 export const saveWhiteList = [
   "tasteScore", "environmentScore", "meal", "description", "price", "menuType", "totalPrice", "portionSize", "heat", 
-  "waitTime", "totalTime", "extrasScore", "innovationScore", "restaurantComment", "review", "timestamp"
+  "waitTime", "totalTime", "extrasScore", "innovationScore", "review", "timestamp", "restaurant"
 ]
 
 export const theme = createMuiTheme({
@@ -163,6 +164,15 @@ export const SaveButton = function(props) {
   return (
     <Button size="large" style={{margin: 10}} variant="outlined" onClick={props.onClick} disabled={props.disabled} startIcon={saveIconNode}>
       Spara
+    </Button>
+  );
+}
+
+export const ReloadButton = function(props) {
+  const reloadIconNode = <CachedIcon style={{ color: "green", opacity: props.disabled ? .4 : 1}}/>;
+  return (
+    <Button size="large" style={{margin: 10}} variant="outlined" onClick={props.onClick} disabled={props.disabled} startIcon={reloadIconNode}>
+      Hämta om bilder
     </Button>
   );
 }

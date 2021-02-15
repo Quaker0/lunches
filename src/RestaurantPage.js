@@ -1,80 +1,52 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
-import MealReviewCard from "./MealReviewCard.js";
-import { getUsername } from "./login.js";
+import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
+import MealReviewCard from "./MealReviewCard";
+import { getRestaurantMeta } from "./api";
 import { Redirect } from "react-router";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 
-export default function RestaurantPage(props) {
-  const restaurant = props.restaurant || props.match.params.restaurant;
-  window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
-  const [tabs, setTabs] = React.useState([
-    {title: "Topplista", page: <Redirect to="/"/>},
-    {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 
-    {title: `Restauranger > ${restaurant}`, page: <RestaurantInfo restaurant={restaurant}/>}
-  ]);
-  const [value, setValue] = React.useState(2);
-  const handleChange = (event, newValue) => { 
-    if (value === newValue) {
-      setTabs([
-        {title: "Topplista", page: <Redirect to="/"/>},
-        {title: "Recensioner", page: <Redirect to="/recentReviews"/>}, 
-        {title: "Restauranger", page: <Redirect to="/restaurants"/>}
-      ]);
-    }
-    setValue(newValue);
-  };
-  return (
-    <>
-      <div className="container-fluid sthlm-cover" />
-      <TabMenu tabs={tabs} handleChange={handleChange} value={value}/>
-    </>
-  );
-}
-
-
-class RestaurantInfo extends Component {
+export default class RestaurantPage extends Component {
   constructor(props) {
     super(props);
-    let restaurant = this.props.restaurant || this.props.match.params.restaurant;
+    let restaurant = props.match.params.restaurant;
+    window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
     restaurant = restaurant.toLowerCase().replace(/\s/g, "");
-    this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0, username: getUsername()};
+    this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.controller = new AbortController();
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
 
-    fetch("https://www.sthlmlunch.se/restaurants/meta.json")
-    .then((response) => {
-      response.json()
-      .then((restaurantsMeta) => {
-        if (restaurantsMeta) {
-          const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
-          if (meta && this.state.restaurant) {
-            document.title = `STHLM LUNCH - ${meta.name}`
-            this.setState({"restaurantMeta": meta});
-            fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`)
-            .then((response) => {
-              response.json()
-              .then((reviews) => {
-                const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
-                let reviewCards = [];
-                Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={reviewToKey(mealReviews[0])} reviews={mealReviews} />));
-                this.setState({reviewCards: reviewCards, reviews: reviews});
-              });
-            });
-          }
+    getRestaurantMeta({ signal: this.controller.signal }).then(restaurantsMeta => {
+      if (restaurantsMeta) {
+        const meta = Object.values(restaurantsMeta).filter(meta => meta.name.toLowerCase().replace(/\s/g, "") === this.state.restaurant)[0];
+        if (meta && this.state.restaurant) {
+          document.title = `STHLM LUNCH - ${meta.name}`
+          this.setState({"restaurantMeta": meta});
+          fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`, { signal: this.controller.signal })
+          .then((response) => response.json())
+          .then((reviews) => {
+            const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
+            let reviewCards = [];
+            Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={reviewToKey(mealReviews[0])} reviews={mealReviews} />));
+            this.setState({reviewCards: reviewCards, reviews: reviews});
+          })
+          .catch(e => {
+            if (e.name !== "AbortError") console.error(e);
+          });
         }
-      });
+      }
     });
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateWindowDimensions);
+    this.controller.abort()
   }
 
   updateWindowDimensions() {
@@ -96,7 +68,7 @@ class RestaurantInfo extends Component {
   }
 
   render() {
-    const { reviewCards, reviews, width, restaurantMeta, username } = this.state;
+    const { reviewCards, reviews, width, restaurantMeta } = this.state;
 
     if (!reviews.length) {
       return "";
@@ -112,14 +84,13 @@ class RestaurantInfo extends Component {
     const topPrice = Math.max(...prices);
     const minPrice = Math.min(...prices);
     const mapWidth = width > 1200 ? "600" : width > 1000 ? "500" : "400";
-    const mapURL = `https://maps.googleapis.com/maps/api/staticmap?&zoom=13&size=${mapWidth}x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurantMeta.address}&key=AIzaSyCQWr60KEp4VnNMdwb7AzQkIuptT3D2zNc`;
-    const mapLink = `https://maps.google.com/maps?q=${restaurantMeta.address}`;
+    const mapURL = `https://maps.googleapis.com/maps/api/staticmap?&zoom=13&size=${mapWidth}x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurantMeta.places[0].address}&key=AIzaSyCQWr60KEp4VnNMdwb7AzQkIuptT3D2zNc`;
+    const mapLink = `https://maps.google.com/maps?q=${restaurantMeta.places[0].address}`;
 
     var envIcons = getRateCircles(aggregatedReviews.envAvg);
 
     return (  
     <>
-      { username ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/#/admin">Admin</Fab></Box> : <></> }
       <div className="page-header text-center">
         <h2 style={{fontVariant: "petite-caps"}}>{restaurantMeta.name}</h2>
       </div>
@@ -132,7 +103,7 @@ class RestaurantInfo extends Component {
             <tbody>
             <tr>
               <th scope="row">Address</th>
-              <td><i className="fas fa-sm fa-map-marker-alt"/> <a href={mapLink}>{restaurantMeta.address}</a></td>
+              <td><i className="fas fa-sm fa-map-marker-alt"/> <a href={mapLink}>{restaurantMeta.places[0].address}</a></td>
             </tr>
             { website ?
               <tr>

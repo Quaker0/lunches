@@ -2,28 +2,19 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { firstLetterUpperCase } from "../utils"
-import { getRestaurantMeta, getRestaurantReviews } from "../api"
+import { firstLetterUpperCase, toPointer } from "../utils"
+import { getRestaurantMeta, getRestaurantReviews, getUnmatchedImages } from "../api"
 import shortid from "shortid"
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, SaveButton, RestaurantSelect, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, UnmatchedImages } from "./adminReviewUtils";
+import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, SaveButton, RestaurantSelect, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, UnmatchedImages, ReloadButton } from "./adminReviewUtils";
 import xmlParser from "fast-xml-parser";
 
 export default class AddReviewPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviewId: shortid.generate(), saveDisabled: false, openSaveModal: false, restaurantMeta: [], meals: [], ...defaultState
+      reviewId: shortid.generate(), buttonsDisabled: false, openSaveModal: false, restaurantMeta: [], meals: [], ...defaultState
     };
-    fetch("https://sthlmlunch-pics.s3.amazonaws.com")
-    .then(response => response.text())
-    .then(body => {
-      this.setState({unmatchedImages: xmlParser.parse(body).ListBucketResult.Contents.map(content => {
-        if (content.Key.startsWith("processed/unmatched")) {
-          return content.Key;
-        }
-        return null;
-      }).filter(Boolean)})
-    })
+    
     this.toggleNewMeal = (show) => {
       const { meals, meal } = this.state;
       if (Object.keys(meals).some(m => m.toLowerCase() === meal.toLowerCase())) {
@@ -32,6 +23,7 @@ export default class AddReviewPage extends Component {
         this.setState({newMeal: show});
       }
     }
+    this.controller = new AbortController();
     this.updateMeal = (event, value) => this.setState({meal: firstLetterUpperCase(value), mealError: ""});
     this.updateNewMealDesc = (event) => this.setState({description: firstLetterUpperCase(event.target.value), descriptionError: ""});
     this.updateMenuType = (event, value) => this.setState({menuType: value});
@@ -41,7 +33,6 @@ export default class AddReviewPage extends Component {
     this.updateExtras = (event, value) => this.setState({extrasScore: value});
     this.updateInnovation = (event, value) => this.setState({innovationScore: value});
     this.updateReview = (event) => this.setState({review: firstLetterUpperCase(event.target.value), reviewError: ""});
-    this.updateComment = (event) => this.setState({restaurantComment: firstLetterUpperCase(event.target.value)});
     this.updateEnviroment = (event, value) => this.setState({environmentScore: value});
     this.updateHeat = (event) => this.setState({heat: event.target.value});
     this.updatePortionSize = (event) => this.setState({portionSize: event.target.value});
@@ -51,6 +42,12 @@ export default class AddReviewPage extends Component {
     this.sendReview = this.sendReview.bind(this);
     this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
     this.setSelectedImageRef = this.setSelectedImageRef.bind(this);
+    this.updateUnmatchedImages = this.updateUnmatchedImages.bind(this);
+    this.updateUnmatchedImages();
+  }
+
+  updateUnmatchedImages() {
+    getUnmatchedImages({signal: this.controller.signal}).then(images => this.setState({unmatchedImages: images}));
   }
 
   setSelectedImageRef(newImageRef) {
@@ -64,7 +61,7 @@ export default class AddReviewPage extends Component {
 
     restaurantMeta.forEach(restaurant => {
       if (value.toLowerCase() === restaurant.name.toLowerCase()) {
-        getRestaurantReviews(restaurant.reviewPointer)
+        getRestaurantReviews(restaurant.reviewPointer || `${toPointer(restaurant.name)}.json`)
         .then(reviews => {
           let meals = {};
           reviews.forEach(review => {
@@ -102,10 +99,10 @@ export default class AddReviewPage extends Component {
   }
 
   sendReview() {
-    const { saveDisabled } = this.state;
-    if (saveDisabled) return null;
+    const { buttonsDisabled } = this.state;
+    if (buttonsDisabled) return null;
 
-    this.setState({saveDisabled: true});
+    this.setState({buttonsDisabled: true});
     if (this.validateFields()) {
       saveNewReview(this.state).then(success => {
         if (success) {
@@ -113,11 +110,11 @@ export default class AddReviewPage extends Component {
         } else {
           alert("Misslyckades med att spara recensionen");
         }
-        this.setState({saveDisabled: false});
+        this.setState({buttonsDisabled: false});
       });
     }
     else {
-      this.setState({saveDisabled: false});
+      this.setState({buttonsDisabled: false});
     }
   }
 
@@ -126,13 +123,13 @@ export default class AddReviewPage extends Component {
   }
 
   componentDidMount() {
-    getRestaurantMeta({cache: "no-cache"}).then(meta => this.setState({restaurantMeta: Object.values(meta)}));
+    getRestaurantMeta({ signal: this.controller.signal, cache: "no-cache"}).then(meta => this.setState({restaurantMeta: Object.values(meta)}));
   }
 
   render() {
     const { 
       restaurantMeta, meals, newMeal, description, meal, mealError, restaurantError, descriptionError, tasteScore, heat, 
-      review, reviewError, environmentScore, restaurantComment, innovationScore, price, priceError, saveDisabled, portionSize, 
+      review, reviewError, environmentScore, innovationScore, price, priceError, buttonsDisabled, portionSize, 
       extrasScore, waitTime, timestamp, menuType, imageRef, reviewId, unmatchedImages, openSaveModal
     } = this.state;
     const restaurants = restaurantMeta.map(meta => meta.name);
@@ -163,14 +160,12 @@ export default class AddReviewPage extends Component {
           <Score label="Nytänkande" score={innovationScore} updateScore={this.updateInnovation} />
           <Score label="Tillbehör" score={extrasScore} updateScore={this.updateExtras} />
           <GridRow>
-            <TextField value={restaurantComment} onChange={this.updateComment} id="comment-field" label="Restaurang kommentar" style={{width: "50vw", margin: 10}} />
-          </GridRow>
-          <GridRow>
             <TextField value={review} onChange={this.updateReview} error={!!reviewError} helperText={reviewError} id="review-field" label="Måltids recension" style={{width: "50vw", margin: 10}} />
           </GridRow>
           <UnmatchedImages imageKeys={unmatchedImages} onChange={this.setSelectedImageRef} selectedImageRef={imageRef}/>
           <GridRow>
-            <SaveButton disabled={saveDisabled} onClick={this.sendReview} />
+            <SaveButton disabled={buttonsDisabled} onClick={this.sendReview} />
+            <ReloadButton disabled={buttonsDisabled} onClick={this.updateUnmatchedImages} />
           </GridRow>
         </Grid>
         <SimpleModal text="Tack for din recension!" node={<p>Du kan fortfarande maila in en ny bild eller ersätta en existerande med ämnet <code>ref={reviewId}</code></p>} open={openSaveModal} handleClose={this.handleCloseSaveModal} />

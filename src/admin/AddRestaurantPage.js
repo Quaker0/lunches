@@ -2,6 +2,7 @@ import React from "react";
 
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Explore from "@material-ui/icons/Explore";
@@ -45,10 +46,17 @@ export default function AddRestaurantPage(props) {
   }
 
   function validateRestaurant() {
+    const restaurantSplit = restaurant.split(RESTAURANT_SEPARATOR);
     const restaurantPointer = toPointer(restaurant.split(RESTAURANT_SEPARATOR)[0]);
-    if (restaurantPointer in restaurantMeta){
+    const addr = address || (restaurantSplit.length > 1 ? restaurantSplit[1] : null);
+    if (addr && restaurantPointer in restaurantMeta && restaurantMeta[restaurantPointer].places.some(place => place.address.toLowerCase().startsWith(addr.toLowerCase()))) {
       setErrors({restaurant: "Restaurangen finns redan!"});
       return false;
+    } else if (addr && restaurantPointer in restaurantMeta) {
+      const currentRestaurantMeta = restaurantMeta[restaurantPointer]
+      if (tags && !tags.length && currentRestaurantMeta.tags) setTags(currentRestaurantMeta.tags.split(", "));
+      if (origins && !origins.length && currentRestaurantMeta.origin) setOrigins(currentRestaurantMeta.origin.split(", "));
+      if (currentRestaurantMeta.payInAdvance) setPayInAdvance(currentRestaurantMeta.payInAdvance);
     }
     setErrors({restaurant: null});
     return true;
@@ -187,6 +195,9 @@ export default function AddRestaurantPage(props) {
     <Grid container spacing={2} direction="column" alignContent="center">
       <GridRow>
         <RestaurantSelect freeSolo restaurants={places ? places.map(p => `${p.name}${RESTAURANT_SEPARATOR}${p.formatted_address}`) : []} updateRestaurant={(e, value) => setRestaurant(value)} error={!!errors.restaurant} helperText={errors.restaurant} />
+      </GridRow>
+      <GridRow>
+        <Typography variant="caption" paragraph style={{width: "50vw"}}>Se till att det är det riktiga namnet och inte <strong>&quot;Bastard Burgers <span style={{color: "red"}}><u>Vasastan</u></span>&quot;</strong> (Google inkluderar det ibland).</Typography>
       </GridRow>
       { 
         placeDetails && placeDetails.length ? (

@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import _ from "lodash";
 
 export default function ReviewCard(props) {
-  const { review, restaurantsMeta } = props;
+  const { review, restaurantsMeta, imageKeys } = props;
   const [show, setShow] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  if (!review.pointer || !review.imageRef || imgError) return null
+  if (!restaurantsMeta || !Object.keys(restaurantsMeta).length || !imageKeys || !review.pointer || !review.imageRef || imgError || !imageKeys.includes(`${review.imageRef}.jpg`)) return null;
   
-  const restaurantMeta = _.get(restaurantsMeta, review.pointer)
-  if (!restaurantMeta) return null
+  const restaurantMeta = restaurantsMeta[review.pointer];
+  if (!restaurantMeta) return null;
   
   var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 

@@ -66,7 +66,7 @@ export default class EditRestaurantPage extends Component {
 		}
 		return (
 			<>
-        <Box mt={-3}>
+        <Box>
             <Button variant="contained" onClick={() => this.props.back()}><ChevronLeftIcon /></Button>
           </Box>
 				<h1 className="page-header text-center">{ this.props.name }</h1>

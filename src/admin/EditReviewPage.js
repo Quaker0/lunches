@@ -72,7 +72,7 @@ export default class EditReviewPage extends Component {
 		return (
 			<>
 				<ThemeProvider theme={theme}>
-					<Box mt={-3}>
+					<Box>
 						<Button variant="contained" onClick={() => this.props.back()}><ChevronLeftIcon /></Button>
 					</Box>
 					<h1 className="page-header text-center">Redigera recension</h1>

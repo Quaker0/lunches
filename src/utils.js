@@ -1,14 +1,12 @@
 import React from "react";
 import { List } from "immutable";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
 import _ from "lodash";
-import { createHashHistory } from "history"
+import { Link } from "react-router-dom";
 
-export const history = createHashHistory()
 export const originMap = {"Asien": "asia", "Nordeuropa": "europe", "Sydeuropa": "europe", "Mellanöstern": "asia", "Nordamerika": "americas", "Sydamerika": "americas", "Afrika": "africa"};
 export const pepperValues = ["Ingen hetta", "Lite hetta", "Lagom hetta", "Stark", "För stark", "Alldeles för stark"];
 
@@ -148,7 +146,7 @@ export function TabMenu(props) {
       {
         List(props.tabs).map((tab, index) => (
           <TabPanel key={index} value={props.value} index={index}>
-            { tab.page }
+            { <tab.page {...props.params}/> }
           </TabPanel>
         )).toArray()
       }
