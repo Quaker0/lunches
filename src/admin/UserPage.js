@@ -43,8 +43,8 @@ export default class UserPage extends Component {
 	render() {
 		const { userMeta, username } = this.state;
 
-		if (!userMeta) {
-			return <></>;
+		if (!userMeta || !username) {
+			return null;
 		}
 
 		const reviewer = username[0].toUpperCase() + username.slice(1); 

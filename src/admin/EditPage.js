@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { GridRow } from "./adminReviewUtils.js";
-import EditRestaurantPage from "./EditRestaurantPage.js";
-import SearchBar from "../SearchBar.js";
+import { GridRow } from "./adminReviewUtils";
+import EditRestaurantPage from "./EditRestaurantPage";
+import SearchBar from "../SearchBar";
 
 export default class EditPage extends Component {
 	constructor() {

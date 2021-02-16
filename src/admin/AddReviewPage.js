@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import xmlParser from "fast-xml-parser";
+
 import { firstLetterUpperCase, toPointer } from "../utils"
 import { getRestaurantMeta, getRestaurantReviews, getUnmatchedImages } from "../api"
 import shortid from "shortid"
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, SaveButton, RestaurantSelect, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, UnmatchedImages, ReloadButton } from "./adminReviewUtils";
-import xmlParser from "fast-xml-parser";
 
 export default class AddReviewPage extends Component {
   constructor(props) {

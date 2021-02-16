@@ -128,7 +128,9 @@ export function getIdToken() {
 }
 
 export function getDecodedJWT() {
-  return jwtDecode(getIdToken());
+  const idToken = getIdToken()
+  if (!idToken) return;
+  return jwtDecode(idToken);
 }
 
 export function getUsername() {

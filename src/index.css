@@ -5,6 +5,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
   min-height: 1000px;
   font-family: sans-serif;
+  scroll-behavior: smooth;
 }
 
 h1, h2 {

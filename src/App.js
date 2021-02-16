@@ -24,10 +24,11 @@ export default function App(props) {
 				<Switch>
           <Route exact path="/" render={props => {
               if (props.location.hash) return <Redirect to={props.location.hash.substring(1)}/>
-              return <RestaurantMap />
+              return <Redirect push to="/recent" />
             }}
           />
-          <Route exact path="/recentReviews" component={RecentReviewsPage} />
+          <Route exact path="/top" component={RestaurantMap} />
+          <Route exact path="/recent" component={RecentReviewsPage} />
 					<Route exact path="/restaurants" component={RestaurantReviewsPage} />
           <Route exact path="/restaurant/:restaurant" component={RestaurantPage} />
           <Route exact path="/admin/user" component={UserPage} />

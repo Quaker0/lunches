@@ -10,37 +10,52 @@ import Tab from "@material-ui/core/Tab";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 
+import LoginForm from "./admin//LoginForm";
 import { getUsername } from "./login";
 
-export default function Nav(props) {
-  const history = useHistory();
+function getTabs() {
   const location = useLocation();
-  const username = getUsername();
   let tabs = [
-    {label: "Topplista", link: "/"},
-    {label: "Recensioner", link: "/recentReviews"},
-    {label: "Restauranger", link: "/restaurants"},
+    {label: "Topplista", link: "/top", linkPattern: /\/top.*/},
+    {label: "Recensioner", link: "/recent", linkPattern: /\/recent.*/},
+    {label: "Restauranger", link: "/restaurants", linkPattern: /\/restaurant.*/},
   ];
 
   const adminSite = location.pathname.startsWith("/admin");
 
   if (adminSite) {
     tabs = [
-      {label: "Användare", icon: <AccountCircleIcon />, link: "/admin/user"}, 
-      {label: "Lägg till", icon: <AddIcon />, link: "/admin/add"}, 
-      {label: "Redigera", icon: <EditIcon />, link: "/admin/edit"},
-      {label: "Statistik", icon: <TimelineIcon />, link: "/admin/stats"}
+      {label: "Användare", icon: <AccountCircleIcon />, link: "/admin/user", linkPattern: /\/admin\/user.*/}, 
+      {label: "Lägg till", icon: <AddIcon />, link: "/admin/add", linkPattern: /\/admin\/add/}, 
+      {label: "Redigera", icon: <EditIcon />, link: "/admin/edit", linkPattern: /\/admin\/edit/},
+      {label: "Statistik", icon: <TimelineIcon />, link: "/admin/stats", linkPattern: /\/admin\/stats/}
     ];
   }
+  return tabs;
+}
+
+export default function Nav() {
+  const history = useHistory();
+  const location = useLocation();
+  const username = getUsername();
+  const adminSite = location.pathname.startsWith("/admin");
+  const tabs = getTabs();
   
-  const startIdx = tabs.findIndex(tab => location.pathname.startsWith(tab.link))
+  const startIdx = tabs.findIndex(tab => location.pathname.match(tab.linkPattern));
   const [tabIdx, setTabIdx] = React.useState(startIdx < 0 ? false : startIdx);
+
+  React.useEffect(() => {
+    const newTabIdx = tabs.findIndex(tab => location.pathname.match(tab.linkPattern));
+    setTabIdx(newTabIdx < 0 ? false : newTabIdx);
+  }, [location.pathname])
+
   const handleTabClick= React.useCallback((e, v) => {
     history.push(tabs[v].link)
     setTabIdx(v);
   }, [history]);
   return (
     <>
+      { adminSite ? <LoginForm/> : <></>}
       { username && adminSite ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/">Hemsida</Fab></Box> : <></> }
       { username && !adminSite ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/admin">Admin</Fab></Box> : <></> }
       <div className="container-fluid sthlm-cover" />
