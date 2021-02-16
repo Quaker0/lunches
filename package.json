@@ -29,7 +29,7 @@
 	"scripts": {
 		"start": "REACT_APP_ENV=dev react-scripts start",
 		"build": "REACT_APP_ENV=prod react-scripts build",
-		"clean-prod": "aws s3 rm --recursive s3://www.sthlmlunch.se/static/js && aws s3 rm --recursive s3://www.sthlmlunch.se/static/css aws && s3 rm --recursive s3://www.sthlmlunch.se/static/media && aws s3 rm s3://www.sthlmlunch.se/ --exclude '*' --include 'precache*' --recursive",
+		"clean-prod": "aws s3 rm --recursive s3://www.sthlmlunch.se/static/js && aws s3 rm --recursive s3://www.sthlmlunch.se/static/css && aws s3 rm --recursive s3://www.sthlmlunch.se/static/media && aws s3 rm s3://www.sthlmlunch.se/ --exclude '*' --include 'precache*' --recursive",
 		"deploy": "aws s3 sync --exclude \".*\" build/ s3://www.sthlmlunch.se --acl public-read",
 		"lint": "eslint src --fix"
 	},

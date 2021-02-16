@@ -33,8 +33,8 @@ export default function Nav(props) {
     ];
   }
   
-  const startIdx = tabs.findIndex(tab => location.pathname.startsWith(tab.link)) || false;
-  const [tabIdx, setTabIdx] = React.useState(startIdx);
+  const startIdx = tabs.findIndex(tab => location.pathname.startsWith(tab.link))
+  const [tabIdx, setTabIdx] = React.useState(startIdx < 0 ? false : startIdx);
   const handleTabClick= React.useCallback((e, v) => {
     history.push(tabs[v].link)
     setTabIdx(v);

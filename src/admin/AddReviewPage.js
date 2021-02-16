@@ -60,8 +60,8 @@ export default class AddReviewPage extends Component {
     this.setState({restaurant: value, restaurantError: ""})
 
     restaurantMeta.forEach(restaurant => {
-      if (value.toLowerCase() === restaurant.name.toLowerCase()) {
-        getRestaurantReviews(restaurant.reviewPointer || `${toPointer(restaurant.name)}.json`)
+      if (value.toLowerCase() === restaurant.name.toLowerCase() && restaurant.reviewPointer) {
+        getRestaurantReviews(restaurant.reviewPointer)
         .then(reviews => {
           let meals = {};
           reviews.forEach(review => {
@@ -123,7 +123,7 @@ export default class AddReviewPage extends Component {
   }
 
   componentDidMount() {
-    getRestaurantMeta({ signal: this.controller.signal, cache: "no-cache"}).then(meta => this.setState({restaurantMeta: Object.values(meta)}));
+    getRestaurantMeta({ signal: this.controller.signal, cache: "no-cache"}).then(meta => this.setState({restaurantMeta: Object.values(meta).reverse()}));
   }
 
   render() {

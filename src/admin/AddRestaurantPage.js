@@ -185,7 +185,7 @@ export default function AddRestaurantPage(props) {
         props.setLoggedIn(false);
       }
       else {
-        alert(response.error || "Misslyckades med att spara recensionen");
+        alert("Misslyckades med att spara recensionen");
       }
       setSaveDisabled(false);
     });
