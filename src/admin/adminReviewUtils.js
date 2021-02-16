@@ -123,7 +123,7 @@ function buildReviewRequest(state) {
   if (!review.description) {
     review.description = state.meals[review.meal];
   }
-  review.reviewer = firstLetterUpperCase(state.username);
+  review.reviewer = firstLetterUpperCase(getUsername());
   review.imageRef = state.imageRef || state.reviewId;
   const request = { review: review };
   if (state.reviewPointer) {

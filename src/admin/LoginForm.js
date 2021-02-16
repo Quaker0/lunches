@@ -32,13 +32,9 @@ const useStyles = makeStyles(theme => ({
 
 
 const getPasswordError = password => {
-  var passwordError = null;
-  if (password) {
-    if (password.length < 8) {
-      passwordError = "För kort!";
-    }
+  if (password && password.length < 8) {
+     return "För kort!";
   }
-  return passwordError;
 }
 
 export default function LoginForm() {
@@ -206,38 +202,39 @@ function Form(props) {
       </Typography>
       <form className={classes.form} noValidate onSubmit={onSubmit}>
         <TextField
-        variant="outlined"
-        margin="normal"
-        required
-        fullWidth
-        disabled={usernameDisabled}
-        id="username"
-        label="Användarnamn"
-        name="username"
-        value={username}
-        onChange={event => setUsername(event.target.value)}
-        autoFocus
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          disabled={usernameDisabled}
+          id="username"
+          label="Användarnamn"
+          name="username"
+          value={username}
+          onChange={event => setUsername(event.target.value)}
+          autoFocus
         />
         <TextField
           error={!!passwordError}
-        variant="outlined"
-        helperText={passwordError}
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Lösenord"
-        type="password"
-        id="password"
-        value={password}
-        onChange={event => setPassword(event.target.value)}
+          variant="outlined"
+          helperText={passwordError}
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Lösenord"
+          type="password"
+          id="password"
+          value={password}
+          onChange={event => setPassword(event.target.value)}
         />
         <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        className={classes.submit}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          disabled={!!passwordError}
+          className={classes.submit}
         >
         {actionMessage || "Logga in"}
         </Button>
@@ -337,6 +334,7 @@ function ConfirmPasswordForm(props) {
         <Button
           type="submit"
           fullWidth
+          disabled={!!passwordError}
           variant="contained"
           color="primary"
           className={classes.submit}
