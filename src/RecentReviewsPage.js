@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import ReviewCard from "./ReviewCard";
-import { getRestaurantMeta, getRecentReviews, getAllImages } from "./api";
-import _ from "lodash";
 import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
+import ReactDOMServer from "react-dom/server";
+import _ from "lodash";
+
+import ReviewCard from "./ReviewCard";
+import { getRestaurantMeta, getRecentReviews, getAllImages } from "./api";
+
 
 export default class RecentReviewsPage extends Component {
   constructor(props) {
@@ -26,16 +29,28 @@ export default class RecentReviewsPage extends Component {
 
   render() {
     const { reviews, restaurantsMeta, imageKeys } = this.state;
-    const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`));
+
+    if (!restaurantsMeta || !Object.keys(restaurantsMeta).length || !imageKeys) return null;
+
+    const isValidReview = review  => (
+      review.pointer && review.imageRef && imageKeys.includes(`${review.imageRef}.jpg`) && restaurantsMeta[review.pointer]
+    );
+
+    const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
+
+    const reviewCards = deduplicatedReviews.map((review, idx) => (
+      <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} imageKeys={imageKeys} />
+    ))
     
     return (
       <>
-        <div className="d-flex flex-column align-items-center">
-          { 
-            deduplicatedReviews.map((review, idx) => (
-              <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} imageKeys={imageKeys} />
-            )) 
-          }
+        <div className="reviews-list">
+          <div className="d-flex flex-column align-items-center" style={{minWidth: "50%"}}>
+          { reviewCards.splice(0, Math.round(deduplicatedReviews.length / 2)).map(review => review) }
+          </div>
+          <div className="d-flex flex-column align-items-center" style={{minWidth: "50%"}}>
+          { reviewCards}
+          </div>
         </div>
     </>
     );

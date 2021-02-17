@@ -1,4 +1,5 @@
 import React from "react";
+import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import TimelineIcon from "@material-ui/icons/Timeline";
@@ -12,6 +13,13 @@ import Box from "@material-ui/core/Box";
 
 import LoginForm from "./admin//LoginForm";
 import { getUsername } from "./login";
+
+const styles = theme => ({
+  tabLabel: {
+    fontSize: "max(max(1vw, 1vh), .8rem)",
+    padding: "max(.5vw, .5vh)"
+  },
+});
 
 function getTabs() {
   const location = useLocation();
@@ -34,7 +42,8 @@ function getTabs() {
   return tabs;
 }
 
-export default function Nav() {
+function Nav(props) {
+  const { classes } = props;
   const history = useHistory();
   const location = useLocation();
   const username = getUsername();
@@ -60,10 +69,12 @@ export default function Nav() {
       { username && !adminSite ? <Box position="fixed" top={10} right={10} zIndex={1}><Fab variant="extended" href="/admin">Admin</Fab></Box> : <></> }
       <div className="container-fluid sthlm-cover" />
       <AppBar position="static" color="inherit">
-        <Tabs value={tabIdx} onChange={handleTabClick} indicatorColor="primary" variant="fullWidth">
-        {tabs.map((tab, idx) => <Tab icon={tab.icon} key={`tab-${idx}`} value={idx} label={tab.label}/>)}
+        <Tabs value={tabIdx} className={classes.tabs} onChange={handleTabClick} indicatorColor="primary" variant="fullWidth">
+        {tabs.map((tab, idx) => <Tab icon={tab.icon} key={`tab-${idx}`} value={idx} label={<span className={classes.tabLabel}>{tab.label}</span>}/>)}
         </Tabs>
       </AppBar>
     </>
   );
 }
+
+export default withStyles(styles)(Nav);

@@ -6,6 +6,7 @@ body {
   min-height: 1000px;
   font-family: sans-serif;
   scroll-behavior: smooth;
+  font-size: 1.3rem !important;
 }
 
 h1, h2 {
@@ -119,6 +120,14 @@ h3, h4 {
 @media(min-width: 800px) {
   .asia-cover {
     background-image: url(https://www.sthlmlunch.se/asia-cover-se.png);
+  }
+}
+
+@media(min-width: 2200px) {
+  .reviews-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around
   }
 }
 
