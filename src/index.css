@@ -17,6 +17,30 @@ h3, h4 {
   font-size: 2rem !important;
 }
 
+.footer {
+  bottom: 0;
+  width: 100%;
+  border: 1px solid whitesmoke;
+  background-color: white;
+  z-index: 10;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: slategray !important;
+  padding: 10px;
+  z-index: 20;
+}
+
+.footer-text:hover {
+  text-decoration: none;
+  color: steelblue!important;
+}
+
+#main {
+   min-height: calc(100vh - 70px - 100px);
+}
+
 .tab-content {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
