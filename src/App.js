@@ -6,7 +6,7 @@ import RestaurantPage from "./RestaurantPage";
 import Head from "./Head";
 import RecentReviewsPage from "./RecentReviewsPage";
 import RestaurantReviewsPage from "./RestaurantReviewsPage";
-import RestaurantMap from "./RestaurantMap";
+import RestaurantToplist from "./RestaurantToplist";
 import AsiaPage from "./AsiaPage";
 import Nav from "./Nav";
 import AddPage from "./admin/AddPage";
@@ -27,7 +27,7 @@ export default function App(props) {
               return <Redirect push to="/recent" />
             }}
           />
-          <Route exact path="/top" component={RestaurantMap} />
+          <Route exact path="/top" component={RestaurantToplist} />
           <Route exact path="/recent" component={RecentReviewsPage} />
 					<Route exact path="/restaurants" component={RestaurantReviewsPage} />
           <Route exact path="/restaurant/:restaurant" component={RestaurantPage} />

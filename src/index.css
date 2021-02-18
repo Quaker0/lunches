@@ -68,11 +68,11 @@ h3, h4 {
   h1, h2 {
     font-size: 30px !important;
   }
-  .h3, h3,.h4, h4 {
+  .h3, h3, .h4, h4 {
     font-size: 25px !important;
   }
   body {
-    font-size: 70% !important;
+    font-size: 85% !important;
   }
   .navbar {
     text-align: center;
@@ -123,7 +123,7 @@ h3, h4 {
   }
 }
 
-@media(min-width: 2200px) {
+@media(min-width: 2600px) {
   .reviews-list{
     display: flex;
     flex-wrap: wrap;
