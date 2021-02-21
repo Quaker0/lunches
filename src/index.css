@@ -6,11 +6,11 @@ body {
   min-height: 1000px;
   font-family: sans-serif;
   scroll-behavior: smooth;
-  font-size: 1.3rem !important;
+  font-size: 1.1rem !important;
 }
 
 h1, h2 {
-  font-size: 3em !important;
+  font-size: 3rem !important;
 }
 
 h3, h4 {
@@ -19,8 +19,10 @@ h3, h4 {
 
 .footer {
   bottom: 0;
+  margin-top: 100px;
+  padding-left: 10px;
   width: 100%;
-  border: 1px solid whitesmoke;
+  border: 2px solid whitesmoke;
   background-color: white;
   z-index: 10;
 }
@@ -39,6 +41,11 @@ h3, h4 {
 
 #main {
    min-height: calc(100vh - 70px - 100px);
+}
+
+.th {
+  padding-right: 20px;
+  font-family: serif;
 }
 
 .tab-content {
@@ -194,10 +201,6 @@ h3, h4 {
 	outline: none !important;
 }
 
-.card-item {
-	padding: 1vmax 3vw !important;
-}
-
 a {
   color: #184794 !important;
 }
@@ -248,6 +251,14 @@ a:hover {
       -ms-animation: fadein .5s; /* Internet Explorer */
        -o-animation: fadein .5s; /* Opera < 12.1 */
           animation: fadein .5s;
+}
+
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
 }
 
 @keyframes fadein {

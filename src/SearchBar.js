@@ -20,12 +20,10 @@ export default class SearchBar extends Component {
     }
 
 		return (
-			<div className="container" style={{width:"90%", "maxWidth": "800px", padding: 20}}>
-				<div className="row justify-content-center py-2">
-					<div className="input-group">
-						<input type="text" className="form-control" placeholder="Sök efter restaurang" aria-label="" aria-describedby="searchbar" onChange={search} onKeyUp={search} onPaste={search} onInput={search} />
-						{ sortByDropdown }
-					</div>
+			<div className="container" style={{width:"90%", "maxWidth": "800px", padding: "30px 20px 10px 20px"}}>
+				<div className="input-group d-flex flex-row justify-content-center align-items-center">
+					<input type="text" className="form-control" placeholder="Sök efter restaurang" aria-label="" aria-describedby="searchbar" onChange={search} onKeyUp={search} onPaste={search} onInput={search} />
+					{ sortByDropdown }
 				</div>
 			</div>
 		);

@@ -27,7 +27,7 @@ export default class EditPage extends Component {
 				} else {
 					return null;
 				}
-			});
+			}).reverse();
 			return <Grid>{ metaRows }</Grid>
 		}
 	}

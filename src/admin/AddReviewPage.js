@@ -3,17 +3,18 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import xmlParser from "fast-xml-parser";
+import shortid from "shortid"
 
 import { firstLetterUpperCase, toPointer } from "../utils"
 import { getRestaurantMeta, getRestaurantReviews, getUnmatchedImages } from "../api"
-import shortid from "shortid"
 import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, defaultState, SaveButton, RestaurantSelect, NewMeal, MenuType, Score, ReviewDate, MealSelect, SimpleSelect, GridRow, saveNewReview, SimpleModal, UnmatchedImages, ReloadButton } from "./adminReviewUtils";
+import { getUsername } from "../login.js";
 
 export default class AddReviewPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviewId: shortid.generate(), buttonsDisabled: false, openSaveModal: false, restaurantMeta: [], meals: [], ...defaultState
+      reviewId: shortid.generate(), buttonsDisabled: false, openSaveModal: false, restaurantMeta: [], meals: [], reviewer: firstLetterUpperCase(getUsername()), ...defaultState
     };
     
     this.toggleNewMeal = (show) => {
@@ -60,22 +61,24 @@ export default class AddReviewPage extends Component {
     const { restaurantMeta } = this.state;
     this.setState({restaurant: value, restaurantError: ""})
 
-    restaurantMeta.forEach(restaurant => {
-      if (value.toLowerCase() === restaurant.name.toLowerCase() && restaurant.reviewPointer) {
-        getRestaurantReviews(restaurant.reviewPointer)
-        .then(reviews => {
-          let meals = {};
-          reviews.forEach(review => {
-            if (!meals[review.meal]) {
-              meals[review.meal] = review.description;
-            }
-          });
-          this.setState({meals: meals, restaurant: restaurant.name});
+    const restaurant = restaurantMeta.find(restaurant => value.toLowerCase() === restaurant.name.toLowerCase() && restaurant.reviewPointer)
+    console.log(restaurant)
+
+    if (restaurant) {
+      getRestaurantReviews(restaurant.reviewPointer, { signal: this.controller.signal, cache: "no-cache"})
+      .then(reviews => {
+        console.log(reviews)
+        let meals = {};
+        reviews.forEach(review => {
+          if (!meals[review.meal]) {
+            meals[review.meal] = review.description;
+          }
         });
-      } else {
-        this.setState({meals: []});
-      }
-    });
+        this.setState({meals: meals, restaurant: restaurant.name});
+      });
+    } else {
+      this.setState({meals: []});
+    }
   }
 
   enforceFields(requiredFields) {

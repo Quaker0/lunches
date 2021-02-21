@@ -108,7 +108,7 @@ export const defaultState = {
 
 export const saveWhiteList = [
   "tasteScore", "environmentScore", "meal", "description", "price", "menuType", "totalPrice", "portionSize", "heat", 
-  "waitTime", "totalTime", "extrasScore", "innovationScore", "review", "timestamp", "restaurant"
+  "waitTime", "totalTime", "extrasScore", "innovationScore", "review", "timestamp", "restaurant", "reviewer"
 ]
 
 export const theme = createMuiTheme({
@@ -123,7 +123,6 @@ function buildReviewRequest(state) {
   if (!review.description) {
     review.description = state.meals[review.meal];
   }
-  review.reviewer = firstLetterUpperCase(getUsername());
   review.imageRef = state.imageRef || state.reviewId;
   const request = { review: review };
   if (state.reviewPointer) {
@@ -256,6 +255,7 @@ export const ComboBox = function(props) {
   return (
     <Autocomplete
       autoComplete
+      autoSelect
       clearOnEscape
       freeSolo
       id={`${props.id}-combo-box`}
@@ -274,14 +274,15 @@ export const ComboBox = function(props) {
 export const RestaurantSelect = function(props) {
   return (
     <Autocomplete
+      autoComplete
+      autoSelect
       clearOnEscape
       autoHighlight
       freeSolo={props.freeSolo}
       id="restaurant-combo-box"
       options={props.restaurants}
       noOptionsText=""
-      filterOptions={options => options}
-      getOptionSelected={(x, y) => x && y && x.toLowerCase().replace(/[^a-zåäö0-9]/g, "") === y.toLowerCase().replace(/[^a-zåäö0-9]/g, "")}
+      getOptionSelected={(x, y) => x && y && x.toLowerCase().replace(/[^a-zåäö0-9]/, "") === y.toLowerCase().replace(/[^a-zåäö0-9]/, "")}
       openText="Öppna"
       style={{width: "50vw"}}
       renderInput={params => <TextField {...params} required error={props.error} helperText={props.helperText} label="Restaurang" />}
@@ -363,7 +364,18 @@ export const ReviewDate = props => (
 )
 
 export const MealSelect = function(props) {
-  return <ComboBox value={props.meal} error={!!props.error} helperText={props.error} label="Måltid" id="meal" options={props.meals} addNew={props.addNew} onChange={props.updateMeal} />;
+  return (
+    <ComboBox
+      value={props.meal}
+      error={!!props.error}
+      helperText={props.error}
+      label="Måltid"
+      id="meal"
+      options={props.meals}
+      addNew={props.addNew}
+      onChange={props.updateMeal}
+     />
+    );
 }
 
 export const SimpleSelect = props => (

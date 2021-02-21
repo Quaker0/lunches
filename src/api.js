@@ -1,12 +1,16 @@
 import { getIdToken } from "./login.js"
 import xmlParser from "fast-xml-parser";
 
-export function getRestaurantReviews(reviewPointer) {
+export function getRestaurantReviews(reviewPointer, options) {
   if (!reviewPointer) {
     throw Error("Missing reviewPointer!")
   }
-  return fetch(`https://www.sthlmlunch.se/restaurants/${reviewPointer}`)
-  .then((response) => response.json());
+  return fetch(`https://www.sthlmlunch.se/restaurants/${reviewPointer}`, options)
+  .then((response) => response.json())
+  .catch(e => {
+    if (e.name !== "AbortError") console.error(e);
+    else throw e;
+  });
 }
 
 export async function addReview(data) {
@@ -111,18 +115,20 @@ export async function deleteReview(data) {
 }
 
 export function getRestaurantMeta(options) {
-  return fetch("https://www.sthlmlunch.se/restaurants/meta.json", { ...options })
+  return fetch("https://www.sthlmlunch.se/restaurants/meta.json", options)
   .then((response) => response.json())
   .catch(e => {
     if (e.name !== "AbortError") console.error(e);
+    else throw e;
   });
 }
 
 export function getRecentReviews(options) {
-  return fetch("https://www.sthlmlunch.se/recentReviews.json", { ...options })
+  return fetch("https://www.sthlmlunch.se/recentReviews.json", options)
   .then((response) => response.json())
   .catch(e => {
     if (e.name !== "AbortError") console.error(e);
+    else throw e;
   });
 }
 
@@ -139,6 +145,7 @@ export function getUnmatchedImages(options) {
   })
   .catch(e => {
     if (e.name !== "AbortError") console.error(e);
+    else throw e;
   });
 }
 
@@ -155,5 +162,6 @@ export function getAllImages(options) {
   })
   .catch(e => {
     if (e.name !== "AbortError") console.error(e);
+    else throw e;
   });
 }
