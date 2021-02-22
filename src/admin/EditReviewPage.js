@@ -3,18 +3,20 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { ThemeProvider } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import shortid from "shortid"
 
 import { getUsername } from "../login.js";
 import { firstLetterUpperCase } from "../utils.js"
-import { TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
+import { RoundImages, TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
 
 export default class EditReviewPage extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {openSaveModal: false, buttonsDisabled: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review};
+		this.state = {reviewId: shortid.generate(), openSaveModal: false, buttonsDisabled: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review, meta: props.meta};
     console.log(props.review)
 		this.updateMenuType = (event, value) => this.setState({menuType: value});
 		this.updatePrice = (event) => this.setState({price: parseInt(event.target.value.replace(/[^0-9,]/g, "") || 0)});
@@ -69,8 +71,13 @@ export default class EditReviewPage extends Component {
 	render() {
 		const { 
 			tasteScore, heat, review, environmentScore, description, innovationScore, price, buttonsDisabled,
-			portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal
+			portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal, imageRef
 		} = this.state;
+
+    let imageKeys;
+    if (imageRef) {
+      imageKeys = [`${imageRef}.jpg`]
+    }
 		return (
 			<>
 				<ThemeProvider theme={theme}>
@@ -102,6 +109,22 @@ export default class EditReviewPage extends Component {
 							<SaveButton onClick={this.save} disabled={buttonsDisabled} />
 							<DeleteButton onClick={this.delete} disabled={buttonsDisabled} />
 						</GridRow>
+            <GridRow>
+            { imageRef ? (
+              <Typography justify-self="center">
+                Lägg till eller ta bort en bild genom att mejla den till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> med <code>ref={imageRef}</code> i ämnet.
+              </Typography>
+              ) : (
+              <Typography justify-self="center">
+                Den här recensionen var tillagd innan vi hade bilder, tryck spara <br/>
+                för att skapa en referens som du kan använda när du mejlar in bilden.
+              </Typography>
+              )
+            }
+            </GridRow>
+            <GridRow>
+              <RoundImages imageKeys={imageKeys}/>
+            </GridRow>
 					</Grid>
 				</ThemeProvider>
 				<SimpleModal text="Recensionen har uppdaterats!" open={openSaveModal} handleClose={this.handleCloseSaveModal} />

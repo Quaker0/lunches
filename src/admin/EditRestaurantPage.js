@@ -13,6 +13,7 @@ export default class EditRestaurantPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {username: getUsername(), jwt: getDecodedJWT()};
+    this.controller = new AbortController();
 		this.selectReview = this.selectReview.bind(this);
 		this.deleteReview = this.deleteReview.bind(this);
     this.fetchReviews = this.fetchReviews.bind(this);
@@ -25,7 +26,7 @@ export default class EditRestaurantPage extends Component {
 	}
 
   fetchReviews() {
-    fetch(`https://www.sthlmlunch.se/restaurants/${this.props.reviewPointer}`)
+    fetch(`https://www.sthlmlunch.se/restaurants/${this.props.reviewPointer}`, {signal: this.controller.signal, cache: "no-cache"})
     .then((response) => response.json())
     .then((reviews) => {
       const userGroups = this.state.jwt["cognito:groups"]

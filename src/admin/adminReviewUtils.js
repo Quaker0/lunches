@@ -74,6 +74,20 @@ export const TasteHelp = () => (
   </GridRow>
 );
 
+export const RoundImages = (props) => {
+  if (!props.imageKeys || !props.imageKeys.filter(Boolean).length) return null;
+  return props.imageKeys.map(imageKey => (
+    <Box key={imageKey} display="flex" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center">
+      <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
+        <img width={150} height={150} alt="Meal pic" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/processed/" + imageKey}/>
+        { 
+          props.input ? <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/> : <></>
+        }
+      </Box>
+     </Box>
+   ))
+}
+
 export const UnmatchedImages = (props) => (
   <Box display="flex" flexDirection="column" alignItems="center" alignContent="center" p={2}>
     <Typography variant="h6">
@@ -81,14 +95,7 @@ export const UnmatchedImages = (props) => (
     </Typography>
     <Typography align="center" paragraph>Maila din bild till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> för att se den här och använda den i din recension.</Typography>
     {
-      props.imageKeys && props.imageKeys.length ? props.imageKeys.map(imageKey => (
-        <Box key={imageKey} display="flex" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center">
-          <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
-            <img width={150} height={150} alt="pre-sent" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/processed/" + imageKey}/>
-            <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/>
-          </Box>
-         </Box>
-       )) : (
+       props.imageKeys && !props.imageKeys.length ? <RoundImages input imageKeys={props.imageKeys}/> : (
         <Typography align="center" paragraph>
           Inga bilder har laddats upp i förväg! <br/>Du kan skicka bilder till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> utan att ange någonting och sedan välja den här.
         </Typography>

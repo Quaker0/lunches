@@ -9,6 +9,7 @@ export default class EditPage extends Component {
 	constructor() {
 		super();
 		this.state = {restaurantsMeta: {}, searchPhrase: ""}
+    this.controller = new AbortController();
 		this.selectRestaurant = this.selectRestaurant.bind(this);
 		this.search = this.search.bind(this);
 	}
@@ -33,7 +34,7 @@ export default class EditPage extends Component {
 	}
 
 	componentDidMount() {
-		fetch("https://www.sthlmlunch.se/restaurants/meta.json")
+		fetch("https://www.sthlmlunch.se/restaurants/meta.json", {signal: this.controller.signal, cache: "no-cache"})
 		.then((response) => {
 			response.json()
 			.then((restaurantsMeta) => {
