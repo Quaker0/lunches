@@ -16,7 +16,8 @@ import { getUsername } from "./login";
 
 const styles = theme => ({
   tabLabel: {
-    fontSize: "max(max(.8vw, .8vh), .8rem)"
+    fontSize: "max(max(.8vw, .8vh), .8rem)",
+    padding: "max(.1vw, .1vh)"
   },
 });
 

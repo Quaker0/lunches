@@ -10,16 +10,16 @@ export default class RestaurantCard extends Component {
 		}
 		const { tasteScore, environmentScore, extrasScore, innovationScore, price } = restaurantMeta;
 		const redirect = `/restaurant/${restaurantMeta.name.toLowerCase()}`;
-    const priceScore = price < 1000 ? "$" : price < 1450 ? "$$" : "$$$";
+    const priceScore = price < 1000 ? <>$<span style={{opacity:0.2}}>$$</span></> : price < 1450 ? <>$$<span style={{opacity:0.2}}>$</span></> : price > 1700 ? "$$$+" : "$$$";
     let imgSrc;
     if ("imageRefs" in restaurantMeta && restaurantMeta["imageRefs"].length) {
       imgSrc = restaurantMeta["imageRefs"].reverse()[0];
     }
 
 		return (
-			<div className="m-4 restaurant-card" style={{width: 200}}>
-        { imgSrc ? <img width={200} alt="meal" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
-        <div className="p-2" style={{backgroundColor: "whitesmoke", borderBottomLeftRadius: "5%", borderBottomRightRadius: "5%"}}>
+			<div className="m-4 restaurant-card" style={{width: 250}}>
+        { imgSrc ? <img width={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
+        <div className="p-2" style={{backgroundColor: "white", borderBottomLeftRadius: "5%", borderBottomRightRadius: "5%"}}>
   				<div className="inline-block pb-2 text-center" style={{fontVariant: "petite-caps"}}>
   					<Link to={redirect} className="h4" style={{color: "black"}}>{restaurantMeta.name}</Link>
   				</div>

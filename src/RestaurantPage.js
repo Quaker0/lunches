@@ -154,7 +154,7 @@ export default class RestaurantPage extends Component {
       </div>
       </div>
 
-      <div className="container-fluid card-item">
+      <div className="container-fluid card-item" style={{paddingBottom: "10%"}}>
         <div className="text-center p-4">
           <h3>Recenserade måltider</h3>
         </div>

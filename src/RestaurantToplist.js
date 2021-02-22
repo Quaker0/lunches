@@ -52,7 +52,7 @@ export default function RestaurantMap() {
   React.useEffect(() => document.title = "STHLM LUNCH - Top Restaurants", []);
 
   return (
-    <div className="p-4">
+    <div className="p-4" style={{backgroundColor: "rgba(0,0,0,0.05)"}}>
       <Grid container spacing={1} justify="center" align="center">
         <Grid item xs={12}>
         <RankCard index={1} restaurant="Kapibara" description="Ett nytt foodie mecka mitt i Östermalm, värt att vallfärda hit för både Donburi och Ramen." nameIcon={kapibaraLogo}/>

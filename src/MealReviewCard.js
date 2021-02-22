@@ -17,8 +17,8 @@ export default class MealReviewCard extends Component {
   
   return (
     <div className="d-flex flex-column align-items-center p-2 mx-2 mb-2" style={{position: "relative", width: 350, borderRadius: "10px", border: "4px solid whitesmoke", boxShadow: "2px 2px lightgrey"}}>
-    { imgSrc ? <img width={300} alt="meal-bg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
-    { imgSrc ? <img width={280} alt="meal" style={{borderRadius: "50%", margin: "10px 0 25px 0", border: "2px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
+    { imgSrc ? <img width={300} alt="" style={{zIndex: 1, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
+    { imgSrc ? <img width={280} alt="" style={{zIndex: 10, borderRadius: "50%", margin: "10px 0 25px 0", border: "2px solid white"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
       <h5 style={{fontVariant: "petite-caps"}}>{reviews[0].meal.toUpperCase()}</h5>
       { tasteIcons }
       <div className="d-flex p-2">

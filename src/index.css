@@ -9,6 +9,17 @@ body {
   font-size: 1.1rem !important;
 }
 
+.tab-page {
+  min-height: 600px;
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 0.1rem lightgrey;
+}
+.btn {
+  margin: 5px;
+}
+
 h1, h2 {
   font-size: 3rem !important;
 }
@@ -21,12 +32,18 @@ h4 {
   font-size: 1.6rem !important;
 }
 
+.search-input {
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
 .footer {
   bottom: 0;
-  margin-top: 100px;
   padding-left: 10px;
   width: 100%;
-  border: 2px solid whitesmoke;
+  border-top: 4px solid whitesmoke;
   background-color: white;
   z-index: 10;
 }
@@ -84,7 +101,7 @@ h4 {
 }
 
 .meal-logo-lg {
-  width: 330px;
+  width: 336px;
 }
 
 @media (max-width: 549px) {
@@ -205,8 +222,17 @@ h4 {
 	outline: none !important;
 }
 
+* {
+  outline: none !important;
+}
+
 a:not(.restaurant-card a) {
   color: #184794 !important;
+}
+
+.restaurant-card:hover {
+  border-radius: 5%;
+  box-shadow: 2px 2px lightgrey;
 }
 
 a:hover {
@@ -255,14 +281,6 @@ a:hover {
       -ms-animation: fadein .5s; /* Internet Explorer */
        -o-animation: fadein .5s; /* Opera < 12.1 */
           animation: fadein .5s;
-}
-
-*,
-*:before,
-*:after {
-    -webkit-box-sizing: content-box !important;
-    -moz-box-sizing: content-box !important;
-    box-sizing: content-box !important;
 }
 
 @keyframes fadein {

@@ -74,7 +74,7 @@ export default class RestaurantReviewsPage extends Component {
 			<RestaurantCard key={meta.name} restaurantMeta={meta} />
 		));
 		return (
-			<div className="py-2">
+			<div className="py-2 tab-page" style={{backgroundColor: "rgba(0,0,0,0.05)"}}>
         <Helmet>
           <title>STHLM LUNCH - Restaurants</title>
         </Helmet>

@@ -234,6 +234,7 @@ function Form(props) {
           variant="contained"
           color="primary"
           disabled={!!passwordError}
+          className={classes.submit}
         >
         {actionMessage || "Logga in"}
         </Button>

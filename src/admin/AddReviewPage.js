@@ -62,7 +62,6 @@ export default class AddReviewPage extends Component {
     this.setState({restaurant: value, restaurantError: ""})
 
     const restaurant = restaurantMeta.find(restaurant => value.toLowerCase() === restaurant.name.toLowerCase() && restaurant.reviewPointer)
-    console.log(restaurant)
 
     if (restaurant) {
       getRestaurantReviews(restaurant.reviewPointer, { signal: this.controller.signal, cache: "no-cache"})
