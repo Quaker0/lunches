@@ -81,7 +81,7 @@ export const RoundImages = (props) => {
       <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
         <img width={150} height={150} alt="Meal pic" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/processed/" + imageKey}/>
         { 
-          props.input ? <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/> : <></>
+          props.onChange ? <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/> : <></>
         }
       </Box>
      </Box>
@@ -95,10 +95,8 @@ export const UnmatchedImages = (props) => (
     </Typography>
     <Typography align="center" paragraph>Maila din bild till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> för att se den här och använda den i din recension.</Typography>
     {
-       props.imageKeys && !props.imageKeys.length ? <RoundImages input imageKeys={props.imageKeys}/> : (
-        <Typography align="center" paragraph>
-          Inga bilder har laddats upp i förväg! <br/>Du kan skicka bilder till <a href="mailto:pics@sthlmlunch.se">pics@sthlmlunch.se</a> utan att ange någonting och sedan välja den här.
-        </Typography>
+       props.imageKeys && props.imageKeys.length ? <RoundImages onChange={props.onChange} imageKeys={props.imageKeys} selectedImageRef={props.selectedImageRef}/> : (
+        <Typography align="center" paragraph> Inga bilder har laddats upp i förväg! </Typography>
       )
     }
   </Box>
