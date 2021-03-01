@@ -9,6 +9,7 @@
 		"amazon-cognito-identity-js": "4.5.10",
 		"animated-scroll-to": "2.0.12",
 		"aws-sdk": "2.841.0",
+		"fast-average-color": "^6.3.0",
 		"fast-xml-parser": "^3.18.0",
 		"immutable": "4.0.0-rc.12",
 		"js-cookie": "2.2.1",

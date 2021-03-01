@@ -96,14 +96,6 @@ h4 {
   animation-name: slidein;
 }
 
-.meal-logo-bg-lg {
-  width: 360px;
-}
-
-.meal-logo-lg {
-  width: 336px;
-}
-
 @media (max-width: 549px) {
   .sthlm-cover {
     background-attachment: scroll !important;
@@ -146,8 +138,8 @@ h4 {
   }
 
   .meal-logo-lg {
-    margin: 1.7%;
-    width: calc(60vw - 15px);
+    margin: 2.4vw;
+    width: calc(60vw - 20px);
     margin-left: auto; 
     margin-right: auto; 
   }
@@ -161,8 +153,13 @@ h4 {
   .asia-cover {
     background-image: url(https://www.sthlmlunch.se/asia-cover.png);
   }
+  .meal-logo-bg-lg {
+    width: 380px;
+  }
+
   .meal-logo-lg {
-    margin: 12px;
+    width: 340px;
+    margin: 20px;
   }
   .meal-logos {
     padding: 5%;
@@ -281,6 +278,22 @@ a:hover {
       -ms-animation: fadein .5s; /* Internet Explorer */
        -o-animation: fadein .5s; /* Opera < 12.1 */
           animation: fadein .5s;
+}
+
+.custom-hover {
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
+  transition:.3s;
+}
+
+.custom-hover:hover {
+  text-decoration: none !important;
+}
+
+.custom-hover h2:hover {
+  color: black !important;
 }
 
 @keyframes fadein {

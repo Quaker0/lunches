@@ -308,6 +308,7 @@ export const RestaurantSeats = props => (
     <div className="mt-2">
     <FormLabel id="seats" component="legend">Sittplatser</FormLabel>
     <RadioGroup row aria-label="seats" name="Seats" value={props.seats} onChange={props.onChange}>
+    <FormControlLabel disabled={props.disabled} value="0" control={<Radio />} label="0" />
       <FormControlLabel disabled={props.disabled} value="<15" control={<Radio />} label="<15" />
       <FormControlLabel disabled={props.disabled} value="15-25" control={<Radio />} label="15-25" />
       <FormControlLabel disabled={props.disabled} value="25-35" control={<Radio />} label="25-35" />
