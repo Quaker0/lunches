@@ -27,6 +27,7 @@ export default function AddRestaurantPage(props) {
   const [ saveDisabled, setSaveDisabled ] = React.useState(false);
   const [ restaurantMeta, setRestaurantMeta ] = React.useState({});
   const [ places, setPlaces ] = React.useState([]);
+  const [ selectedPlace, setSelectedPlace ] = React.useState();
   const [ placeDetails, setPlaceDetails ] = React.useState([]);
   const [ openSaveConfirmation, setOpenSaveConfirmation ] = React.useState(false);
   const [ lastRestaurantSearch, setLastRestaurantSearch ] = React.useState("");
@@ -38,16 +39,22 @@ export default function AddRestaurantPage(props) {
 
   function validateWebsite() {
     if (website && !website.match(/^https?:\/\/(www\.)?[\w\d]+\.[\w]+(\/[-a-z\d%_~+]+)*$/gi)){
-      setErrors({website: "Invalid URL (has to start with http and can't end with a slash)"});
+      setErrors({website: "Ogiltig URL (måste börja med http och kan inte sluta med snedsträck)"});
       return false;
     }
     setErrors({website: null});
     return true;
   }
 
+  function updateRestaurant(event, restaurant) {
+    const selectedPlace = places.find(place => `${place.name}${RESTAURANT_SEPARATOR}${place.formatted_address}` === restaurant);
+    if (selectedPlace) setSelectedPlace(selectedPlace);
+    setRestaurant(restaurant);
+  }
+
   function validateRestaurant() {
     const restaurantSplit = restaurant.split(RESTAURANT_SEPARATOR);
-    const restaurantPointer = toPointer(restaurant.split(RESTAURANT_SEPARATOR)[0]);
+    const restaurantPointer = toPointer(restaurantSplit[0]);
     const addr = address || (restaurantSplit.length > 1 ? restaurantSplit[1] : null);
     if (addr && restaurantPointer in restaurantMeta && restaurantMeta[restaurantPointer].places.some(place => place.address.toLowerCase().startsWith(addr.toLowerCase()))) {
       setErrors({restaurant: "Restaurangen finns redan!"});
@@ -57,8 +64,8 @@ export default function AddRestaurantPage(props) {
       if (tags && !tags.length && currentRestaurantMeta.tags) setTags(currentRestaurantMeta.tags.split(", "));
       if (origins && !origins.length && currentRestaurantMeta.origin) setOrigins(currentRestaurantMeta.origin.split(", "));
       if (currentRestaurantMeta.payInAdvance) setPayInAdvance(currentRestaurantMeta.payInAdvance);
+      setErrors({restaurant: null});
     }
-    setErrors({restaurant: null});
     return true;
   }
 
@@ -97,6 +104,7 @@ export default function AddRestaurantPage(props) {
       setWebsite("")
       setTags([])
       setOrigins([])
+      setErrors({})
     }
 
     const lastSearchChanged = !lastRestaurantSearch || !restaurant.startsWith(lastRestaurantSearch) || Math.abs(lastRestaurantSearch.length - restaurant.length) > 2;
@@ -111,7 +119,6 @@ export default function AddRestaurantPage(props) {
     }
 
     if(places && places.length && restaurant.includes(RESTAURANT_SEPARATOR)) {
-      const selectedPlace = places.find(place => `${place.name}${RESTAURANT_SEPARATOR}${place.formatted_address}` === restaurant)
       if (selectedPlace) {
         const geo = selectedPlace.geometry.location
         if (!lastPlaceSearch || (lastPlaceSearch.lat !== geo.lat || lastPlaceSearch.lng !== geo.lng)) {
@@ -147,7 +154,7 @@ export default function AddRestaurantPage(props) {
 
     const params = {
       payInAdvance, seats,
-      name: restaurant,
+      name: restaurant.split(RESTAURANT_SEPARATOR)[0],
       address: firstLetterUpperCase(address), 
       website: website.toLowerCase(),
       origin: origins.sort().filter(Boolean).join(", "),
@@ -155,18 +162,14 @@ export default function AddRestaurantPage(props) {
     }
 
     if (restaurant.includes(RESTAURANT_SEPARATOR)) {
-      const selectedPlace = places.find(place => `${place.name}${RESTAURANT_SEPARATOR}${place.formatted_address}` === restaurant)
       if (!selectedPlace) {
-        setErrors({restaurant: "Ogiltigt restaurang namn!"});
-        return null;
-      } else {
-        params.name = selectedPlace.name;
-        params.address = selectedPlace.formatted_address;
-        params.phoneNumber = phoneNumber
-        params.googlePlaceId = selectedPlace.place_id;
-        if (placeDetails && placeDetails.length) {
-          params.closestMetro = placeDetails[0].name;
-        }
+        throw Error("Tappade bort restaurangen...")
+      }
+      params.address = selectedPlace.formatted_address;
+      params.phoneNumber = phoneNumber
+      params.googlePlaceId = selectedPlace.place_id;
+      if (placeDetails && placeDetails.length) {
+        params.closestMetro = placeDetails[0].name;
       }
     }
     
@@ -194,7 +197,7 @@ export default function AddRestaurantPage(props) {
   return (
     <Grid container spacing={2} direction="column" alignContent="center">
       <GridRow>
-        <RestaurantSelect freeSolo restaurants={places ? places.map(p => `${p.name}${RESTAURANT_SEPARATOR}${p.formatted_address}`) : []} updateRestaurant={(e, value) => setRestaurant(value)} error={!!errors.restaurant} helperText={errors.restaurant} />
+        <RestaurantSelect freeSolo restaurants={places ? places.map(p => `${p.name}${RESTAURANT_SEPARATOR}${p.formatted_address}`) : []} updateRestaurant={updateRestaurant} error={!!errors.restaurant} helperText={errors.restaurant} />
       </GridRow>
       <GridRow>
         <Typography variant="caption" paragraph style={{width: "50vw"}}>Se till att det är det riktiga namnet och inte <strong>&quot;Bastard Burgers <span style={{color: "red"}}><u>Vasastan</u></span>&quot;</strong> (Google inkluderar det ibland).</Typography>
