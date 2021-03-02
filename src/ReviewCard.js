@@ -4,7 +4,7 @@ import FastAverageColor from "fast-average-color";
 
 
 export default function ReviewCard(props) {
-  const { review, restaurantsMeta, imageKeys } = props;
+  const { review, restaurantsMeta } = props;
   const [show, setShow] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [themeColor, setThemeColor] = useState(false);

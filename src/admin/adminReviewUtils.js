@@ -119,7 +119,17 @@ export const saveWhiteList = [
 export const theme = createMuiTheme({
   palette: {
     primary: { main: "#e1e5eb" },
-  }
+  },
+  button: {
+    borderRadius: 8,
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: 8,
+      }, 
+    }, 
+  },
 }, svSE);
 
 

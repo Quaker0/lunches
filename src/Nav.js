@@ -14,7 +14,7 @@ import Box from "@material-ui/core/Box";
 import LoginForm from "./admin//LoginForm";
 import { getUsername } from "./login";
 
-const styles = theme => ({
+const styles = () => ({
   tabLabel: {
     fontSize: "max(max(.8vw, .8vh), .8rem)",
     padding: "max(.1vw, .1vh)"

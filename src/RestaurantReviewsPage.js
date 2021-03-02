@@ -5,8 +5,6 @@ import RestaurantPage from "./RestaurantPage";
 import { filterSearchedReviews } from "./utils"
 import { getRestaurantMeta } from "./api";
 import _ from "lodash";
-import Fab from "@material-ui/core/Fab";
-import Box from "@material-ui/core/Box";
 import { Helmet } from "react-helmet";
 
 export default class RestaurantReviewsPage extends Component {

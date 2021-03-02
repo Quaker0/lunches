@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import NotFoundPage from "./NotFoundPage";
 import RestaurantPage from "./RestaurantPage";
@@ -16,7 +16,7 @@ import StatPage from "./admin/StatPage";
 import UserPage from "./admin/UserPage";
 
 
-export default function App(props) {
+export default function App() {
 	return (
 		<Router>
 			<>

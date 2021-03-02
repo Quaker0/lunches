@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { frame } from "./content/frame.png";
 
 export default class RestaurantCard extends Component {
 	render() {
@@ -8,7 +7,7 @@ export default class RestaurantCard extends Component {
 		if (restaurantMeta === {}) {
 			return ""
 		}
-		const { tasteScore, environmentScore, extrasScore, innovationScore, price } = restaurantMeta;
+		const { tasteScore, environmentScore, price } = restaurantMeta;
 		const redirect = `/restaurant/${restaurantMeta.name.toLowerCase()}`;
     const priceScore = price < 1000 ? <>$<span style={{opacity:0.2}}>$$</span></> : price < 1450 ? <>$$<span style={{opacity:0.2}}>$</span></> : price > 1700 ? "$$$+" : "$$$";
     let imgSrc;

@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { TabMenu, getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
+import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
 import MealReviewCard from "./MealReviewCard";
 import { getRestaurantMeta } from "./api";
-import { Redirect } from "react-router";
-import Fab from "@material-ui/core/Fab";
-import Box from "@material-ui/core/Box";
 
 export default class RestaurantPage extends Component {
   constructor(props) {

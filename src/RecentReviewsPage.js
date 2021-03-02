@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import Fab from "@material-ui/core/Fab";
-import Box from "@material-ui/core/Box";
-import ReactDOMServer from "react-dom/server";
 import _ from "lodash";
 
 import ReviewCard from "./ReviewCard";
