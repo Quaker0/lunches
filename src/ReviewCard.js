@@ -29,7 +29,7 @@ export default function ReviewCard(props) {
       </div>
       <div className="d-flex flex-column justify-content-center pr-3">
         <div className="d-flex flex-row align-items-baseline pb-4 pt-2 meal-header-text">
-          <Link to={restaurantRedirect} className="pr-3 custom-hover"><h2 style={{fontVariant: "petite-caps", color: themeColor.hex}}>{restaurantMeta.name}</h2></Link>
+          <Link to={restaurantRedirect} className="pr-3 custom-hover restaurant-name"><h2 style={{fontVariant: "petite-caps", color: themeColor.hex}}>{restaurantMeta.name}</h2></Link>
           <h3 className="font-weight-light pl-3" style={{fontVariant: "all-petite-caps"}}>{review.meal}</h3> 
         </div>
         <p className="pb-4" style={{maxWidth: 800, fontVariant: "all-petite-caps"}}>{review.description}</p> 

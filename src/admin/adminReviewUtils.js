@@ -387,8 +387,8 @@ export const MealSelect = function(props) {
       helperText={props.error}
       label="Måltid"
       id="meal"
-      options={props.meals}
-      addNew={props.addNew}
+      options={props.meals || []}
+      addNew={!!props.addNew}
       onChange={props.updateMeal}
      />
     );

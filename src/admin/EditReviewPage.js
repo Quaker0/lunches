@@ -26,6 +26,7 @@ export default class EditReviewPage extends Component {
 		this.updateEnviromentScore = (event, value) => this.setState({environmentScore: value});
 		this.updateReview = (event) => this.setState({review: firstLetterUpperCase(event.target.value), reviewError: ""});
 		this.updateDescription = (event) => this.setState({description: firstLetterUpperCase(event.target.value)});
+    this.updateMeal = (event) => this.setState({meal: firstLetterUpperCase(event.target.value)});
 		this.updateHeat = (event) => this.setState({heat: event.target.value});
 		this.updatePortionSize = (event) => this.setState({portionSize: event.target.value});
 		this.updateWaitTime = (event) => this.setState({waitTime: event.target.value});
@@ -70,7 +71,7 @@ export default class EditReviewPage extends Component {
 
 	render() {
 		const { 
-			tasteScore, heat, review, environmentScore, description, innovationScore, price, buttonsDisabled,
+			tasteScore, heat, review, environmentScore, description, innovationScore, price, buttonsDisabled, meal,
 			portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal, imageRef
 		} = this.state;
 
@@ -87,6 +88,9 @@ export default class EditReviewPage extends Component {
 					<h1 className="page-header text-center">Redigera recension</h1>
 					<Grid container spacing={2} >
 						<ReviewDate value={timestamp} disabled/>
+            <GridRow>
+              <TextField value={meal} onChange={this.updateMeal} id="meal-field" label="Måltid" style={{width: "50vw", margin: 10}} />
+            </GridRow>
             <GridRow>
               <TextField value={description} onChange={this.updateDescription} id="description-field" label="Måltids beskrivning" style={{width: "50vw", margin: 10}} />
             </GridRow>
