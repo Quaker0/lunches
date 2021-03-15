@@ -81,7 +81,7 @@ export const RoundImages = (props) => {
       <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
         <img width={150} height={150} alt="Meal pic" style={{padding: "10px", borderRadius: "50%"}} src={"https://pics.sthlmlunch.se/" + imageKey}/>
         { 
-          props.onChange ? <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/> : <></>
+          props.onChange ? <input type="checkbox" value={imageKey} checked={props.selectedImageRef === imageKey} onChange={(e) => props.onChange(e.target.value)}/> : <></>
         }
       </Box>
      </Box>

@@ -30,7 +30,7 @@ export default class RecentReviewsPage extends Component {
     if (!restaurantsMeta || !Object.keys(restaurantsMeta).length || !imageKeys) return null;
 
     const isValidReview = review  => (
-      review.pointer && review.imageRef && imageKeys.includes(`${review.imageRef}.jpg`) && restaurantsMeta[review.pointer]
+      review.pointer && review.imageRef && imageKeys.includes(`${review.imageRef}`) && restaurantsMeta[review.pointer]
     );
 
     const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);

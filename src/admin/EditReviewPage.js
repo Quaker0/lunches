@@ -77,7 +77,7 @@ export default class EditReviewPage extends Component {
 
     let imageKeys;
     if (imageRef) {
-      imageKeys = [`${imageRef}.jpg`]
+      imageKeys = [`${imageRef}`]
     }
 		return (
 			<>
