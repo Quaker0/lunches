@@ -17,7 +17,7 @@ export default class RestaurantCard extends Component {
 
 		return (
 			<div className="m-4 restaurant-card" style={{width: 250}}>
-        { imgSrc ? <img width={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://sthlmlunch-pics.s3.amazonaws.com/processed/${imgSrc}.jpg`} /> : <></> }
+        { imgSrc ? <img width={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://pics.sthlmlunch.se/${imgSrc}.jpg`} /> : <></> }
         <div className="p-2" style={{backgroundColor: "white", borderBottomLeftRadius: "5%", borderBottomRightRadius: "5%"}}>
   				<div className="inline-block pb-2 text-center" style={{fontVariant: "petite-caps"}}>
   					<Link to={redirect} className="h4" style={{color: "black"}}>{restaurantMeta.name}</Link>

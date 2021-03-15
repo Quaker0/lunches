@@ -79,7 +79,7 @@ export const RoundImages = (props) => {
   return props.imageKeys.map(imageKey => (
     <Box key={imageKey} display="flex" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center">
       <Box display="flex" justifyContent="center" flexDirection="column" alignContent="center" alignItems="center">
-        <img width={150} height={150} alt="Meal pic" style={{padding: "10px", borderRadius: "50%"}} src={"https://sthlmlunch-pics.s3.amazonaws.com/processed/" + imageKey}/>
+        <img width={150} height={150} alt="Meal pic" style={{padding: "10px", borderRadius: "50%"}} src={"https://pics.sthlmlunch.se/" + imageKey}/>
         { 
           props.onChange ? <input type="checkbox" value={imageKey.replace(".jpg", "")} checked={props.selectedImageRef === imageKey.replace(".jpg", "")} onChange={(e) => props.onChange(e.target.value)}/> : <></>
         }
