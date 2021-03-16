@@ -18,7 +18,7 @@ export default class RestaurantCard extends Component {
 
     return (
       <div className="m-4 restaurant-card" style={{width: 250}}>
-         <LazyLoad height={250} width={250} offset={100} once>
+         <LazyLoad height={250} width={250} once>
         { imgSrc ? <img width={250} height={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://pics.sthlmlunch.se/${imgSrc}`} /> : <></> }
         </LazyLoad>
         <div className="p-2" style={{backgroundColor: "white", borderBottomLeftRadius: "5%", borderBottomRightRadius: "5%"}}>

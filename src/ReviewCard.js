@@ -23,7 +23,7 @@ export default function ReviewCard(props) {
   var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 
   return (
-    <LazyLoad style={{width: "100%"}} height={500} offset={200} once>
+    <LazyLoad style={{width: "100%"}} height={500} once>
       <div className={"meal-row" + (show ? " fade-in": " invisible")} style={{border: "8px solid whitesmoke"}}>
         <div className="py-5 meal-logos">
           <img crossOrigin="anonymous" onError={setImgError} onLoad={onLoad} alt="meal-bg" className="meal-logo-bg-lg" style={{zIndex: -10, borderRadius: "50%", overflow: "hidden", objectFit: "cover", position: "absolute", opacity: 0.2}} src={`https://pics.sthlmlunch.se/${review.imageRef}`} />
