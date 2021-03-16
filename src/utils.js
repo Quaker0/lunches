@@ -1,6 +1,8 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import _ from "lodash";
+import _sortBy from "lodash/sortBy";
+import _groupBy from "lodash/groupBy";
+import _sum from "lodash/sum";
 
 export const originMap = {"Asien": "asia", "Nordeuropa": "europe", "Sydeuropa": "europe", "Mellanöstern": "asia", "Nordamerika": "americas", "Sydamerika": "americas", "Afrika": "africa"};
 export const pepperValues = ["Ingen hetta", "Lite hetta", "Lagom hetta", "Stark", "För stark", "Alldeles för stark"];
@@ -22,7 +24,7 @@ function aggregateReviews(reviews) {
 	const scores = ["tasteScore", "environmentScore", "extrasScore", "innovationScore", "price"];
 	var agg = {};
 	scores.forEach(score => {
-		agg[score] = _.sumBy(reviews, r => parseInt(r[score]));
+		agg[score] = _sum(reviews.map(r => parseInt(r[score])));
 	});
 	return agg;
 }
@@ -71,15 +73,14 @@ export function filterReviews(groupedReviews, aggregatedReviews, filterOn) {
 }
 
 export function sortReviews(reviews, aggregatedReviews, sortOn) {
-	return _(reviews).chain()
-	.sortBy(review => review.restaurant)
-	.sortBy(review => aggregatedReviews[review.restaurant.toLowerCase()][sortOn])
-	.reverse()
-	.value()
+	return _sortBy(
+    _sortBy(reviews, review => review.restaurant), 
+    review => aggregatedReviews[review.restaurant.toLowerCase()][sortOn])
+  .reverse()
 }
 
 export function groupReviews(reviews) {
-	return _.groupBy(reviews, r => r.restaurant.toLowerCase());
+	return _groupBy(reviews, r => r.restaurant.toLowerCase());
 }
 
 export function filterSearchedReviews(reviews, searchPhrase) {
@@ -126,7 +127,7 @@ export function mode(arr) {
 }
 
 export function cleanGet(reviews, key) {
-	return _.compact(reviews.map(review => review[key]));
+	return reviews.map(review => review[key]).filter(Boolean);
 }
 
 export function TabPanel(props) {

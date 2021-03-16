@@ -5,7 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import grey from "@material-ui/core/colors/grey";
 import { getUsername } from "../login.js";
-import _ from "lodash";
+import _sum from "lodash/sum";
+import _sortBy from "lodash/sortBy";
+import _uniq from "lodash/uniq";
 
 export default class UserPage extends Component {
   constructor() {
@@ -23,8 +25,7 @@ export default class UserPage extends Component {
   }
 
   buildReviewGrid(reviewer, reviews) {
-    const reviewCards = _(reviews)
-      .sortBy(["timestamp", "restaurant"])
+    const reviewCards = _sortBy(reviews, review => review.timestamp + review.restaurant)
       .map((review, index) => (
         <Grid item key={`${review.restaurant}${review.timestamp}${index}`}>
           <Box bgcolor={grey[300]} p={2}>
@@ -32,10 +33,9 @@ export default class UserPage extends Component {
           </Box>
         </Grid>
       ))
-      .compact()
+      .filter(Boolean)
       .reverse()
       .slice(0, 10)
-      .value();
     return <Box mt={2}><Grid container spacing={1}>{reviewCards}</Grid></Box>;
   }
 
@@ -60,10 +60,10 @@ export default class UserPage extends Component {
 
     const tasteScores = userMeta[reviewer].map((review) => review.tasteScore);
     const tasteDiffs = userMeta[reviewer].map((review) => review.avgTasteDiff);
-    const favorites = _(userMeta[reviewer]).sortBy(["tasteScore"]).reverse().value();
-    const tasteAvg = Math.round(_.sum(tasteScores) / userMeta[reviewer].length) / 10;
-    const tasteDiffAvg = Math.round(_.sum(tasteDiffs) / userMeta[reviewer].length) / 10;
-    const restaurants = _(userMeta[reviewer]).map((review) => review.restaurant).uniq().value();
+    const favorites = _sortBy(userMeta[reviewer], review => review.tasteScore).reverse();
+    const tasteAvg = Math.round(_sum(tasteScores) / userMeta[reviewer].length) / 10;
+    const tasteDiffAvg = Math.round(_sum(tasteDiffs) / userMeta[reviewer].length) / 10;
+    const restaurants = _uniq(userMeta[reviewer].map((review) => review.restaurant));
     const reviewGrid = this.buildReviewGrid(reviewer, userMeta[reviewer]);
 
     return (

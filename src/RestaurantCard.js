@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import LazyLoad from "react-lazyload";
+import LazyLoad, { forceVisible } from "react-lazyload";
 import { Link } from "react-router-dom";
 
 export default class RestaurantCard extends Component {
   render() {
-    const { restaurantMeta} = this.props;
+    const { key, restaurantMeta, idx} = this.props;
     if (restaurantMeta === {}) {
       return ""
     }
@@ -16,10 +16,14 @@ export default class RestaurantCard extends Component {
       imgSrc = restaurantMeta["imageRefs"].reverse()[0];
     }
 
+    if (idx < 4) {
+      forceVisible()
+    }
+
     return (
-      <div className="m-4 restaurant-card" style={{width: 250}}>
-         <LazyLoad height={250} width={250} once>
-        { imgSrc ? <img width={250} height={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://pics.sthlmlunch.se/${imgSrc}`} /> : <></> }
+      <div key={key} className="m-4 restaurant-card" style={{width: 250}}>
+        <LazyLoad height={250} width={250} once>
+          { imgSrc ? <img width={250} height={250} alt="" style={{borderTopRightRadius: "5%", borderTopLeftRadius: "5%"}} src={`https://pics.sthlmlunch.se/${imgSrc}`} /> : <></> }
         </LazyLoad>
         <div className="p-2" style={{backgroundColor: "white", borderBottomLeftRadius: "5%", borderBottomRightRadius: "5%"}}>
           <div className="inline-block pb-2 text-center" style={{fontVariant: "petite-caps"}}>

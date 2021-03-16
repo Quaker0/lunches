@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { groupBy } from "lodash";
+import _groupBy from "lodash/groupBy";
 import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
 import { getRestaurantMeta } from "./api";
 
@@ -29,7 +29,7 @@ export default class RestaurantPage extends Component {
           fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`, { signal: this.controller.signal })
           .then((response) => response.json())
           .then((reviews) => {
-            const mealsReviews = groupBy(reviews, r => r.meal.toLowerCase());
+            const mealsReviews = _groupBy(reviews, r => r.meal.toLowerCase());
             let reviewCards = [];
             Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={reviewToKey(mealReviews[0])} reviews={mealReviews} />));
             this.setState({reviewCards: reviewCards, reviews: reviews});

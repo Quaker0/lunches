@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { filterSearchedReviews } from "./utils"
 import { getRestaurantMeta } from "./api";
 import { Helmet } from "react-helmet";
-import { sortBy } from "lodash"
+import _sortBy from "lodash/sortBy"
 
 import RestaurantPage from "./RestaurantPage";
 import RestaurantCard from "./RestaurantCard";
@@ -64,12 +64,12 @@ export default class RestaurantReviewsPage extends Component {
 
 		var metaData = Object.values(filteredMeta).filter(meta => meta.reviewPointer && meta.tasteScore);
 		if (sortByValue) {
-			metaData = sortBy(metaData, meta => meta.name).sortBy(meta => meta[sortByValue]);
+			metaData = _sortBy(_sortBy(metaData, meta => meta.name), meta => meta[sortByValue]);
     }
 
 		let restaurantCards = [];
-		metaData.reverse().forEach(meta => restaurantCards.push(
-			<RestaurantCard key={meta.name} restaurantMeta={meta} />
+		metaData.reverse().forEach((meta, idx) => restaurantCards.push(
+			<RestaurantCard key={meta.name} idx={idx} restaurantMeta={meta} />
 		));
 		return (
 			<div className="py-2 tab-page" style={{backgroundColor: "rgba(0,0,0,0.05)"}}>

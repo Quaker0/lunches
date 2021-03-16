@@ -6,7 +6,11 @@ const Button = lazy(() => import("@material-ui/core/Button"));
 const TimelineIcon = lazy(() => import("@material-ui/icons/Timeline"));
 const BarChartIcon = lazy(() => import("@material-ui/icons/BarChart"));
 
-import { sortBy, orderBy, ceil, max, flatten } from "lodash";
+import _flatten from "lodash/flatten";
+import _sortBy from "lodash/sortBy";
+import _orderBy from "lodash/orderBy";
+import _ceil from "lodash/ceil";
+import _max from "lodash/max";
 
 const months = ["Jan", "Feb", "Mar","Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -22,14 +26,14 @@ export default class StatPage extends Component {
 		window.addEventListener("resize", this.updateWindowDimensions);
 		getStats().then((stats) => {
 			let eventSeries = {};
-			Object.keys(stats.series.values).forEach((event) => {
+			Object.keys(stats.series.values).forEach(event => {
 				let series = [];
-				Object.entries(stats.series.values[event]).forEach((entry) => {
-					const currentDatetime = new Date(entry[0])
+				Object.entries(stats.series.values[event]).forEach(([dt, value]) => {
+					const currentDatetime = new Date(dt)
 					const formattedDate = currentDatetime.getDate() + " " + months[currentDatetime.getMonth()]
-					series.push({x: formattedDate, y: entry[1], i: 12 * currentDatetime.getMonth() + currentDatetime.getDate()});
+					series.push({x: formattedDate, y: value, i: 12 * currentDatetime.getMonth() + currentDatetime.getDate()});
 				});
-				eventSeries[event] = sortBy(series, "i");
+				eventSeries[event] = _sortBy(series, x => x.i);
 			});
 			this.setState({eventSeries: eventSeries});
 		});
@@ -59,8 +63,8 @@ export default class StatPage extends Component {
 		if (chart === "bar") {
 			lines = Object.keys(eventSeries).map((event) => <VerticalBarSeries key={event} data={eventSeries[event]}/>);
 		}
-		const maxY = ceil(max(flatten(Object.values(eventSeries)).map((point)=>point.y)) / 10) * 10;
-    const userData = orderBy(Object.entries(userMeta).map(([reviewer, reviews]) => ({x: reviewer, y: reviews.length})), "y", "desc");
+		const maxY = _ceil(_max(_flatten(Object.values(eventSeries)).map((point)=>point.y)) / 10) * 10;
+    const userData = _orderBy(Object.entries(userMeta).map(([reviewer, reviews]) => ({x: reviewer, y: reviews.length})), x => x.y, "desc");
 
 		return (
       <div style={{minHeight: 800}}>

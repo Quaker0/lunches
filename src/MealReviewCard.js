@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import LazyLoad from "react-lazyload";
-import { filter, get } from "lodash";
+import _filter from "lodash/filter";
+import _get from "lodash/get";
 import { getAggregatedReviews, getPepperIcons, getRateCircles, mode, cleanGet, reviewToKey } from "./utils.js"
+
+const Review = (props) => (
+  <div key={reviewToKey(props.review)} className="text-center">
+    <p>
+      <i className="fas fa-quote-left px-2"/>
+      <i className="pt-2">{props.review.review}</i>
+      <i className="fas fa-quote-right px-2"/>
+    </p>
+  </div>
+)
 
 
 export default class MealReviewCard extends Component {
@@ -11,10 +22,10 @@ export default class MealReviewCard extends Component {
   const pepperIcons = getPepperIcons(heat)
 
   const aggregatedReviews = getAggregatedReviews(reviews);
-  let reviewsItems = [];
-  filter(reviews, review => review.review.trim()).forEach(review => reviewsItems.push(<div key={reviewToKey(review)} className="text-center"><p><i className="fas fa-quote-left px-2"/><i className="pt-2">{review.review}</i><i className="fas fa-quote-right px-2"/></p></div>));
-  var tasteIcons = getRateCircles(aggregatedReviews.tasteScore);
-  const imgSrc = get(reviews.find(r => r.imageRef), "imageRef");
+  const filteredReviews = _filter(reviews, review => review.review.trim());
+  const reviewsItems = filteredReviews.map(review => <Review key={reviewToKey(review)} review={review}/>);
+  const tasteIcons = getRateCircles(aggregatedReviews.tasteScore);
+  const imgSrc = _get(reviews.find(r => r.imageRef), "imageRef");
   
   return (
     <div className="d-flex flex-column align-items-center p-2 mx-2 mb-2" style={{position: "relative", width: 350, borderRadius: "10px", border: "4px solid whitesmoke", boxShadow: "2px 2px lightgrey"}}>

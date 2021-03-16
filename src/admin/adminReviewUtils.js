@@ -26,7 +26,7 @@ import { firstLetterUpperCase } from "../utils"
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import * as api from "../api"
-import { pick } from "lodash";
+import _pick from "lodash/pick";
 import { getUsername } from "../login"
 
 export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Café", "Vegetariskt", "Veganskt", "Buffé", "Pizza", "Taco", "Ramen", "Hamburgare", "Kebab"];
@@ -133,7 +133,7 @@ export const theme = createMuiTheme({
 
 
 function buildReviewRequest(state) {
-  const review = pick(state, saveWhiteList)
+  const review = _pick(state, saveWhiteList)
   if (!review.description) {
     review.description = state.meals[review.meal];
   }

@@ -7,7 +7,8 @@ import { reviewToKey } from "../utils";
 import { getDecodedJWT, getUsername }	from "../login";
 import EditReviewPage from "./EditReviewPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { groupBy, filter } from "lodash";
+import _groupBy from "lodash/groupBy";
+import _filter from "lodash/filter";
 
 export default class EditRestaurantPage extends Component {
 	constructor(props) {
@@ -36,7 +37,7 @@ export default class EditRestaurantPage extends Component {
   }
 
 	buildReviewGrid(reviews, userGroups) {
-		const mealsReviews = groupBy(reviews, r => r.meal.toLowerCase());
+		const mealsReviews = _groupBy(reviews, r => r.meal.toLowerCase());
 		let reviewCards = [];
 		Object.values(mealsReviews).forEach((mealReviews) => {
 			mealReviews.forEach(review => {
@@ -60,7 +61,7 @@ export default class EditRestaurantPage extends Component {
 	deleteReview(review) {
 		let { reviews } = this.state;
 		const userGroups = this.state.jwt["cognito:groups"]
-		const new_reviews = filter(reviews, (r) => !(r.timestamp === review.timestamp && r.reviewer === review.reviewer && r.meal === review.meal))
+		const new_reviews = _filter(reviews, (r) => !(r.timestamp === review.timestamp && r.reviewer === review.reviewer && r.meal === review.meal))
 		const reviewGrid = this.buildReviewGrid(new_reviews, userGroups);
 		this.setState({review: null, reviewGrid: reviewGrid, reviews: new_reviews});
 	}

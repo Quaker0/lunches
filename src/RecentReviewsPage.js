@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { keyBy } from "lodash";
+import _keyBy from "lodash/keyBy";
 
 import { getRestaurantMeta, getRecentReviews } from "./api";
 
@@ -32,7 +32,7 @@ export default class RecentReviewsPage extends Component {
       review.pointer && review.imageRef && restaurantsMeta[review.pointer]
     );
 
-    const deduplicatedReviews = Object.values(keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
+    const deduplicatedReviews = Object.values(_keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
 
     const reviewCards = deduplicatedReviews.map((review, idx) => (
       <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} />
