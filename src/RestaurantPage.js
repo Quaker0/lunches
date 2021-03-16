@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import _ from "lodash";
+import { groupBy } from "lodash";
 import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
 import MealReviewCard from "./MealReviewCard";
 import { getRestaurantMeta } from "./api";
@@ -28,7 +28,7 @@ export default class RestaurantPage extends Component {
           fetch(`https://www.sthlmlunch.se/restaurants/${meta.reviewPointer}`, { signal: this.controller.signal })
           .then((response) => response.json())
           .then((reviews) => {
-            const mealsReviews = _.groupBy(reviews, r => r.meal.toLowerCase());
+            const mealsReviews = groupBy(reviews, r => r.meal.toLowerCase());
             let reviewCards = [];
             Object.values(mealsReviews).forEach((mealReviews) => reviewCards.push(<MealReviewCard key={reviewToKey(mealReviews[0])} reviews={mealReviews} />));
             this.setState({reviewCards: reviewCards, reviews: reviews});
@@ -155,7 +155,7 @@ export default class RestaurantPage extends Component {
         <div className="text-center p-4">
           <h3>Recenserade måltider</h3>
         </div>
-        <div id="reviews" className="d-flex justify-content-start flex-wrap">
+        <div id="reviews" className="d-flex justify-content-start flex-wrap" style={{overflow: "auto"}}>
           { reviewCards }
         </div>
       </div>

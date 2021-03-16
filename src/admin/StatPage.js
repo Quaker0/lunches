@@ -4,7 +4,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import BarChart from "@material-ui/icons/BarChart";
-import _ from "lodash";
+import { sortBy, orderBy, ceil, max } from "lodash";
 
 const months = ["Jan", "Feb", "Mar","Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -27,7 +27,7 @@ export default class StatPage extends Component {
 					const formattedDate = currentDatetime.getDate() + " " + months[currentDatetime.getMonth()]
 					series.push({x: formattedDate, y: entry[1], i: 12 * currentDatetime.getMonth() + currentDatetime.getDate()});
 				});
-				eventSeries[event] = _.sortBy(series, "i");
+				eventSeries[event] = sortBy(series, "i");
 			});
 			this.setState({eventSeries: eventSeries});
 		});
@@ -57,8 +57,8 @@ export default class StatPage extends Component {
 		if (chart === "bar") {
 			lines = Object.keys(eventSeries).map((event) => <VerticalBarSeries key={event} data={eventSeries[event]}/>);
 		}
-		const maxY = _.ceil(_.max(_(eventSeries).values().flatten().map((point)=>point.y).value()) / 10) * 10;
-    const userData = _.orderBy(Object.entries(userMeta).map(([reviewer, reviews]) => ({x: reviewer, y: reviews.length})), "y", "desc");
+		const maxY = ceil(max(Object.values(eventSeries).flatten().map((point)=>point.y)) / 10) * 10;
+    const userData = orderBy(Object.entries(userMeta).map(([reviewer, reviews]) => ({x: reviewer, y: reviews.length})), "y", "desc");
 
 		return (
       <div style={{minHeight: 800}}>

@@ -23,11 +23,10 @@ import SaveIcon from "@material-ui/icons/Save";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CachedIcon from "@material-ui/icons/Cached";
 import { firstLetterUpperCase } from "../utils"
-import { List as ImmutableList } from "immutable";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import * as api from "../api"
-import _ from "lodash";
+import { pick } from "lodash";
 import { getUsername } from "../login"
 
 export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Café", "Vegetariskt", "Veganskt", "Buffé", "Pizza", "Taco", "Ramen", "Hamburgare", "Kebab"];
@@ -134,7 +133,7 @@ export const theme = createMuiTheme({
 
 
 function buildReviewRequest(state) {
-  const review = _.pick(state, saveWhiteList)
+  const review = pick(state, saveWhiteList)
   if (!review.description) {
     review.description = state.meals[review.meal];
   }
@@ -405,7 +404,7 @@ export const SimpleSelect = props => (
     onChange={props.onChange}
     style={{width: "50vw"}}
     >
-    {ImmutableList(props.options).map(item => <MenuItem value={item} key={item}>{item}</MenuItem>).toArray()}
+    {props.options.map(item => <MenuItem value={item} key={item}>{item}</MenuItem>).toArray()}
     </Select>
   </GridRow>
 );

@@ -1,5 +1,4 @@
 import React from "react";
-import { List } from "immutable";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -130,7 +129,7 @@ export function mode(arr) {
 }
 
 export function cleanGet(reviews, key) {
-	return _.compact(List(reviews).map(review => review[key]).toArray());
+	return _.compact(reviews.map(review => review[key]));
 }
 
 export function TabMenu(props) {
@@ -138,12 +137,12 @@ export function TabMenu(props) {
     <>
       <AppBar position="static" color="inherit">
         <Tabs value={props.value} onChange={props.handleChange} indicatorColor="primary" variant="fullWidth">
-          { List(props.tabs).map((tab) => <Tab icon={tab.icon} label={tab.title} key={tab.title.toLowerCase()}/>).toArray() }
+          { props.tabs.map((tab) => <Tab icon={tab.icon} label={tab.title} key={tab.title.toLowerCase()}/>).toArray() }
         </Tabs>
       </AppBar>
       
       {
-        List(props.tabs).map((tab, index) => (
+        props.tabs.map((tab, index) => (
           <TabPanel key={index} value={props.value} index={index}>
             { <tab.page {...props.params}/> }
           </TabPanel>

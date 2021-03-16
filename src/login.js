@@ -1,15 +1,15 @@
-import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
-import * as AWS from "aws-sdk/global";
+import { CognitoUserPool, CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
+import { CognitoIdentityCredentials, config } from "aws-sdk/global";
 import jwtDecode from "jwt-decode";
 
 const poolData = {
   UserPoolId: "eu-central-1_845hqElSt",
   ClientId: "10ckl84jpvm8sjidd1knmcql1r",
 };
-var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+var userPool = new CognitoUserPool(poolData);
 
 function newCognitoIdentityCredentials(result) {
-  return new AWS.CognitoIdentityCredentials({
+  return new CognitoIdentityCredentials({
     IdentityPoolId: "eu-central-1:56488c86-9315-4fe8-b28b-883b593d5daa",
     Logins: {
       "cognito-idp.eu-central-1.amazonaws.com/eu-central-1_845hqElSt": result
@@ -24,7 +24,7 @@ export async function forgotPassword(username, callback) {
     Username: username,
     Pool: userPool,
   };
-  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  var cognitoUser = new CognitoUser(userData);
   cognitoUser.forgotPassword({
     onSuccess: () => {
       callback({type: "forgotPasswordPending"});
@@ -43,7 +43,7 @@ export function confirmPassword(confirmationCode, username, newPassword, callbac
     Username: username,
     Pool: userPool,
   };
-  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  var cognitoUser = new CognitoUser(userData);
   cognitoUser.confirmPassword(confirmationCode, newPassword, {
     onSuccess: () => {
       callback({type: "passwordResetted"});
@@ -61,18 +61,18 @@ export function login(username, password, callback) {
     Username: username,
     Password: password,
   };
-  var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
+  var authenticationDetails = new AuthenticationDetails(
     authenticationData
   );
   var userData = {
     Username: username,
     Pool: userPool,
   };
-  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  var cognitoUser = new CognitoUser(userData);
   cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess: function(result) {
-      AWS.config.region = "eu-central-1";
-      AWS.config.credentials = newCognitoIdentityCredentials(result);
+      config.region = "eu-central-1";
+      config.credentials = newCognitoIdentityCredentials(result);
       window.gtag("event", "login", { "method": "Cognito" });
       callback({type: "loggedIn"});
     },
@@ -85,7 +85,7 @@ export function login(username, password, callback) {
           onSuccess: (result) => {
             console.log("NEW PASSWORD COMPLETED");
             window.gtag("event", "password_recovery", { "method": "Cognito" });
-            AWS.config.credentials = newCognitoIdentityCredentials(result);
+            config.credentials = newCognitoIdentityCredentials(result);
             return result;
           },
           onFailure: (err) => {

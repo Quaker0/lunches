@@ -4,8 +4,8 @@ import SearchBar from "./SearchBar";
 import RestaurantPage from "./RestaurantPage";
 import { filterSearchedReviews } from "./utils"
 import { getRestaurantMeta } from "./api";
-import _ from "lodash";
 import { Helmet } from "react-helmet";
+import { sortBy } from "lodash"
 
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
@@ -25,7 +25,7 @@ export default class RestaurantReviewsPage extends Component {
 	}
 
 	sortBy(event) {
-		this.setState({sortBy: event.target.id});
+		this.setState({sortByValue: event.target.id});
 	}
 
 	search(event) {
@@ -43,7 +43,7 @@ export default class RestaurantReviewsPage extends Component {
   }
 
 	render() {
-		const { restaurant, restaurantsMeta, searchPhrase, originFilter, sortBy } = this.state;	
+		const { restaurant, restaurantsMeta, searchPhrase, originFilter, sortByValue } = this.state;
     if (restaurant) {
       return <RestaurantPage restaurant={restaurant} />
     }
@@ -60,12 +60,9 @@ export default class RestaurantReviewsPage extends Component {
 		}
 
 		var metaData = Object.values(filteredMeta).filter(meta => meta.reviewPointer && meta.tasteScore);
-		if (sortBy) {
-			metaData = _(metaData).chain()
-			.sortBy(meta => meta.name)
-			.sortBy(meta => meta[sortBy])
-			.value();
-		}
+		if (sortByValue) {
+			metaData = sortBy(metaData, meta => meta.name).sortBy(meta => meta[sortByValue]);
+    }
 
 		let restaurantCards = [];
 		metaData.reverse().forEach(meta => restaurantCards.push(

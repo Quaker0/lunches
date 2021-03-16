@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import _ from "lodash";
+import { keyBy } from "lodash";
 
 import ReviewCard from "./ReviewCard";
 import { getRestaurantMeta, getRecentReviews, getAllImages } from "./api";
@@ -33,7 +33,7 @@ export default class RecentReviewsPage extends Component {
       review.pointer && review.imageRef && imageKeys.includes(`${review.imageRef}`) && restaurantsMeta[review.pointer]
     );
 
-    const deduplicatedReviews = _.values(_.keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
+    const deduplicatedReviews = Object.values(keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
 
     const reviewCards = deduplicatedReviews.map((review, idx) => (
       <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} imageKeys={imageKeys} />
@@ -49,7 +49,7 @@ export default class RecentReviewsPage extends Component {
           { reviewCards}
           </div>
         </div>
-    </>
+      </>
     );
   }
 }
