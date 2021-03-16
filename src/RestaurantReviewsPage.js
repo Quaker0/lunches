@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import RestaurantCard from "./RestaurantCard";
-import SearchBar from "./SearchBar";
-import RestaurantPage from "./RestaurantPage";
 import { filterSearchedReviews } from "./utils"
 import { getRestaurantMeta } from "./api";
 import { Helmet } from "react-helmet";
 import { sortBy } from "lodash"
+
+import RestaurantPage from "./RestaurantPage";
+import RestaurantCard from "./RestaurantCard";
+import SearchBar from "./SearchBar";
 
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {

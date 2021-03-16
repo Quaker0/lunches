@@ -1,10 +1,12 @@
-import React, { Component } from "react";
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, VerticalBarSeries, LineMarkSeries, DiscreteColorLegend} from "react-vis";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import TimelineIcon from "@material-ui/icons/Timeline";
-import BarChart from "@material-ui/icons/BarChart";
-import { sortBy, orderBy, ceil, max } from "lodash";
+import React, { Component, lazy } from "react";
+
+import { LineMarkSeries ,VerticalBarSeries, XYPlot, HorizontalGridLines, VerticalGridLines, XAxis, YAxis, DiscreteColorLegend } from "react-vis";
+const Box = lazy(() => import("@material-ui/core/Box"));
+const Button = lazy(() => import("@material-ui/core/Button"));
+const TimelineIcon = lazy(() => import("@material-ui/icons/Timeline"));
+const BarChartIcon = lazy(() => import("@material-ui/icons/BarChart"));
+
+import { sortBy, orderBy, ceil, max, flatten } from "lodash";
 
 const months = ["Jan", "Feb", "Mar","Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -57,7 +59,7 @@ export default class StatPage extends Component {
 		if (chart === "bar") {
 			lines = Object.keys(eventSeries).map((event) => <VerticalBarSeries key={event} data={eventSeries[event]}/>);
 		}
-		const maxY = ceil(max(Object.values(eventSeries).flatten().map((point)=>point.y)) / 10) * 10;
+		const maxY = ceil(max(flatten(Object.values(eventSeries)).map((point)=>point.y)) / 10) * 10;
     const userData = orderBy(Object.entries(userMeta).map(([reviewer, reviews]) => ({x: reviewer, y: reviews.length})), "y", "desc");
 
 		return (
@@ -68,7 +70,7 @@ export default class StatPage extends Component {
 						<TimelineIcon/>
 					</Button>
 					<Button variant="contained" color={chart === "bar" ? "primary" : "default"} onClick={() => this.setState({chart: "bar"})} >
-						<BarChart/>
+						<BarChartIcon/>
 					</Button>
 				</Box>
 				<XYPlot

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { groupBy } from "lodash";
 import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
-import MealReviewCard from "./MealReviewCard";
 import { getRestaurantMeta } from "./api";
+
+import MealReviewCard from "./MealReviewCard";
 
 export default class RestaurantPage extends Component {
   constructor(props) {

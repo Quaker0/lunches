@@ -3,16 +3,17 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 
 import Nav from "./Nav";
 import Footer from "./Footer";
+import RecentReviewsPage from "./RecentReviewsPage";
+import RestaurantPage from "./RestaurantPage";
+import RestaurantReviewsPage from "./RestaurantReviewsPage";
+import RestaurantToplist from "./RestaurantToplist";
 
 const NotFoundPage = lazy(() => import("./NotFoundPage"));
-const RestaurantPage = lazy(() => import("./RestaurantPage"));
-const RecentReviewsPage = lazy(() => import("./RecentReviewsPage"));
-const RestaurantReviewsPage = lazy(() => import("./RestaurantReviewsPage"));
-const RestaurantToplist = lazy(() => import("./RestaurantToplist"));
 const AddPage = lazy(() => import("./admin/AddPage"));
 const EditPage = lazy(() => import("./admin/EditPage"));
 const StatPage = lazy(() => import("./admin/StatPage"));
 const UserPage = lazy(() => import("./admin/UserPage"));
+const Head = () => <div className="container-fluid sthlm-cover" />;
 
 
 export default function App() {
@@ -20,7 +21,8 @@ export default function App() {
     <Suspense fallback={<></>}>
       <Router>
         <>
-          <Route/>
+          <Route />
+          <Head />
           <Nav />
           <div id="main">
             <Switch>
