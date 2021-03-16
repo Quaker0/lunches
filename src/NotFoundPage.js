@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 
 export default class NotFoundError extends PureComponent {
   render() {
-    window.mixpanel.track("Page view", {"page": "Page not found"});
+    window.mixpanel && window.mixpanel.track("Page view", {"page": "Page not found"});
     return (
       <>
         <Helmet>

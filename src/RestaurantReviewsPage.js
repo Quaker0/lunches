@@ -10,7 +10,9 @@ import { sortBy } from "lodash"
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
-    if (!this.props.restaurant) window.mixpanel.track("Page view", {"page": "Restaurants page"});
+    if (!this.props.restaurant) {
+      window.mixpanel && window.mixpanel.track("Page view", {"page": "Restaurants page"});
+    }
 		this.state = {
 			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant
 		};

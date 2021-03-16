@@ -1,8 +1,5 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import AppBar from "@material-ui/core/AppBar";
 import _ from "lodash";
 
 export const originMap = {"Asien": "asia", "Nordeuropa": "europe", "Sydeuropa": "europe", "Mellanöstern": "asia", "Nordamerika": "americas", "Sydamerika": "americas", "Afrika": "africa"};
@@ -130,26 +127,6 @@ export function mode(arr) {
 
 export function cleanGet(reviews, key) {
 	return _.compact(reviews.map(review => review[key]));
-}
-
-export function TabMenu(props) {
-  return (
-    <>
-      <AppBar position="static" color="inherit">
-        <Tabs value={props.value} onChange={props.handleChange} indicatorColor="primary" variant="fullWidth">
-          { props.tabs.map((tab) => <Tab icon={tab.icon} label={tab.title} key={tab.title.toLowerCase()}/>).toArray() }
-        </Tabs>
-      </AppBar>
-      
-      {
-        props.tabs.map((tab, index) => (
-          <TabPanel key={index} value={props.value} index={index}>
-            { <tab.page {...props.params}/> }
-          </TabPanel>
-        )).toArray()
-      }
-    </>
-  );
 }
 
 export function TabPanel(props) {

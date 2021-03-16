@@ -1,7 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
-import Head from "./Head";
 import Nav from "./Nav";
 import Footer from "./Footer";
 
@@ -10,7 +9,6 @@ const RestaurantPage = lazy(() => import("./RestaurantPage"));
 const RecentReviewsPage = lazy(() => import("./RecentReviewsPage"));
 const RestaurantReviewsPage = lazy(() => import("./RestaurantReviewsPage"));
 const RestaurantToplist = lazy(() => import("./RestaurantToplist"));
-const AsiaPage = lazy(() => import("./AsiaPage"));
 const AddPage = lazy(() => import("./admin/AddPage"));
 const EditPage = lazy(() => import("./admin/EditPage"));
 const StatPage = lazy(() => import("./admin/StatPage"));
@@ -22,7 +20,7 @@ export default function App() {
     <Suspense fallback={<></>}>
       <Router>
         <>
-          <Route component={Head} />
+          <Route/>
           <Nav />
           <div id="main">
             <Switch>
@@ -42,7 +40,6 @@ export default function App() {
               <Route exact path="/admin">
                 <Redirect to="/admin/add" />
               </Route>
-              <Route exact path="/asia" component={AsiaPage} />
               <Route path="*" component={NotFoundPage} />
             </Switch>
           </div>

@@ -404,7 +404,7 @@ export const SimpleSelect = props => (
     onChange={props.onChange}
     style={{width: "50vw"}}
     >
-    {props.options.map(item => <MenuItem value={item} key={item}>{item}</MenuItem>).toArray()}
+    {props.options.map(item => <MenuItem value={item} key={item}>{item}</MenuItem>)}
     </Select>
   </GridRow>
 );

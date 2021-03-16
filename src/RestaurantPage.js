@@ -8,7 +8,7 @@ export default class RestaurantPage extends Component {
   constructor(props) {
     super(props);
     let restaurant = props.match.params.restaurant;
-    window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
+    window.mixpanel && window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
     restaurant = restaurant.toLowerCase().replace(/\s/g, "");
     this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
