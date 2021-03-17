@@ -13,7 +13,17 @@ const AddPage = lazy(() => import("./admin/AddPage"));
 const EditPage = lazy(() => import("./admin/EditPage"));
 const StatPage = lazy(() => import("./admin/StatPage"));
 const UserPage = lazy(() => import("./admin/UserPage"));
-const Head = () => <div className="container-fluid sthlm-cover" />;
+const Head = () => (
+  <div className="container-fluid sthlm-cover">
+    <div className="neon-sign d-flex flex-wrap">
+      <span className="neon-first-letter">S</span>
+      <span className="d-flex flex-column flex-wrap">
+        <span>THLM</span>
+        <span>LUNCH</span>
+      </span>
+    </div>
+  </div>
+);
 
 
 export default function App() {
