@@ -3,16 +3,21 @@ import { filterSearchedReviews } from "./utils"
 import { getRestaurantMeta } from "./api";
 import { Helmet } from "react-helmet";
 import _sortBy from "lodash/sortBy"
+import mixpanel from "mixpanel-browser";
 
 import RestaurantPage from "./RestaurantPage";
 import RestaurantCard from "./RestaurantCard";
 import SearchBar from "./SearchBar";
 
+mixpanel.init("d7a7c6b2479a03ab4163bd44a5c0b26d", {
+    api_host: "https://api-eu.mixpanel.com",
+})
+
 export default class RestaurantReviewsPage extends Component {
 	constructor(props) {
 		super(props);
     if (!this.props.restaurant) {
-      window.mixpanel && window.mixpanel.track("Page view", {"page": "Restaurants page"});
+      mixpanel.track("Page view", {"page": "Restaurants page"});
     }
 		this.state = {
 			reviews: null, aggregatedReviews: {}, searchPhrase: null, originFilter: null, restaurant: this.props.restaurant

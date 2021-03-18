@@ -1,9 +1,14 @@
 import React, { PureComponent } from "react";
 import { Helmet } from "react-helmet";
+import mixpanel from "mixpanel-browser";
+
+mixpanel.init("d7a7c6b2479a03ab4163bd44a5c0b26d", {
+    api_host: "https://api-eu.mixpanel.com",
+})
 
 export default class NotFoundError extends PureComponent {
   render() {
-    window.mixpanel && window.mixpanel.track("Page view", {"page": "Page not found"});
+    mixpanel.track("Page view", {"page": "Page not found"});
     return (
       <>
         <Helmet>

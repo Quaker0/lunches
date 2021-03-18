@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import _groupBy from "lodash/groupBy";
+import mixpanel from "mixpanel-browser";
+
 import { getAggregatedReviews, getRateCircles, mode, cleanGet, reviewToKey } from "./utils"
 import { getRestaurantMeta } from "./api";
-
 import MealReviewCard from "./MealReviewCard";
+
+mixpanel.init("d7a7c6b2479a03ab4163bd44a5c0b26d", {
+    api_host: "https://api-eu.mixpanel.com",
+})
 
 export default class RestaurantPage extends Component {
   constructor(props) {
     super(props);
     let restaurant = props.match.params.restaurant;
-    window.mixpanel && window.mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
+    mixpanel.track("Page view", {page: "Restaurant page", restaurant: restaurant});
     restaurant = restaurant.toLowerCase().replace(/\s/g, "");
     this.state = {reviewCards: "", restaurant: restaurant, reviews: [], width: 0};
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);

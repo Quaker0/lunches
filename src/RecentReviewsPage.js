@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import _keyBy from "lodash/keyBy";
 
 import { getRestaurantMeta, getRecentReviews } from "./api";
-
 import ReviewCard from "./ReviewCard";
+import mixpanel from "mixpanel-browser";
+
+mixpanel.init("d7a7c6b2479a03ab4163bd44a5c0b26d", {
+    api_host: "https://api-eu.mixpanel.com",
+})
 
 export default class RecentReviewsPage extends Component {
   constructor(props) {
     super(props);
     document.title = "STHLM LUNCH - Recent Reviews"
-    window.mixpanel && window.mixpanel.track("Page view", {"page": "Reviews page"});
+    mixpanel.track("Page view", {"page": "Reviews page"});
     this.state = {reviews: []};
     this.controller = new AbortController();
   }

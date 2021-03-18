@@ -28,6 +28,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import * as api from "../api"
 import _pick from "lodash/pick";
 import { getUsername } from "../login"
+import mixpanel from "mixpanel-browser";
+
+mixpanel.init("d7a7c6b2479a03ab4163bd44a5c0b26d", {
+    api_host: "https://api-eu.mixpanel.com",
+})
 
 export const tagOptions = ["Take away", "Bokningsbar", "Företag", "Café", "Vegetariskt", "Veganskt", "Buffé", "Pizza", "Taco", "Ramen", "Hamburgare", "Kebab"];
 
@@ -153,22 +158,22 @@ function buildReviewRequest(state) {
 
 
 export function saveNewReview(state) {
-  window.mixpanel.track("Add review", {"reviewer": state.username});
+  mixpanel.track("Add review", {"reviewer": state.username});
   return api.addReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function saveRestaurant(params) {
-  window.mixpanel.track("Add restaurant", {"reviewer": getUsername()});
+  mixpanel.track("Add restaurant", {"reviewer": getUsername()});
   return api.addRestaurant(params);
 }
 
 export function saveReview(state) {
-  window.mixpanel.track("Edit review", {"reviewer": state.username});
+  mixpanel.track("Edit review", {"reviewer": state.username});
   return api.editReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
 export function deleteReview(state) {
-  window.mixpanel.track("Delete review", {"reviewer": state.username});
+  mixpanel.track("Delete review", {"reviewer": state.username});
   return api.deleteReview(buildReviewRequest(state)).then(response => response.status === 201);
 }
 
