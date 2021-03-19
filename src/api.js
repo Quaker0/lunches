@@ -22,7 +22,12 @@ export async function addReview(data) {
     },
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
-  });
+  }).then(async response => {
+    if (response.status !== 200) {
+      return {error: await response.text(), status: response.status, success: false};
+    }
+    return {status: response.status, success: true};
+  }).catch(e => {console.error(e)});
 }
 
 export async function addRestaurant(data) {
@@ -34,9 +39,9 @@ export async function addRestaurant(data) {
     },
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
-  }).then(response => {
+  }).then(async response => {
     if (response.status !== 200) {
-      return {error: response.text(), status: response.status};
+      return {error: await response.text(), status: response.status, success: false};
     }
     return {status: response.status, success: true};
   }).catch(e => {console.error(e)});

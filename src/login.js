@@ -73,7 +73,7 @@ export function login(username, password, callback) {
     onSuccess: function(result) {
       config.region = "eu-central-1";
       config.credentials = newCognitoIdentityCredentials(result);
-      window.gtag("event", "login", { "method": "Cognito" });
+      window.gtag && window.gtag("event", "login", { "method": "Cognito" });
       callback({type: "loggedIn"});
     },
     newPasswordRequired: function(userAttributes) {
@@ -84,7 +84,7 @@ export function login(username, password, callback) {
         callback: (newPassword) => cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
           onSuccess: (result) => {
             console.log("NEW PASSWORD COMPLETED");
-            window.gtag("event", "password_recovery", { "method": "Cognito" });
+            window.gtag && window.gtag("event", "password_recovery", { "method": "Cognito" });
             config.credentials = newCognitoIdentityCredentials(result);
             return result;
           },
@@ -106,25 +106,21 @@ export function login(username, password, callback) {
 
 export function isLoggedIn() {
   var cognitoUser = userPool.getCurrentUser();
-  if (cognitoUser != null) {
-    return cognitoUser.getSession(function(err, session) {
-      if (err) { return false }
-       return session.isValid();
-    });
-  }
-  return false;
+  if (!cognitoUser) return false;
+  return cognitoUser.getSession(function(err, session) {
+    if (err) return false;
+     return session.isValid();
+  });
 }
 
 export function getIdToken() {
   var cognitoUser = userPool.getCurrentUser();
-  if (cognitoUser != null) {
-    return cognitoUser.getSession(function(err, session) {
-      if (!err && session.isValid()){
-        return session.getIdToken().getJwtToken();
-      } 
-    });
-  }
-  return false;
+  if (!cognitoUser) return false;
+  return cognitoUser.getSession(function(err, session) {
+    if (!err && session.isValid()){
+      return session.getIdToken().getJwtToken();
+    }
+  });
 }
 
 export function getDecodedJWT() {
@@ -135,5 +131,5 @@ export function getDecodedJWT() {
 
 export function getUsername() {
   const cognitoUser = userPool.getCurrentUser();
-  if (cognitoUser) { return cognitoUser.getUsername(); }
+  if (cognitoUser) return cognitoUser.getUsername();
 }

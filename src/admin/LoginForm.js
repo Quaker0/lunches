@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -44,8 +44,11 @@ export default function LoginForm() {
   const [loginResult, setLoginResult] = useState();
   const [forgottenPassword, setForgottenPassword] = useState(false);
   const [open, setOpen] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(true);
-  useEffect(() => setLoggedIn(isLoggedIn()), []);
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn());
+  setTimeout(() => {
+    setLoggedIn(isLoggedIn())
+    setOpen(true)
+  }, 15000);
 
   const handleLoginResult = (result) => {
     if (result) {

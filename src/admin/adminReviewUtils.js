@@ -159,7 +159,7 @@ function buildReviewRequest(state) {
 
 export function saveNewReview(state) {
   mixpanel.track("Add review", {"reviewer": state.username});
-  return api.addReview(buildReviewRequest(state)).then(response => response.status === 201);
+  return api.addReview(buildReviewRequest(state));
 }
 
 export function saveRestaurant(params) {
@@ -392,7 +392,7 @@ export const MealSelect = function(props) {
       label="Måltid"
       id="meal"
       options={props.meals || []}
-      addNew={!!props.addNew}
+      addNew={props.addNew}
       onChange={props.updateMeal}
      />
     );

@@ -61,7 +61,7 @@ export default class EditReviewPage extends Component {
 	}
 
 	handleCloseSaveModal() {
-    window.gtag("event", "edit_review", "admin");
+    window.gtag && window.gtag("event", "edit_review", "admin");
 		this.setState({openSaveModal: false});
 	}
 
