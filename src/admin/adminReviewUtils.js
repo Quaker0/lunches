@@ -368,8 +368,7 @@ Score.defaultProps = {multiplier: 1}
 
 export const ReviewDate = props => (
   <GridRow>
-    <form noValidate>
-      <TextField
+    <TextField
       id="review-date"
       label="Datum recenserat"
       type="date"
@@ -378,8 +377,7 @@ export const ReviewDate = props => (
       onChange={props.updateDate}
       style={{width: "50vw", margin:10}}
       disabled={props.disabled}
-      />
-    </form>
+    />
   </GridRow>
 )
 
@@ -434,7 +432,7 @@ export function SimpleModal(props) {
       onClose={props.handleClose}
       >
       <div style={modalStyle} className={classes.paper}>
-        { props.text ? <h2 id="modal-title" className="text-center">{props.text}</h2>  : <></>}
+        { props.text ? <h3 id="modal-title" className="text-center">{props.text}</h3>  : <></>}
         { props.node }
       </div>
       </Modal>

@@ -9,14 +9,14 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import shortid from "shortid"
 
-import { getUsername } from "../login.js";
+import { getUsername, getDecodedJWT } from "../login.js";
 import { firstLetterUpperCase } from "../utils.js"
 import { RoundImages, TasteHelp, heatOptions, potionSizeOptions, waitTimeOptions, theme, MenuType, Score, ReviewDate, SimpleSelect, GridRow, defaultState, SaveButton, saveReview, DeleteButton, deleteReview, SimpleModal } from "./adminReviewUtils.js";
 
 export default class EditReviewPage extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {reviewId: shortid.generate(), openSaveModal: false, buttonsDisabled: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review, meta: props.meta};
+		this.state = {jwt: getDecodedJWT(), reviewId: shortid.generate(), openSaveModal: false, buttonsDisabled: false, openDeleteModal: false, username: getUsername(), reviewPointer: props.reviewPointer, ...defaultState, ...props.review, meta: props.meta};
     console.log(props.review)
 		this.updateMenuType = (event, value) => this.setState({menuType: value});
 		this.updatePrice = (event) => this.setState({price: parseInt(event.target.value.replace(/[^0-9,]/g, "") || 0)});
@@ -30,6 +30,7 @@ export default class EditReviewPage extends Component {
 		this.updateHeat = (event) => this.setState({heat: event.target.value});
 		this.updatePortionSize = (event) => this.setState({portionSize: event.target.value});
 		this.updateWaitTime = (event) => this.setState({waitTime: event.target.value});
+    this.updateDate = (event) => this.setState({timestamp: event.target.value});
 		this.save = this.save.bind(this);
 		this.delete = this.delete.bind(this);
 		this.handleCloseSaveModal = this.handleCloseSaveModal.bind(this);
@@ -71,14 +72,17 @@ export default class EditReviewPage extends Component {
 
 	render() {
 		const { 
-			tasteScore, heat, review, environmentScore, description, innovationScore, price, buttonsDisabled, meal,
+			tasteScore, heat, review, environmentScore, description, innovationScore, price, buttonsDisabled, meal, jwt,
 			portionSize, extrasScore, waitTime, username, timestamp, menuType, openSaveModal, openDeleteModal, imageRef
 		} = this.state;
+
+    console.log(timestamp)
 
     let imageKeys;
     if (imageRef) {
       imageKeys = [`${imageRef}`]
     }
+    const userGroups = jwt["cognito:groups"];
 		return (
 			<>
 				<ThemeProvider theme={theme}>
@@ -87,7 +91,7 @@ export default class EditReviewPage extends Component {
 					</Box>
 					<h1 className="page-header text-center">Redigera recension</h1>
 					<Grid container spacing={2} >
-						<ReviewDate value={timestamp} disabled/>
+						<ReviewDate value={timestamp} updateDate={this.updateDate} disabled={!userGroups || !userGroups.includes("admins")}/>
             <GridRow>
               <TextField value={meal} onChange={this.updateMeal} id="meal-field" label="Måltid" style={{width: "50vw", margin: 10}} />
             </GridRow>

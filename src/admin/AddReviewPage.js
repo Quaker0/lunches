@@ -28,7 +28,7 @@ export default class AddReviewPage extends Component {
     this.updateMeal = (event, value) => this.setState({meal: firstLetterUpperCase(value), mealError: ""});
     this.updateNewMealDesc = (event) => this.setState({description: firstLetterUpperCase(event.target.value), descriptionError: ""});
     this.updateMenuType = (event, value) => this.setState({menuType: value});
-    this.updateDate = (event, value) => this.setState({timestamp: value});
+    this.updateDate = (event) => this.setState({timestamp: event.target.value});
     this.updatePrice = (event) => this.setState({price: parseInt(event.target.value.replace(/[^0-9,]/g, "") || 0)});
     this.updateTaste = (event, value) => this.setState({tasteScore: value});
     this.updateExtras = (event, value) => this.setState({extrasScore: value});
