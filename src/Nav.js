@@ -13,7 +13,7 @@ import Tab from "@material-ui/core/Tab";
 const styles = () => ({
   tabLabel: {
     fontSize: "max(max(.8vw, .8vh), .8rem)",
-    padding: "max(.1vw, .1vh)"
+    padding: "max(.2vw, .2vh)"
   },
 });
 

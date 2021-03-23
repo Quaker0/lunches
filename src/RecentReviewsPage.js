@@ -39,7 +39,7 @@ export default class RecentReviewsPage extends Component {
     const deduplicatedReviews = Object.values(_keyBy(reviews, review => `${review.pointer}-${review.meal}`)).filter(isValidReview);
 
     const reviewCards = deduplicatedReviews.map((review, idx) => (
-      <ReviewCard key={idx} review={review} restaurantsMeta={restaurantsMeta} />
+      <ReviewCard key={idx} idx={idx} review={review} restaurantsMeta={restaurantsMeta} />
     ))
     
     return (

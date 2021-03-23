@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import LazyLoad from "react-lazyload";
+import LazyLoad, { forceVisible } from "react-lazyload";
 import { Link } from "react-router-dom";
 import FastAverageColor from "fast-average-color";
 
 
 export default function ReviewCard(props) {
-  const { review, restaurantsMeta } = props;
+  const { review, restaurantsMeta, idx } = props;
   const [show, setShow] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [themeColor, setThemeColor] = useState(false);
@@ -18,7 +18,11 @@ export default function ReviewCard(props) {
     setThemeColor(color)
     setShow(true);
   }
-  
+
+  if (idx < 2) {
+    forceVisible()
+  }
+
   const restaurantMeta = restaurantsMeta[review.pointer];
   var restaurantRedirect = `/restaurant/${restaurantMeta.name.toLowerCase().trim()}`;
 

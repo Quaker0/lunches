@@ -14,11 +14,6 @@ body {
   font-size: 1.1rem !important;
 }
 
-:root {
-  --neon-text-color: #f80;
-  --neon-border-color: #08d;
-}
-
 .tab-page {
   min-height: 600px;
 }
@@ -87,18 +82,29 @@ h4 {
   background-attachment: fixed;
   background-position: top center;
   background-repeat: no-repeat;
-  background-color: currentColor;
   background-size: 100% auto;
-  min-height: 38vw;
+  min-height: 36vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: currentColor;
 }
 
-@media (max-width: 549px) {
-  .sthlm-cover {
-    background-attachment: scroll !important;;
+@media (min-width: 300px) and (max-width: 399px) {
+  .webp .sthlm-cover {
+    background-attachment: scroll !important;
+    background-image: url(https://www.sthlmlunch.se/stockholm-xs.webp);
   }
+}
+
+@media (min-width: 400px) and (max-width: 699px) {
+  .webp .sthlm-cover {
+    background-attachment: scroll !important;
+    background-image: url(https://www.sthlmlunch.se/stockholm-sm.webp);
+  }
+}
+
+@media (max-width: 699px) {
   h1, h2 {
     font-size: 30px !important;
   }
@@ -107,17 +113,6 @@ h4 {
   }
   body {
     font-size: 85% !important;
-  }
-  .navbar {
-    text-align: center;
-    padding: 10px 0 !important;
-    justify-content: space-around;
-  }
-  .navbar > a { 
-    padding: 8px;
-    margin: 4px;
-    font-size: 16px;
-    flex: 1;
   }
   .meal-logo-bg-lg {
     width: 60vw;
@@ -128,7 +123,7 @@ h4 {
   }
 
   .meal-logo-lg {
-    margin: 2.4vw;
+    margin: 10px;
     width: calc(60vw - 20px);
     margin-left: auto; 
     margin-right: auto; 
@@ -139,7 +134,11 @@ h4 {
   }
 }
 
-@media(min-width: 550px) {
+@media(min-width: 700px) {
+  .webp .sthlm-cover {
+    background-image: url(https://www.sthlmlunch.se/stockholm-md.webp);
+  }
+
   .meal-logo-bg-lg {
     width: 380px;
   }
@@ -163,6 +162,8 @@ h4 {
     justify-content: space-around
   }
 }
+
+
 
 .meal-row {
   display: flex;
@@ -292,7 +293,7 @@ a:hover {
 }
 
 .neon-sign {
-  font-size: max(10vw, 60px);
+  font-size: max(8vw, 60px);
   font-style: italic;
   margin: max(5vw, 50px) 0;
   font-family: 'Baumans';
@@ -300,29 +301,6 @@ a:hover {
   color: #fff;
   line-height: 1.1;
   padding: 2vw 6vw;
-  border: 0.4rem solid #fff;
+  border: max(0.4vw, 0.4vh) solid #fff;
   border-radius: 2rem;
 }
-
-.neon:hover {
-  text-shadow:
-    -0.2rem -0.2rem 1rem #fff,
-    0.2rem 0.2rem 1rem #fff,
-    0 0 2rem var(--neon-text-color),
-    0 0 4rem var(--neon-text-color),
-    0 0 6rem var(--neon-text-color),
-    0 0 8rem var(--neon-text-color),
-    0 0 10rem var(--neon-text-color);
-}
-
-/*
-.neon-box:hover {
-  box-shadow:
-      0 0 .5rem #eee,
-      inset 0 0 .5rem #eee,
-      0 0 2rem var(--neon-border-color),
-      inset 0 0 2rem var(--neon-border-color),
-      0 0 4rem var(--neon-border-color),
-      inset 0 0 4rem var(--neon-border-color);
-}
-*/
