@@ -25,7 +25,7 @@ body {
   margin: 5px;
 }
 
-h1, h2 {
+h2 {
   font-size: 3rem !important;
 }
 
@@ -105,7 +105,7 @@ h4 {
 }
 
 @media (max-width: 699px) {
-  h1, h2 {
+  h2 {
     font-size: 30px !important;
   }
   .h3, h3, .h4, h4 {
@@ -292,14 +292,17 @@ a:hover {
     to   { opacity: 1; }
 }
 
-.neon-sign {
+h1 {
   font-size: max(8vw, 60px);
   font-style: italic;
-  margin: max(5vw, 50px) 0;
   font-family: 'Baumans';
   font-weight: 400;
-  color: #fff;
   line-height: 1.1;
+}
+
+.neon-sign {
+  margin: max(5vw, 50px) 0;
+  color: #fff;
   padding: 2vw 6vw;
   border: max(0.4vw, 0.4vh) solid #fff;
   border-radius: 2rem;

@@ -32,7 +32,7 @@
     "setup": "modernizr -c modernizr-config.json && cp modernizr.js public/modernizr.js",
     "clean": "rm -rf node_modules",
     "clean-prod": "aws s3 rm --recursive s3://www.sthlmlunch.se/static/js && aws s3 rm --recursive s3://www.sthlmlunch.se/static/css && aws s3 rm --recursive s3://www.sthlmlunch.se/static/media && aws s3 rm s3://www.sthlmlunch.se/ --exclude '*' --include 'precache*' --recursive",
-    "deploy": "aws s3 sync --exclude \".*\" build/ s3://www.sthlmlunch.se --acl public-read --cache-control max-age=3600",
+    "deploy": "aws s3 sync --exclude \".*\" build/ s3://www.sthlmlunch.se --acl public-read --cache-control max-age=3600 && aws cloudfront create-invalidation --distribution-id E2608NZLS56YYZ --paths \"/*\"",
     "lint": "eslint src --fix"
   },
   "eslintConfig": {

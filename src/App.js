@@ -15,13 +15,13 @@ const StatPage = lazy(() => import("./admin/StatPage"));
 const UserPage = lazy(() => import("./admin/UserPage"));
 const Head = () => (
   <div className="container-fluid sthlm-cover">
-    <div className="neon-sign d-flex flex-wrap">
+    <h1 className="neon-sign d-flex flex-wrap">
       <span className="neon-first-letter">S</span>
       <span className="d-flex flex-column flex-wrap">
         <span>THLM</span>
         <span>LUNCH</span>
       </span>
-    </div>
+    </h1>
   </div>
 );
 
